@@ -1,0 +1,282 @@
+/* ==========================================================================
+   Laporan Impak Perancangan PBT (Official Report Printable Styles)
+   Government Standard Layout (A4 format, bilingual BM/EN)
+   ========================================================================== */
+
+.pbt-report-container {
+  background: #ffffff;
+  color: #1e293b;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;
+  padding: 2.5rem;
+  border-radius: 8px;
+  line-height: 1.5;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.report-header {
+  border-bottom: 3px double #0f172a;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-crest-section {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.report-pbt-logo {
+  width: 65px;
+  height: 65px;
+  background: #0f172a;
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.report-header-titles h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.report-header-titles h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0284c7;
+  text-transform: uppercase;
+}
+
+.report-header-titles p {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.report-meta-box {
+  text-align: right;
+  font-size: 0.78rem;
+  color: #475569;
+  background: #f8fafc;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.report-meta-box strong {
+  color: #0f172a;
+}
+
+.report-section {
+  margin-bottom: 1.5rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.report-section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  border-left: 4px solid #0284c7;
+  padding-left: 0.6rem;
+  margin-bottom: 0.85rem;
+  background: #f1f5f9;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* Metadata Table */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.report-table th, .report-table td {
+  border: 1px solid #cbd5e1;
+  padding: 0.55rem 0.8rem;
+  text-align: left;
+}
+
+.report-table th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Metric Status Summary Badges in Report */
+.report-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.report-matrix-card {
+  border-radius: 6px;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+.report-matrix-card.green {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.report-matrix-card.yellow {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.report-matrix-card.red {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.report-matrix-card h4 {
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.report-matrix-score {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.report-matrix-desc {
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+/* Sign-off box */
+.report-signoff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 1.5rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.signoff-box {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 1rem;
+  background: #fafafa;
+}
+
+.signoff-line {
+  height: 55px;
+  border-bottom: 1px solid #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.signoff-meta {
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+/* ==========================================================================
+   Complete Multi-Page Print Optimization (A4 Fix)
+   ========================================================================== */
+
+@media print {
+  html, body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .app-header,
+  .sidebar-panel,
+  .map-container-wrapper,
+  .modal-close-btn,
+  .no-print,
+  .header-actions,
+  .map-floating-overlay,
+  .map-layer-controls,
+  .map-measuring-toolbar {
+    display: none !important;
+  }
+
+  .main-layout {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .modal-overlay {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+  }
+
+  .modal-content {
+    position: static !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .pbt-report-container {
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  .report-section,
+  .report-table,
+  .report-matrix-grid,
+  .report-signoff-grid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 15mm 15mm;
+  }
+}

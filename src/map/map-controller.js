@@ -84,6 +84,11 @@ export class MapController {
 
     // Handle Map Clicks for site selection or measuring
     this.map.on('click', (e) => this.handleMapClick(e));
+
+    // Recalibrate full-screen dimensions
+    setTimeout(() => {
+      if (this.map) this.map.invalidateSize();
+    }, 150);
   }
 
   setBasemap(type) {
@@ -221,15 +226,22 @@ export class MapController {
   }
 
   /**
-   * Renders extracted OSM spatial infrastructure
+   * Clears all spatial infrastructure layers (rail, bus, education, worship, heritage)
    */
-  renderSpatialInfrastructure(spatialData) {
-    // Clear previous items
+  clearSpatialLayers() {
     this.layers.rail.clearLayers();
     this.layers.bus.clearLayers();
     this.layers.education.clearLayers();
     this.layers.worship.clearLayers();
     this.layers.heritage.clearLayers();
+  }
+
+  /**
+   * Renders infrastructure items onto their respective Leaflet layer groups
+   */
+  renderSpatialInfrastructure(spatialData) {
+    // Clear previous items
+    this.clearSpatialLayers();
 
     // 1. Rail Stations
     (spatialData.railStations || []).forEach((item) => {
@@ -279,10 +291,16 @@ export class MapController {
     this.clearMeasurement();
     this.measuringMode = mode;
     this.map.getContainer().style.cursor = 'crosshair';
+
+    const btnDist = document.getElementById('btn-measure-distance');
+    const btnArea = document.getElementById('btn-measure-area');
+    if (btnDist) btnDist.classList.toggle('active', mode === 'distance');
+    if (btnArea) btnArea.classList.toggle('active', mode === 'area');
+
     this.updateMeasureStatusText(
       mode === 'distance'
-        ? '📍 Klik titik-titik atas peta untuk ukur jarak jajaran.'
-        : '📐 Klik sekurang-kurangnya 3 titik untuk ukur keluasan poligon tapak.'
+        ? '📍 Klik titik atas peta (jarak)'
+        : '📐 Klik ≥3 titik poligon (luas)'
     );
   }
 
@@ -294,7 +312,13 @@ export class MapController {
     this.activeLabelMarker = null;
     this.layers.measurements.clearLayers();
     this.map.getContainer().style.cursor = '';
-    this.updateMeasureStatusText('');
+
+    const btnDist = document.getElementById('btn-measure-distance');
+    const btnArea = document.getElementById('btn-measure-area');
+    if (btnDist) btnDist.classList.remove('active');
+    if (btnArea) btnArea.classList.remove('active');
+
+    this.updateMeasureStatusText('Pilih alat untuk mula mengukur');
   }
 
   handleMapClick(e) {

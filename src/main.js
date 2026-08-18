@@ -117,7 +117,13 @@ function initUI() {
       state.selectedStateId = e.target.value;
       state.isManualPbtSelection = true;
       populatePbtDropdown(e.target.value);
-      runFullPipeline();
+      const pbtSelect = document.getElementById('pbt-select');
+      if (pbtSelect) {
+        const selected = PBT_ALL_DATABASE.find((p) => p.id === pbtSelect.value);
+        if (selected) {
+          handleManualPbtSelection(selected);
+        }
+      }
     });
   }
 
@@ -129,11 +135,7 @@ function initUI() {
     pbtSelect.addEventListener('change', (e) => {
       const selected = PBT_ALL_DATABASE.find((p) => p.id === e.target.value);
       if (selected) {
-        state.currentPbt = selected;
-        state.isManualPbtSelection = true; // User manually selected an unmatched or specific PBT
-        updateNearbyLocationChips(state.currentSiteName, selected);
-        updatePolicyOptionsForTargetPbt(selected, state.developmentTypeId);
-        runFullPipeline();
+        handleManualPbtSelection(selected);
       }
     });
   }
@@ -226,30 +228,9 @@ function initUI() {
       const lng = parseFloat(chip.dataset.lng);
       const pbtId = chip.dataset.pbt;
 
-      if (name) {
-        state.currentSiteName = name;
-        if (siteInput) siteInput.value = name;
+      if (!isNaN(lat) && !isNaN(lng) && name) {
+        updateSiteLocationOnly(lat, lng, name, {}, pbtId);
       }
-
-      if (!isNaN(lat) && !isNaN(lng)) {
-        state.currentLat = lat;
-        state.currentLng = lng;
-      }
-
-      if (pbtId) {
-        const matchingPbt = PBT_ALL_DATABASE.find((p) => p.id === pbtId);
-        if (matchingPbt) {
-          state.currentPbt = matchingPbt;
-          state.selectedStateId = matchingPbt.stateId;
-          const sSelect = document.getElementById('state-filter-select');
-          if (sSelect) sSelect.value = matchingPbt.stateId;
-          populatePbtDropdown(matchingPbt.stateId);
-          const pSelect = document.getElementById('pbt-select');
-          if (pSelect) pSelect.value = matchingPbt.id;
-        }
-      }
-
-      runFullPipeline();
     });
   }
 
@@ -302,11 +283,18 @@ function initUI() {
   // 7. Manual Geocoding Search Button
   const btnSearch = document.getElementById('btn-geocode-search');
   if (btnSearch) {
-    btnSearch.addEventListener('click', () => {
+    btnSearch.addEventListener('click', async () => {
       state.isManualPbtSelection = false; // Explicit search on entered location
       readFormInputs();
-      updateNearbyLocationChips(state.currentSiteName, state.currentPbt);
-      runFullPipeline();
+      if (!state.currentSiteName) return;
+
+      try {
+        const geoResult = await geocodeLocation(state.currentSiteName);
+        const cleanName = geoResult.displayName.split(',').slice(0, 2).join(',');
+        updateSiteLocationOnly(geoResult.lat, geoResult.lng, cleanName, geoResult.addressDetails || {});
+      } catch (err) {
+        console.error('Geocoding search failed:', err);
+      }
     });
   }
 
@@ -455,83 +443,131 @@ function updateUnitsLabel(typeId) {
 }
 
 /**
- * Applies a preset site into form inputs and state
+ * Resets any previous simulation results to clean idle/ready state
+ * when a user relocates or changes to a new site.
+ */
+function resetSimulationToReadyState() {
+  state.spatialData = null;
+  state.simulationResult = null;
+
+  if (mapController) {
+    mapController.clearSpatialLayers();
+  }
+
+  const countersContainer = document.getElementById('infra-counters-container');
+  if (countersContainer) renderEmptyInfrastructureCounters(countersContainer);
+
+  const hazardContainer = document.getElementById('hazard-cards-container');
+  if (hazardContainer) renderEmptyHazardCards(hazardContainer);
+
+  setReportButtonAvailable(false);
+  updateStepperProgress(1);
+}
+
+/**
+ * Handles site change to a new location without automatically triggering the heavy simulation.
+ * Updates coordinates, map buffer, auto-detects PBT, and sets UI to clean ready state.
+ */
+function updateSiteLocationOnly(lat, lng, siteName, addressDetails = {}, pbtId = null) {
+  state.currentLat = lat;
+  state.currentLng = lng;
+  state.currentSiteName = siteName;
+  state.addressDetails = addressDetails;
+
+  const siteInput = document.getElementById('site-name-input');
+  if (siteInput) siteInput.value = siteName;
+
+  // Auto-Detect PBT
+  const detectedPbt = pbtId
+    ? (PBT_ALL_DATABASE.find((p) => p.id === pbtId) || JurisdictionEngine.detectPBTFromLocation(lat, lng, siteName, addressDetails))
+    : JurisdictionEngine.detectPBTFromLocation(lat, lng, siteName, addressDetails);
+
+  if (detectedPbt) {
+    state.currentPbt = detectedPbt;
+    state.selectedStateId = detectedPbt.stateId;
+    state.isManualPbtSelection = false;
+
+    const stateSelect = document.getElementById('state-filter-select');
+    if (stateSelect) stateSelect.value = detectedPbt.stateId;
+    populatePbtDropdown(detectedPbt.stateId);
+
+    const pbtSelect = document.getElementById('pbt-select');
+    if (pbtSelect) pbtSelect.value = detectedPbt.id;
+
+    const overlayPbtSub = document.getElementById('overlay-pbt-sub');
+    if (overlayPbtSub) {
+      overlayPbtSub.innerText = `PBT: ${detectedPbt.shortName} (${detectedPbt.stateName}) | Zon Penampan 1,000m`;
+    }
+
+    updatePolicyOptionsForTargetPbt(detectedPbt, state.developmentTypeId);
+  }
+
+  // Update map view with 1km buffer ring
+  if (mapController) {
+    mapController.setProposedSite(lat, lng, siteName, state.units);
+  }
+
+  // Update overlay title
+  const overlayTitle = document.getElementById('overlay-site-title');
+  const dev = DEVELOPMENT_TYPES.find((d) => d.id === state.developmentTypeId);
+  const unitLabel = dev ? dev.unitLabel : 'Unit';
+  if (overlayTitle) overlayTitle.innerText = `${siteName} (${state.units} ${unitLabel})`;
+
+  // Validate jurisdiction banner
+  state.jurisdictionResult = JurisdictionEngine.validateJurisdiction(
+    state.currentPbt.id,
+    lat,
+    lng,
+    siteName,
+    addressDetails
+  );
+  renderJurisdictionBanner(state.jurisdictionResult);
+  updateGeocodeDisplay(lat, lng, siteName);
+  updateNearbyLocationChips(siteName, state.currentPbt);
+
+  // Clean reset of previous simulation results to ready state (zero Overpass queries!)
+  resetSimulationToReadyState();
+}
+
+/**
+ * Applies a preset site into form inputs and state (without auto-starting simulation)
  */
 function applyPresetSite(preset) {
-  state.currentSiteName = preset.name;
-  state.currentLat = preset.lat;
-  state.currentLng = preset.lng;
   state.units = preset.defaultUnits;
   state.developmentTypeId = preset.developmentType;
   state.floors = preset.defaultFloors || 24;
   state.siteAreaAcres = preset.defaultArea || 3.5;
 
-  if (preset.pbtId) {
-    const matchingPbt = PBT_ALL_DATABASE.find((p) => p.id === preset.pbtId);
-    if (matchingPbt) {
-      state.currentPbt = matchingPbt;
-      state.selectedStateId = matchingPbt.stateId;
-
-      const stateSelect = document.getElementById('state-filter-select');
-      if (stateSelect) stateSelect.value = matchingPbt.stateId;
-      populatePbtDropdown(matchingPbt.stateId);
-
-      const pbtSelect = document.getElementById('pbt-select');
-      if (pbtSelect) pbtSelect.value = matchingPbt.id;
-    }
-  }
-
-  const siteInput = document.getElementById('site-name-input');
   const unitsInput = document.getElementById('units-input');
   const devTypeSelect = document.getElementById('dev-type-select');
   const floorsInput = document.getElementById('floors-input');
   const areaInput = document.getElementById('area-input');
 
-  if (siteInput) siteInput.value = preset.name;
   if (unitsInput) unitsInput.value = preset.defaultUnits;
   if (devTypeSelect) devTypeSelect.value = preset.developmentType;
   if (floorsInput) floorsInput.value = state.floors;
   if (areaInput) areaInput.value = state.siteAreaAcres;
 
   updateUnitsLabel(preset.developmentType);
-  runFullPipeline();
+  updateSiteLocationOnly(preset.lat, preset.lng, preset.name, {}, preset.pbtId);
 }
 
 /**
- * Initializes Leaflet Map Controller & Auto-Assigns PBT on Pinpoint
+ * Initializes Leaflet Map Controller & Auto-Assigns PBT on Pinpoint (without auto-starting simulation)
  */
 function initMap() {
   mapController = new MapController('map');
 
-  // Handle map click to pin proposed site (with auto-assign PBT)
+  // Handle map click to pin proposed site (with auto-assign PBT without auto-starting simulation)
   mapController.onSiteSelected(async (lat, lng) => {
-    state.currentLat = lat;
-    state.currentLng = lng;
-
-    const geo = await reverseGeocode(lat, lng, activeAbortController ? activeAbortController.signal : null);
-    state.currentSiteName = geo.displayName.split(',').slice(0, 2).join(',');
-    state.addressDetails = geo.addressDetails || {};
-
-    // Auto-Assign PBT for this pinpointed coordinate
-    const match = JurisdictionEngine.findMatchingPbt(lat, lng, geo.displayName, geo.addressDetails);
-    if (match && match.pbt) {
-      state.currentPbt = match.pbt;
-      state.selectedStateId = match.pbt.stateId;
-
-      const stateSelect = document.getElementById('state-filter-select');
-      if (stateSelect) stateSelect.value = match.pbt.stateId;
-      populatePbtDropdown(match.pbt.stateId);
-
-      const pbtSelect = document.getElementById('pbt-select');
-      if (pbtSelect) pbtSelect.value = match.pbt.id;
+    try {
+      const geo = await reverseGeocode(lat, lng, activeAbortController ? activeAbortController.signal : null);
+      const siteName = geo.displayName.split(',').slice(0, 2).join(',');
+      updateSiteLocationOnly(lat, lng, siteName, geo.addressDetails || {});
+    } catch (err) {
+      console.error('Reverse geocode error:', err);
+      updateSiteLocationOnly(lat, lng, `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`, {});
     }
-
-    const siteInput = document.getElementById('site-name-input');
-    if (siteInput) siteInput.value = state.currentSiteName;
-
-    updateNearbyLocationChips(state.currentSiteName, state.currentPbt);
-    updateGeocodeDisplay(lat, lng, geo.displayName);
-    runFullPipeline();
   });
 }
 
@@ -579,17 +615,13 @@ async function runFullPipeline() {
   // Start live timer
   simulationSeconds = 0;
   if (btnSim) {
+    btnSim.classList.remove('simulating-success');
     btnSim.classList.add('simulating-active');
     if (btnIcon) {
-      btnIcon.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spin"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>`;
+      btnIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spin"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="12"/></svg>`;
     }
     if (btnText) {
-      btnText.innerHTML = `
-        <span class="btn-sim-content-stack">
-          <span class="btn-sim-title">Sedang Memproses (0s)</span>
-          <span class="btn-sim-subtitle">Klik untuk Batal</span>
-        </span>
-      `;
+      btnText.innerText = 'Sedang Memproses (0s) • Batal';
     }
   }
 
@@ -597,12 +629,7 @@ async function runFullPipeline() {
   simulationTimer = setInterval(() => {
     simulationSeconds++;
     if (btnText && state.isSimulating) {
-      btnText.innerHTML = `
-        <span class="btn-sim-content-stack">
-          <span class="btn-sim-title">Sedang Memproses (${simulationSeconds}s)</span>
-          <span class="btn-sim-subtitle">Klik untuk Batal</span>
-        </span>
-      `;
+      btnText.innerText = `Sedang Memproses (${simulationSeconds}s) • Batal`;
     }
   }, 1000);
 
@@ -625,6 +652,36 @@ async function runFullPipeline() {
 
     // Update map view with 1km buffer
     mapController.setProposedSite(state.currentLat, state.currentLng, state.currentSiteName, state.units);
+
+    // If jurisdiction conflict is detected, halt immediately before Overpass query to save API rate limits!
+    if (state.jurisdictionResult && !state.jurisdictionResult.isValid) {
+      updateStepperProgress(4);
+      state.spatialData = { counts: { rail: 0, bus: 0, education: 0, worship: 0, heritage: 0, total: 0 }, rail: [], bus: [], education: [], worship: [], heritage: [] };
+      mapController.renderSpatialInfrastructure(state.spatialData);
+
+      const countersContainer = document.getElementById('infra-counters-container');
+      renderInfrastructureCounters(countersContainer, state.spatialData.counts);
+
+      state.simulationResult = runSimulation({
+        pbtId: state.currentPbt.id,
+        siteName: state.currentSiteName,
+        units: state.units,
+        developmentTypeId: state.developmentTypeId,
+        floors: state.floors,
+        siteAreaAcres: state.siteAreaAcres,
+        spatialData: state.spatialData,
+        jurisdictionResult: state.jurisdictionResult,
+        policyOptions: state.policyOptions
+      });
+
+      updateStepperProgress(5);
+      const hazardContainer = document.getElementById('hazard-cards-container');
+      renderHazardCards(hazardContainer, state.simulationResult.results);
+
+      // Immediately show the official conflict resolution dialog
+      openPbtConflictDialog(state.jurisdictionResult);
+      return;
+    }
 
     // STEP 3: Spatial Data Extraction via Overpass API
     updateStepperProgress(3);
@@ -675,6 +732,24 @@ async function runFullPipeline() {
     // Enable "Laporan Tersedia" with highlight
     setReportButtonAvailable(true);
 
+    if (btnSim) {
+      btnSim.classList.remove('simulating-active');
+      btnSim.classList.add('simulating-success');
+      if (btnIcon) {
+        btnIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+      }
+      if (btnText) {
+        btnText.innerText = 'Simulasi Selesai';
+      }
+      setTimeout(() => {
+        if (!state.isSimulating) {
+          btnSim.classList.remove('simulating-success');
+          if (btnIcon) btnIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+          if (btnText) btnText.innerText = 'Jalankan Simulasi Impak';
+        }
+      }, 1200);
+    }
+
   } catch (err) {
     if (err.name === 'AbortError') {
       console.log('[MyPBTSim] Proses simulasi telah dibatalkan oleh pengguna.');
@@ -686,10 +761,10 @@ async function runFullPipeline() {
     activeAbortController = null;
     clearInterval(simulationTimer);
 
-    if (btnSim) {
+    if (btnSim && !btnSim.classList.contains('simulating-success')) {
       btnSim.classList.remove('simulating-active');
       if (btnIcon) {
-        btnIcon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+        btnIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
       }
       if (btnText) {
         btnText.innerText = 'Jalankan Simulasi Impak';
@@ -714,9 +789,9 @@ function cancelSimulationAndRollback() {
   const btnText = document.getElementById('btn-sim-text');
 
   if (btnSim) {
-    btnSim.classList.remove('simulating-active');
+    btnSim.classList.remove('simulating-active', 'simulating-success');
     if (btnIcon) {
-      btnIcon.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+      btnIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
     }
     if (btnText) {
       btnText.innerText = 'Jalankan Simulasi Impak';
@@ -785,7 +860,7 @@ function setReportButtonAvailable(isAvailable) {
     btn.disabled = false;
     btn.classList.remove('disabled-report-btn');
     btn.classList.add('btn-report-available');
-    if (btnText) btnText.innerText = '📄 Laporan Tersedia';
+    if (btnText) btnText.innerText = 'Laporan Tersedia';
   } else {
     btn.disabled = true;
     btn.classList.add('disabled-report-btn');
@@ -877,22 +952,139 @@ function renderJurisdictionBanner(jurisdiction) {
       <div>${jurisdiction.message}</div>
     `;
 
-    // Wire 1-Click Auto-Sync Button
+    // Wire Auto-Sync Button to open Conflict Resolution Dialog Box
     const btnSync = document.getElementById('btn-auto-sync-pbt');
     if (btnSync) {
       btnSync.addEventListener('click', () => {
-        autoSyncPbt(jurisdiction.suggestedPbt);
+        openPbtConflictDialog(jurisdiction);
       });
     }
   }
 }
 
 /**
- * 1-Click Auto Sync when location is in a different PBT
+ * Opens the PBT Jurisdiction Conflict Resolution Dialog Box
+ */
+function openPbtConflictDialog(jurisdiction) {
+  const modal = document.getElementById('pbt-conflict-modal');
+  const modalBody = document.getElementById('conflict-modal-body');
+  if (!modal || !modalBody || !jurisdiction) return;
+
+  const detected = jurisdiction.suggestedPbt || jurisdiction.detectedPbt;
+  const selected = jurisdiction.selectedPbt;
+
+  modalBody.innerHTML = `
+    <div class="conflict-alert-box">
+      <div class="conflict-alert-title">Perhatian: Percanggahan Bidang Kuasa PBT Dikesan</div>
+      <div class="conflict-alert-desc">
+        Tapak cadangan pemajuan (<strong>${state.currentSiteName}</strong>) dikesan berada di bawah kawasan pentadbiran statutori 
+        <strong>${detected.name}</strong> (${detected.stateName}), tetapi permohonan semasa ditetapkan kepada 
+        <strong>${selected.name}</strong>.
+      </div>
+    </div>
+
+    <div class="conflict-comparison-grid">
+      <div class="conflict-col col-detected">
+        <div class="conflict-col-badge">✓ PBT Berkuasa Statutori (Dikesan)</div>
+        <div class="conflict-pbt-name">${detected.name}</div>
+        <div class="conflict-detail-row">
+          <span>Negeri Pentadbiran:</span>
+          <strong>${detected.stateName}</strong>
+        </div>
+        <div class="conflict-detail-row">
+          <span>Akta / Ordinan Statutori:</span>
+          <strong>${detected.act}</strong>
+        </div>
+        <div class="conflict-detail-row">
+          <span>Rancangan Tempatan:</span>
+          <strong>${detected.localPlan}</strong>
+        </div>
+      </div>
+
+      <div class="conflict-col col-selected">
+        <div class="conflict-col-badge badge-warning">⚠️ PBT Semasa Dipilih</div>
+        <div class="conflict-pbt-name">${selected.name}</div>
+        <div class="conflict-detail-row">
+          <span>Negeri Pentadbiran:</span>
+          <strong>${selected.stateName}</strong>
+        </div>
+        <div class="conflict-detail-row">
+          <span>Akta / Ordinan Statutori:</span>
+          <strong>${selected.act}</strong>
+        </div>
+        <div class="conflict-detail-row">
+          <span>Rancangan Tempatan:</span>
+          <strong>${selected.localPlan}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="conflict-law-note">
+      <strong>Kesan Perundangan:</strong> Di bawah Seksyen 19 Akta Perancangan Bandar dan Desa 1976 (Akta 172) / Akta 267 / Ordinan Negeri, Kebenaran Merancang (KM) hanya sah di sisi undang-undang jika diluluskan oleh Pihak Berkuasa Tempatan yang mempunyai bidang kuasa statutori ke atas lot berkenaan. Permohonan kepada PBT yang salah adalah tidak sah (<em>ultra vires</em>) dan tertolak secara automatik. Sila selaraskan PBT untuk meneruskan permohonan yang sah.
+    </div>
+  `;
+
+  modal.classList.add('open');
+
+  const btnConfirm = document.getElementById('btn-confirm-sync-pbt');
+  const btnClose = document.getElementById('btn-close-conflict-modal');
+  const btnKeep = document.getElementById('btn-keep-current-pbt');
+
+  const closeModal = () => modal.classList.remove('open');
+
+  if (btnConfirm) {
+    btnConfirm.onclick = () => {
+      closeModal();
+      autoSyncPbt(detected);
+    };
+  }
+
+  if (btnClose) btnClose.onclick = closeModal;
+  if (btnKeep) btnKeep.onclick = closeModal;
+}
+
+/**
+ * Handles manual State / PBT selection by validating jurisdiction immediately
+ * and showing the conflict dialog before running any simulation to save rate limits.
+ */
+function handleManualPbtSelection(selectedPbt) {
+  state.currentPbt = selectedPbt;
+  state.isManualPbtSelection = true;
+
+  const overlayPbtSub = document.getElementById('overlay-pbt-sub');
+  if (overlayPbtSub) {
+    overlayPbtSub.innerText = `PBT: ${selectedPbt.shortName} (${selectedPbt.stateName}) | Zon Penampan 1,000m`;
+  }
+
+  updateNearbyLocationChips(state.currentSiteName, selectedPbt);
+  updatePolicyOptionsForTargetPbt(selectedPbt, state.developmentTypeId);
+
+  // Validate jurisdiction against the current site coordinates & name
+  const jurisdiction = JurisdictionEngine.validateJurisdiction(
+    selectedPbt.id,
+    state.currentLat,
+    state.currentLng,
+    state.currentSiteName,
+    state.addressDetails
+  );
+
+  state.jurisdictionResult = jurisdiction;
+  renderJurisdictionBanner(jurisdiction);
+
+  // If a conflict exists with the current site location, show the dialog box immediately!
+  if (!jurisdiction.isValid) {
+    openPbtConflictDialog(jurisdiction);
+  }
+}
+
+/**
+ * 1-Click Auto Sync when location is in a different PBT.
+ * Instantly re-evaluates statutory rules locally without re-querying Overpass or restarting the stopwatch.
  */
 function autoSyncPbt(targetPbt) {
   state.currentPbt = targetPbt;
   state.selectedStateId = targetPbt.stateId;
+  state.isManualPbtSelection = false;
 
   const stateSelect = document.getElementById('state-filter-select');
   if (stateSelect) stateSelect.value = targetPbt.stateId;
@@ -901,9 +1093,46 @@ function autoSyncPbt(targetPbt) {
   const pbtSelect = document.getElementById('pbt-select');
   if (pbtSelect) pbtSelect.value = targetPbt.id;
 
+  const overlayPbtSub = document.getElementById('overlay-pbt-sub');
+  if (overlayPbtSub) {
+    overlayPbtSub.innerText = `PBT: ${targetPbt.shortName} (${targetPbt.stateName}) | Zon Penampan 1,000m`;
+  }
+
   updateNearbyLocationChips(state.currentSiteName, targetPbt);
   updatePolicyOptionsForTargetPbt(targetPbt, state.developmentTypeId);
-  runFullPipeline();
+
+  // Validate and update jurisdiction banner
+  state.jurisdictionResult = JurisdictionEngine.validateJurisdiction(
+    targetPbt.id,
+    state.currentLat,
+    state.currentLng,
+    state.currentSiteName,
+    state.addressDetails
+  );
+  renderJurisdictionBanner(state.jurisdictionResult);
+
+  // If spatial data already exists for this site, re-evaluate statutory rules locally in 0ms!
+  if (state.spatialData && state.spatialData.counts && state.spatialData.counts.total !== undefined && state.spatialData.counts.total >= 0) {
+    state.simulationResult = runSimulation({
+      pbtId: targetPbt.id,
+      siteName: state.currentSiteName,
+      units: state.units,
+      developmentTypeId: state.developmentTypeId,
+      floors: state.floors,
+      siteAreaAcres: state.siteAreaAcres,
+      spatialData: state.spatialData,
+      jurisdictionResult: state.jurisdictionResult,
+      policyOptions: state.policyOptions
+    });
+
+    updateStepperProgress(5);
+    const hazardContainer = document.getElementById('hazard-cards-container');
+    renderHazardCards(hazardContainer, state.simulationResult.results);
+    setReportButtonAvailable(true);
+  } else {
+    // Idle state: not simulated yet -> keep stepper at ready state
+    updateStepperProgress(1);
+  }
 }
 
 function updateGeocodeDisplay(lat, lng, address) {

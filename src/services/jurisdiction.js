@@ -82,6 +82,14 @@ export class JurisdictionEngine {
   }
 
   /**
+   * Helper alias to find matching PBT wrapper
+   */
+  static findMatchingPbt(lat, lng, addressString = '', rawAddressDetails = {}) {
+    const pbt = this.detectPBTFromLocation(lat, lng, addressString, rawAddressDetails);
+    return { pbt, matched: !!pbt };
+  }
+
+  /**
    * Validates if the selected PBT matches the detected site location
    * @param {string} selectedPbtId
    * @param {number} lat

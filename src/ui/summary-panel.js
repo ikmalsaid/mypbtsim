@@ -49,9 +49,6 @@ export function renderEmptyInfrastructureCounters(containerElement) {
       <div class="empty-state-desc">
         Pengekstrakan transit rel, hentian bas, sekolah, rumah ibadat dan tapak warisan dalam radius 1,000m belum dimulakan.
       </div>
-      <div class="empty-state-hint">
-        Tekan <strong>"Jalankan Simulasi Impak"</strong> untuk memulakan semakan OSM.
-      </div>
     </div>
   `;
 }

@@ -42,7 +42,7 @@
       <div class="brand-title-group">
         <div class="brand-title-row">
           <h1 class="brand-title">MyPBT<span class="brand-title-accent">Sim</span></h1>
-          <span class="brand-version-badge">DIHASILKAN OLEH MINDAKOTA</span>
+          <span class="brand-version-badge">DIBANGUNKAN OLEH MINDAKOTA</span>
         </div>
         <p class="brand-subtitle">Sistem Simulasi Impak Kebenaran Merancang PBT Malaysia</p>
       </div>
@@ -53,7 +53,7 @@
       <!-- State Filter -->
       <div style="display: flex; align-items: center; gap: 0.35rem;">
         <span style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">Negeri:</span>
-        <select id="state-filter-select" class="form-select" style="width: 140px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
+        <select id="state-filter-select" class="form-select" style="width: 180px; min-width: 170px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
           <!-- Populated from MALAYSIA_STATES -->
         </select>
       </div>
@@ -61,7 +61,7 @@
       <!-- PBT Council Selector -->
       <div style="display: flex; align-items: center; gap: 0.35rem;">
         <span style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">PBT:</span>
-        <select id="pbt-select" class="form-select" style="width: 280px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
+        <select id="pbt-select" class="form-select" style="width: 360px; min-width: 310px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
           <!-- Populated from PBT_ALL_DATABASE -->
         </select>
       </div>
@@ -78,13 +78,13 @@
   <main class="main-layout">
     
     <!-- LEFT SIDEBAR: Step 1 (Inputs & Presets) & Step 2 (Geocoding & Jurisdiction) -->
-    <aside class="sidebar-panel">
+    <aside class="sidebar-panel left-panel">
       
       <!-- STEP 1: Form Input Card (Streamlined & Uncluttered in Pure Bahasa Melayu) -->
       <section class="glass-card">
         <div class="card-title">
           <span class="step-indicator">1</span>
-          <span>Input Pegawai Perancang</span>
+          <span>Input Parameter & Lokasi</span>
         </div>
 
         <form id="simulation-form">
@@ -319,21 +319,21 @@
             <span class="basemap-lbl">Terang</span>
           </button>
         </div>
-      </div>
 
-      <!-- Bottom Floating Measuring Toolbar -->
-      <div class="map-measuring-toolbar">
-        <span style="font-weight: 700; font-size: 0.75rem; color: var(--accent-blue);">ALAT UKUR:</span>
-        <button id="btn-measure-distance" class="btn btn-secondary" style="font-size: 0.72rem; padding: 4px 8px;">
-          📏 Ukur Jarak
-        </button>
-        <button id="btn-measure-area" class="btn btn-secondary" style="font-size: 0.72rem; padding: 4px 8px;">
-          📐 Ukur Keluasan
-        </button>
-        <button id="btn-clear-measure" class="btn btn-secondary" style="font-size: 0.72rem; padding: 4px 8px;">
-          ✖ Padam
-        </button>
-        <span id="measure-status-text" style="font-size: 0.72rem; color: #cbd5e1; margin-left: 0.35rem;"></span>
+        <!-- Alat Ukur Section (Placed under Peta Dasar with uniform radius & hint above buttons) -->
+        <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">Alat Ukur</div>
+        <div id="measure-status-text" class="measure-hint-text">Pilih alat untuk mula mengukur</div>
+        <div class="measure-buttons-grid">
+          <button type="button" id="btn-measure-distance" class="measure-tool-btn" title="Ukur Jarak Geodesik">
+            <span>📏</span> Jarak
+          </button>
+          <button type="button" id="btn-measure-area" class="measure-tool-btn" title="Ukur Keluasan Poligon">
+            <span>📐</span> Keluasan
+          </button>
+          <button type="button" id="btn-clear-measure" class="measure-tool-btn btn-clear-tool" title="Padam Ukuran">
+            <span>✖</span> Padam
+          </button>
+        </div>
       </div>
 
       <!-- Leaflet Map Container -->
@@ -341,13 +341,13 @@
     </section>
 
     <!-- RIGHT SIDEBAR: Step 4 (AI Simulation Hazards) & Step 5 (Assessment Summary) -->
-    <aside class="sidebar-panel">
+    <aside class="sidebar-panel right-panel">
       
       <!-- Spatial Infrastructure Summary Counters -->
       <section class="glass-card">
         <div class="card-title">
           <span class="step-indicator">3</span>
-          <span>Infrastruktur 1km (Data Spatial)</span>
+          <span>Carian Data Spatial 1km</span>
         </div>
         <div id="infra-counters-container">
           <!-- Infrastructure counters rendered dynamically -->
@@ -358,7 +358,7 @@
       <section class="glass-card">
         <div class="card-title">
           <span class="step-indicator">4</span>
-          <span>Enjin Simulasi AI & Statutori</span>
+          <span>Simulasi Statutori & Impak</span>
         </div>
         <div id="hazard-cards-container" class="hazard-cards-wrapper">
           <!-- Traffic Stress, TOD Score, Zoning Compliance cards rendered dynamically -->
@@ -368,6 +368,11 @@
     </aside>
 
   </main>
+
+  <!-- Centered Footer Disclaimer (Minimalist Text, Not a Card) -->
+  <footer class="main-footer-disclaimer">
+    Penafian: Simulasi ini dijana berasaskan unjuran <em>senario terbaik (best-case scenario)</em>. Pegawai perancang dinasihatkan menyemak sebarang ralat & data tapak sebelum membuat keputusan rasmi.
+  </footer>
 
   <!-- STEP 5: Official Report Modal -->
   <div id="report-modal" class="modal-overlay">
@@ -389,6 +394,35 @@
       
       <!-- Report Container Rendered Dynamically -->
       <div id="report-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- PBT Jurisdiction Conflict Resolution Modal Dialog -->
+  <div id="pbt-conflict-modal" class="modal-overlay">
+    <div class="modal-content conflict-modal-content">
+      <div class="conflict-modal-header">
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <span style="font-size: 1.4rem;">⚠️</span>
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 800; color: #fca5a5; margin: 0;">Konflik Bidang Kuasa PBT Dikesan</h3>
+            <p style="font-size: 0.72rem; color: #94a3b8; margin: 0;">Percanggahan Statutori Kebenaran Merancang (KM)</p>
+          </div>
+        </div>
+        <button type="button" id="btn-close-conflict-modal" class="btn-conflict-close" title="Tutup Dialog">✕</button>
+      </div>
+
+      <div class="conflict-modal-body" id="conflict-modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="conflict-modal-footer">
+        <button type="button" id="btn-keep-current-pbt" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 12px;">
+          Kekalkan Pilihan Semasa
+        </button>
+        <button type="button" id="btn-confirm-sync-pbt" class="btn btn-primary" style="font-size: 0.8rem; font-weight: 700; padding: 6px 14px;">
+          Selaraskan PBT Sekarang
+        </button>
+      </div>
     </div>
   </div>
 

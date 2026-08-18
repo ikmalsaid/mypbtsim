@@ -105,7 +105,7 @@
   "pbts": [
     {
       "id": "dbkl",
-      "name": "Dewan Bandaraya Kuala Lumpur (DBKL)",
+      "name": "Dewan Bandaraya Kuala Lumpur",
       "shortName": "DBKL",
       "stateId": "kl",
       "stateName": "W.P. Kuala Lumpur",
@@ -140,7 +140,7 @@
     },
     {
       "id": "pkb",
-      "name": "Perbadanan Pembangunan Kampong Bharu (PKB)",
+      "name": "Perbadanan Pembangunan Kampong Bharu",
       "shortName": "PKB",
       "stateId": "kl",
       "stateName": "W.P. Kuala Lumpur",
@@ -166,7 +166,7 @@
     },
     {
       "id": "pjaya",
-      "name": "Perbadanan Putrajaya (PPj)",
+      "name": "Perbadanan Putrajaya",
       "shortName": "PPj",
       "stateId": "putrajaya",
       "stateName": "W.P. Putrajaya",
@@ -221,7 +221,7 @@
     },
     {
       "id": "mbpj",
-      "name": "Majlis Bandaraya Petaling Jaya (MBPJ)",
+      "name": "Majlis Bandaraya Petaling Jaya",
       "shortName": "MBPJ",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -253,7 +253,7 @@
     },
     {
       "id": "mbsa",
-      "name": "Majlis Bandaraya Shah Alam (MBSA)",
+      "name": "Majlis Bandaraya Shah Alam",
       "shortName": "MBSA",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -283,7 +283,7 @@
     },
     {
       "id": "mbsj",
-      "name": "Majlis Bandaraya Subang Jaya (MBSJ)",
+      "name": "Majlis Bandaraya Subang Jaya",
       "shortName": "MBSJ",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -312,7 +312,7 @@
     },
     {
       "id": "mbdk",
-      "name": "Majlis Bandaraya Diraja Klang (MBDK)",
+      "name": "Majlis Bandaraya Diraja Klang",
       "shortName": "MBDK",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -342,7 +342,7 @@
     },
     {
       "id": "mpsepang",
-      "name": "Majlis Perbandaran Sepang (MPSp - Cyberjaya/KLIA)",
+      "name": "Majlis Perbandaran Sepang",
       "shortName": "MPSp",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -370,7 +370,7 @@
     },
     {
       "id": "mpaj",
-      "name": "Majlis Perbandaran Ampang Jaya (MPAJ)",
+      "name": "Majlis Perbandaran Ampang Jaya",
       "shortName": "MPAJ",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -398,7 +398,7 @@
     },
     {
       "id": "mpkj",
-      "name": "Majlis Perbandaran Kajang (MPKj)",
+      "name": "Majlis Perbandaran Kajang",
       "shortName": "MPKj",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -425,7 +425,7 @@
     },
     {
       "id": "mpselayang",
-      "name": "Majlis Perbandaran Selayang (MPS)",
+      "name": "Majlis Perbandaran Selayang",
       "shortName": "MPS",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -451,7 +451,7 @@
     },
     {
       "id": "mpkl",
-      "name": "Majlis Perbandaran Kuala Langat (MPKL)",
+      "name": "Majlis Perbandaran Kuala Langat",
       "shortName": "MPKL",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -477,7 +477,7 @@
     },
     {
       "id": "mphs",
-      "name": "Majlis Perbandaran Hulu Selangor (MPHS)",
+      "name": "Majlis Perbandaran Hulu Selangor",
       "shortName": "MPHS",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -503,7 +503,7 @@
     },
     {
       "id": "mpks",
-      "name": "Majlis Perbandaran Kuala Selangor (MPKS)",
+      "name": "Majlis Perbandaran Kuala Selangor",
       "shortName": "MPKS",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -528,7 +528,7 @@
     },
     {
       "id": "mdsb",
-      "name": "Majlis Daerah Sabak Bernam (MDSB)",
+      "name": "Majlis Daerah Sabak Bernam",
       "shortName": "MDSB",
       "stateId": "selangor",
       "stateName": "Selangor",
@@ -551,7 +551,7 @@
     },
     {
       "id": "mbpp",
-      "name": "Majlis Bandaraya Pulau Pinang (MBPP)",
+      "name": "Majlis Bandaraya Pulau Pinang",
       "shortName": "MBPP",
       "stateId": "penang",
       "stateName": "Pulau Pinang",
@@ -582,7 +582,7 @@
     },
     {
       "id": "mbsp",
-      "name": "Majlis Bandaraya Seberang Perai (MBSP)",
+      "name": "Majlis Bandaraya Seberang Perai",
       "shortName": "MBSP",
       "stateId": "penang",
       "stateName": "Pulau Pinang",
@@ -609,7 +609,7 @@
     },
     {
       "id": "mbjb",
-      "name": "Majlis Bandaraya Johor Bahru (MBJB)",
+      "name": "Majlis Bandaraya Johor Bahru",
       "shortName": "MBJB",
       "stateId": "johor",
       "stateName": "Johor",
@@ -639,7 +639,7 @@
     },
     {
       "id": "mbip",
-      "name": "Majlis Bandaraya Iskandar Puteri (MBIP)",
+      "name": "Majlis Bandaraya Iskandar Puteri",
       "shortName": "MBIP",
       "stateId": "johor",
       "stateName": "Johor",
@@ -667,7 +667,7 @@
     },
     {
       "id": "mbpg",
-      "name": "Majlis Bandaraya Pasir Gudang (MBPG)",
+      "name": "Majlis Bandaraya Pasir Gudang",
       "shortName": "MBPG",
       "stateId": "johor",
       "stateName": "Johor",
@@ -691,7 +691,7 @@
     },
     {
       "id": "mpkulai",
-      "name": "Majlis Perbandaran Kulai (MPKu)",
+      "name": "Majlis Perbandaran Kulai",
       "shortName": "MPKu",
       "stateId": "johor",
       "stateName": "Johor",
@@ -715,7 +715,7 @@
     },
     {
       "id": "mpkluang",
-      "name": "Majlis Perbandaran Kluang (MPKluang)",
+      "name": "Majlis Perbandaran Kluang",
       "shortName": "MPK",
       "stateId": "johor",
       "stateName": "Johor",
@@ -738,7 +738,7 @@
     },
     {
       "id": "mpbp",
-      "name": "Majlis Perbandaran Batu Pahat (MPBP)",
+      "name": "Majlis Perbandaran Batu Pahat",
       "shortName": "MPBP",
       "stateId": "johor",
       "stateName": "Johor",
@@ -761,7 +761,7 @@
     },
     {
       "id": "mpmuar",
-      "name": "Majlis Perbandaran Muar (MPMuar)",
+      "name": "Majlis Perbandaran Muar",
       "shortName": "MPM",
       "stateId": "johor",
       "stateName": "Johor",
@@ -784,7 +784,7 @@
     },
     {
       "id": "mppontian",
-      "name": "Majlis Perbandaran Pontian (MPPontian)",
+      "name": "Majlis Perbandaran Pontian",
       "shortName": "MPP",
       "stateId": "johor",
       "stateName": "Johor",
@@ -808,7 +808,7 @@
     },
     {
       "id": "mpsegamat",
-      "name": "Majlis Perbandaran Segamat (MPSegamat)",
+      "name": "Majlis Perbandaran Segamat",
       "shortName": "MPSeg",
       "stateId": "johor",
       "stateName": "Johor",
@@ -854,7 +854,7 @@
     },
     {
       "id": "mdkt",
-      "name": "Majlis Perbandaran Kota Tinggi (MPKT)",
+      "name": "Majlis Perbandaran Kota Tinggi",
       "shortName": "MPKT",
       "stateId": "johor",
       "stateName": "Johor",
@@ -875,7 +875,7 @@
     },
     {
       "id": "mdmersing",
-      "name": "Majlis Daerah Mersing (MDM)",
+      "name": "Majlis Daerah Mersing",
       "shortName": "MDM",
       "stateId": "johor",
       "stateName": "Johor",
@@ -897,7 +897,7 @@
     },
     {
       "id": "mdtangkak",
-      "name": "Majlis Daerah Tangkak (MDT)",
+      "name": "Majlis Daerah Tangkak",
       "shortName": "MDT",
       "stateId": "johor",
       "stateName": "Johor",
@@ -919,7 +919,7 @@
     },
     {
       "id": "mdsimpangrenggam",
-      "name": "Majlis Daerah Simpang Renggam (MDSR)",
+      "name": "Majlis Daerah Simpang Renggam",
       "shortName": "MDSR",
       "stateId": "johor",
       "stateName": "Johor",
@@ -941,7 +941,7 @@
     },
     {
       "id": "mdyongpeng",
-      "name": "Majlis Daerah Yong Peng (MDYP)",
+      "name": "Majlis Daerah Yong Peng",
       "shortName": "MDYP",
       "stateId": "johor",
       "stateName": "Johor",
@@ -962,7 +962,7 @@
     },
     {
       "id": "mdlabis",
-      "name": "Majlis Daerah Labis (MDL)",
+      "name": "Majlis Daerah Labis",
       "shortName": "MDL",
       "stateId": "johor",
       "stateName": "Johor",
@@ -984,7 +984,7 @@
     },
     {
       "id": "mbmb",
-      "name": "Majlis Bandaraya Melaka Bersejarah (MBMB)",
+      "name": "Majlis Bandaraya Melaka Bersejarah",
       "shortName": "MBMB",
       "stateId": "melaka",
       "stateName": "Melaka",
@@ -1010,7 +1010,7 @@
     },
     {
       "id": "mphtj",
-      "name": "Majlis Perbandaran Hang Tuah Jaya (MPHTJ)",
+      "name": "Majlis Perbandaran Hang Tuah Jaya",
       "shortName": "MPHTJ",
       "stateId": "melaka",
       "stateName": "Melaka",
@@ -1033,7 +1033,7 @@
     },
     {
       "id": "mpag",
-      "name": "Majlis Perbandaran Alor Gajah (MPAG)",
+      "name": "Majlis Perbandaran Alor Gajah",
       "shortName": "MPAG",
       "stateId": "melaka",
       "stateName": "Melaka",
@@ -1054,7 +1054,7 @@
     },
     {
       "id": "mpjasin",
-      "name": "Majlis Perbandaran Jasin (MPJasin)",
+      "name": "Majlis Perbandaran Jasin",
       "shortName": "MPJ",
       "stateId": "melaka",
       "stateName": "Melaka",
@@ -1074,7 +1074,7 @@
     },
     {
       "id": "mbseremban",
-      "name": "Majlis Bandaraya Seremban (MBS)",
+      "name": "Majlis Bandaraya Seremban",
       "shortName": "MBS",
       "stateId": "nsembilan",
       "stateName": "Negeri Sembilan",
@@ -1097,7 +1097,7 @@
     },
     {
       "id": "mppd",
-      "name": "Majlis Perbandaran Port Dickson (MPPD)",
+      "name": "Majlis Perbandaran Port Dickson",
       "shortName": "MPPD",
       "stateId": "nsembilan",
       "stateName": "Negeri Sembilan",
@@ -1222,7 +1222,7 @@
     },
     {
       "id": "mbipoh",
-      "name": "Majlis Bandaraya Ipoh (MBI)",
+      "name": "Majlis Bandaraya Ipoh",
       "shortName": "MBI",
       "stateId": "perak",
       "stateName": "Perak",
@@ -1543,7 +1543,7 @@
     },
     {
       "id": "mbkuantan",
-      "name": "Majlis Bandaraya Kuantan (MBK)",
+      "name": "Majlis Bandaraya Kuantan",
       "shortName": "MBK",
       "stateId": "pahang",
       "stateName": "Pahang",
@@ -1570,7 +1570,7 @@
     },
     {
       "id": "mdch",
-      "name": "Majlis Daerah Cameron Highlands (MDCH)",
+      "name": "Majlis Daerah Cameron Highlands",
       "shortName": "MDCH",
       "stateId": "pahang",
       "stateName": "Pahang",
@@ -1791,7 +1791,7 @@
     },
     {
       "id": "tioman",
-      "name": "Lembaga Pembangunan Tioman (TDA)",
+      "name": "Lembaga Pembangunan Tioman",
       "shortName": "TDA",
       "stateId": "pahang",
       "stateName": "Pahang",
@@ -1815,7 +1815,7 @@
     },
     {
       "id": "mbalorsetar",
-      "name": "Majlis Bandaraya Alor Setar (MBAS)",
+      "name": "Majlis Bandaraya Alor Setar",
       "shortName": "MBAS",
       "stateId": "kedah",
       "stateName": "Kedah",
@@ -1839,7 +1839,7 @@
     },
     {
       "id": "mpsungapipetani",
-      "name": "Majlis Perbandaran Sungai Petani (MPSPK)",
+      "name": "Majlis Perbandaran Sungai Petani",
       "shortName": "MPSPK",
       "stateId": "kedah",
       "stateName": "Kedah",
@@ -1861,7 +1861,7 @@
     },
     {
       "id": "mpkulim",
-      "name": "Majlis Perbandaran Kulim (MPK / KHTP)",
+      "name": "Majlis Perbandaran Kulim",
       "shortName": "MPK",
       "stateId": "kedah",
       "stateName": "Kedah",
@@ -1885,7 +1885,7 @@
     },
     {
       "id": "mplangkawi",
-      "name": "Majlis Perbandaran Langkawi Bandaraya Pelancongan (MPLBP)",
+      "name": "Majlis Perbandaran Langkawi Bandaraya Pelancongan",
       "shortName": "MPLBP",
       "stateId": "kedah",
       "stateName": "Kedah",
@@ -1910,7 +1910,7 @@
     },
     {
       "id": "mpkubangpasu",
-      "name": "Majlis Perbandaran Kubang Pasu (MPKP)",
+      "name": "Majlis Perbandaran Kubang Pasu",
       "shortName": "MPKP",
       "stateId": "kedah",
       "stateName": "Kedah",
@@ -2054,7 +2054,7 @@
     },
     {
       "id": "mpkbbri",
-      "name": "Majlis Perbandaran Kota Bharu Bandar Raya Islam (MPKB-BRI)",
+      "name": "Majlis Perbandaran Kota Bharu Bandar Raya Islam",
       "shortName": "MPKB-BRI",
       "stateId": "kelantan",
       "stateName": "Kelantan",
@@ -2317,7 +2317,7 @@
     },
     {
       "id": "mbkt",
-      "name": "Majlis Bandaraya Kuala Terengganu (MBKT)",
+      "name": "Majlis Bandaraya Kuala Terengganu",
       "shortName": "MBKT",
       "stateId": "terengganu",
       "stateName": "Terengganu",
@@ -2483,7 +2483,7 @@
     },
     {
       "id": "mpkangar",
-      "name": "Majlis Perbandaran Kangar (MPKangar)",
+      "name": "Majlis Perbandaran Kangar",
       "shortName": "MPKangar",
       "stateId": "perlis",
       "stateName": "Perlis",
@@ -2508,7 +2508,7 @@
     },
     {
       "id": "dbkk",
-      "name": "Dewan Bandaraya Kota Kinabalu (DBKK)",
+      "name": "Dewan Bandaraya Kota Kinabalu",
       "shortName": "DBKK",
       "stateId": "sabah",
       "stateName": "Sabah",
@@ -3097,7 +3097,7 @@
     },
     {
       "id": "dbku",
-      "name": "Dewan Bandaraya Kuching Utara (DBKU)",
+      "name": "Dewan Bandaraya Kuching Utara",
       "shortName": "DBKU",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3122,7 +3122,7 @@
     },
     {
       "id": "mbks",
-      "name": "Majlis Bandaraya Kuching Selatan (MBKS)",
+      "name": "Majlis Bandaraya Kuching Selatan",
       "shortName": "MBKS",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3148,7 +3148,7 @@
     },
     {
       "id": "mbm",
-      "name": "Majlis Bandaraya Miri (MBM)",
+      "name": "Majlis Bandaraya Miri",
       "shortName": "MBM",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3175,7 +3175,7 @@
     },
     {
       "id": "bda",
-      "name": "Lembaga Kemajuan Bintulu (Bintulu Development Authority - BDA)",
+      "name": "Lembaga Kemajuan Bintulu",
       "shortName": "BDA",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3474,7 +3474,7 @@
     },
     {
       "id": "mdmeradongjulau",
-      "name": "Majlis Daerah Meradong dan Julau (MDMJ)",
+      "name": "Majlis Daerah Meradong dan Julau",
       "shortName": "MDMJ",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3497,7 +3497,7 @@
     },
     {
       "id": "mdluarsibu",
-      "name": "Majlis Daerah Luar Bandar Sibu (SRDC)",
+      "name": "Majlis Daerah Luar Bandar Sibu",
       "shortName": "SRDC",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3608,7 +3608,7 @@
     },
     {
       "id": "mdmatudaro",
-      "name": "Majlis Daerah Matu dan Daro (MDMD)",
+      "name": "Majlis Daerah Matu dan Daro",
       "shortName": "MDMD",
       "stateId": "sarawak",
       "stateName": "Sarawak",
@@ -3630,7 +3630,7 @@
     },
     {
       "id": "mdmukahdalat",
-      "name": "Majlis Daerah Dalat dan Mukah (MDDM)",
+      "name": "Majlis Daerah Dalat dan Mukah",
       "shortName": "MDDM",
       "stateId": "sarawak",
       "stateName": "Sarawak",

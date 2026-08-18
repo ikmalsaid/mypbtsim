@@ -147,9 +147,6 @@ export function renderEmptyHazardCards(containerElement) {
       <div class="empty-state-desc">
         Kiraan Bebanan Trafik (TSI), Aksesibiliti Transit (TOD), dan Pematuhan Statutori Akta PBT akan diproses selepas carian OSM selesai.
       </div>
-      <div class="empty-state-hint">
-        Status: <strong>Sedia Untuk Analisis</strong>
-      </div>
     </div>
   `;
 }

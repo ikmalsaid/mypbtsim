@@ -14,8 +14,6 @@ export function generateReportHtml(simulationData, pbtInfo) {
     year: 'numeric'
   });
 
-  const refNumber = `PBT/KM/2026/SIM-${Math.floor(1000 + Math.random() * 9000)}`;
-
   return `
     <div class="pbt-report-container" id="printable-pbt-report">
       
@@ -24,12 +22,11 @@ export function generateReportHtml(simulationData, pbtInfo) {
         <div class="report-crest-section">
           <div class="report-header-titles">
             <h2>${pbtInfo ? pbtInfo.name : 'Pihak Berkuasa Tempatan'}</h2>
-            <h3>Jabatan Perancangan Bandar dan Desa (Town Planning Department)</h3>
+            <h3>Jabatan Perancangan Bandar dan Desa</h3>
             <p>Sistem Simulasi Penilaian Impak Kebenaran Merancang (MyPBTSim)</p>
           </div>
         </div>
         <div class="report-meta-box">
-          <div><strong>No. Rujukan:</strong> ${refNumber}</div>
           <div><strong>Tarikh:</strong> ${dateFormatted}</div>
           <div><strong>Status KM:</strong> <span style="color:${overallAssessment.color}; font-weight:800;">${overallAssessment.status.replace(/_/g, ' ')}</span></div>
         </div>
@@ -211,9 +208,9 @@ export function generateReportHtml(simulationData, pbtInfo) {
         </div>
       </div>
 
-      <!-- Footer Disclaimer & Watermark -->
+      <!-- Footer Disclaimer & Statutory Note -->
       <div class="report-final-disclaimer">
-        Dokumen rasmi ini dijana secara digital melalui Platform Geospatial MyPBTSim. Sah laku untuk proses kelulusan Jawatankuasa Pusat Setempat (OSC) PBT.
+        <strong>PENAFIAN:</strong> Penilaian simulasi ini dijanakan secara digital berasaskan unjuran <em>senario terbaik (best-case scenario)</em> sebagai instrumen sokongan perancangan awal. Pegawai perancang dinasihatkan menyemak sebarang ralat data spatial, tapak fizikal, dan dokumen hakmilik sebelum membuat kelulusan statutori rasmi.
       </div>
 
     </div>

@@ -1,35 +1,33 @@
 /**
  * AI & Town Planning Simulation Engine
- * Executes 3 real-time calculations:
- * 1. Traffic Stress Index (TSI) - Units/GFA vs Access Roads, PCU Weighted Trips & Heavy Vehicles
+ * Executes 3 real-time calculations + Jurisdiction & Specific Council Policy Audits:
+ * 1. Traffic Stress Index (TSI) - Units/GFA vs Access Roads & PCU Heavy Vehicles
  * 2. Transit-Oriented Development (TOD) Score (0 - 100)
- * 3. Zoning & Heritage Law Compliance Check (Akta 172, Akta 645, Akta 127 JAS, MAS)
+ * 3. Statutory Zoning, Council-Specific By-Laws (Akta 172/267, RSKU 3.0, Hillside, UNESCO 18m, JAS Buffer, JS-SEZ)
  */
 
 import { SIMULATION_THRESHOLDS, MALAYSIAN_STATUTORY_LAWS } from '../config/simulation-rules.js';
 import { DEVELOPMENT_TYPES } from '../config/pbt-presets.js';
+import { PBT_ALL_DATABASE } from '../config/pbt-database.js';
 
 /**
  * Main simulation runner
- * @param {object} params
- * @param {string} params.siteName
- * @param {number} params.units
- * @param {string} params.developmentTypeId
- * @param {number} params.floors
- * @param {number} params.siteAreaAcres
- * @param {object} params.spatialData Overpass extracted infrastructure
  */
 export function runSimulation({
+  pbtId = 'dbkl',
   siteName = 'Tapak Cadangan',
   units = 350,
   developmentTypeId = 'high_rise_residential',
   floors = 24,
   siteAreaAcres = 3.5,
-  spatialData = {}
+  spatialData = {},
+  jurisdictionResult = null,
+  policyOptions = {}
 }) {
+  const pbt = PBT_ALL_DATABASE.find((p) => p.id === pbtId) || PBT_ALL_DATABASE[0];
   const devType = DEVELOPMENT_TYPES.find((d) => d.id === developmentTypeId) || DEVELOPMENT_TYPES[0];
 
-  // 1. Calculate Traffic Stress Index (with PCU & Heavy Vehicle weighting)
+  // 1. Calculate Traffic Stress Index
   const trafficStressResult = calculateTrafficStress(units, devType, spatialData.accessRoads || []);
 
   // 2. Calculate TOD Score
@@ -37,25 +35,36 @@ export function runSimulation({
     spatialData.railStations || [],
     spatialData.busStops || [],
     spatialData.schools || [],
-    devType
+    devType,
+    pbt
   );
 
-  // 3. Calculate Zoning, Environmental (JAS) & Heritage Compliance
-  const zoningComplianceResult = evaluateZoningAndHeritage(
+  // 3. Calculate Statutory, Jurisdiction & Specific Council Policy Compliance
+  const zoningComplianceResult = evaluateZoningAndCouncilPolicies(
+    pbt,
     siteName,
     units,
     siteAreaAcres,
     floors,
     devType,
     spatialData.heritageSites || [],
-    spatialData.schools || []
+    spatialData.schools || [],
+    jurisdictionResult,
+    policyOptions
   );
 
   // 4. Generate Overall Planning Approval Recommendation
-  const overallAssessment = determineOverallApproval(trafficStressResult, todScoreResult, zoningComplianceResult);
+  const overallAssessment = determineOverallApproval(
+    trafficStressResult,
+    todScoreResult,
+    zoningComplianceResult,
+    jurisdictionResult
+  );
 
   return {
     timestamp: new Date().toISOString(),
+    pbt,
+    jurisdictionResult,
     input: {
       siteName,
       units,
@@ -65,7 +74,8 @@ export function runSimulation({
       unitLabel: devType.unitLabel,
       tripRate: devType.tripRate,
       floors,
-      siteAreaAcres
+      siteAreaAcres,
+      policyOptions
     },
     results: {
       trafficStress: trafficStressResult,
@@ -79,6 +89,8 @@ export function runSimulation({
       busStopsCount: (spatialData.busStops || []).length,
       schoolsCount: (spatialData.schools || []).length,
       nearestSchool: (spatialData.schools || [])[0] || null,
+      worshipPlacesCount: (spatialData.worshipPlaces || []).length,
+      nearestWorship: (spatialData.worshipPlaces || [])[0] || null,
       heritageSitesCount: (spatialData.heritageSites || []).length,
       nearestHeritage: (spatialData.heritageSites || [])[0] || null,
       accessRoadsCount: (spatialData.accessRoads || []).length
@@ -88,7 +100,6 @@ export function runSimulation({
 
 /**
  * 1. Traffic Stress Index Calculation (PLANMalaysia & JKR/HPU Manual)
- * Incorporates PCU (Passenger Car Unit) multiplier for Heavy Vehicles (HV).
  */
 function calculateTrafficStress(units, devType, accessRoads) {
   const baseTripRate = devType.tripRate || 0.8;
@@ -99,7 +110,6 @@ function calculateTrafficStress(units, devType, accessRoads) {
   const rawTrips = Math.round(units * baseTripRate);
   const peakHourGeneratedTrips = Math.round(rawTrips * pcuFactor);
 
-  // Estimate total access road capacity
   let totalLaneCount = 0;
   let primaryRoadsCount = 0;
 
@@ -110,15 +120,12 @@ function calculateTrafficStress(units, devType, accessRoads) {
       if (r.highwayType === 'primary' || r.highwayType === 'trunk') primaryRoadsCount++;
     });
   } else {
-    // Default baseline 2-lane local road
     totalLaneCount = 4;
   }
 
-  // Base capacity per lane per peak hour: 750 PCU
   const baseLaneCapacity = 750;
   const totalRoadCapacity = Math.max(totalLaneCount * baseLaneCapacity, 1500);
 
-  // Baseline ambient background traffic (55% of capacity utilized)
   const ambientTraffic = totalRoadCapacity * 0.55;
   const totalPostDevTraffic = ambientTraffic + peakHourGeneratedTrips;
   const stressRatio = Math.min(Math.round((totalPostDevTraffic / totalRoadCapacity) * 100), 100);
@@ -137,21 +144,21 @@ function calculateTrafficStress(units, devType, accessRoads) {
 
     if (devType.category === 'industrial' || devType.category === 'logistics') {
       recommendations = [
-        'Laporan Penilaian Impak Trafik (TIA) Terperinci dan Analisis Bebanan Gandar Jalan (Axle Load) DIWAJIBKAN sebelum kelulusan KM.',
+        'Laporan Penilaian Impak Trafik (TIA) Terperinci dan Analisis Bebanan Gandar Jalan (Axle Load JKR U5/R5) DIWAJIBKAN.',
         `Peratusan kenderaan berat tinggi (~${Math.round(hvRatio * 100)}% treler/lori kontena) memerlukan jejari pusingan minima 15 meter di semua persimpangan.`,
-        'Pelebaran jalan akses perindustrian kepada 4 lorong berturap piawaian JKR U5/R5 dengan lorong pecutan/nyahpecutan (acceleration/deceleration lanes).',
+        'Pelebaran jalan akses perindustrian kepada 4 lorong berturap piawaian JKR dengan lorong memotong/nyahpecutan.',
         'Penyediaan kawasan menunggu lori (holding bay) dalam kawasan tapak bagi mengelak halangan di jalan awam.'
       ];
     } else if (devType.category === 'commercial') {
       recommendations = [
-        'Laporan TIA Komprehensif dan Pelan Pengurusan Trafik Waktu Puncak (Peak Hour Traffic Management Plan) DIWAJIBKAN.',
-        'Sistem tanjakan keluar-masuk bertingkat (grade-separated ingress/egress ramp) atau simpang berlampu isyarat pintar berpusat (SCATS).',
-        'Penyediaan laluan khas e-hailing, teksi, dan kawasan punggah barang (loading bay) bawah tanah.'
+        'Laporan TIA Komprehensif dan Pelan Pengurusan Trafik Waktu Puncak (Peak Hour Traffic Plan) DIWAJIBKAN.',
+        'Sistem tanjakan keluar-masuk bertingkat (grade-separated ingress/egress ramp) atau simpang lampu isyarat pintar (SCATS).',
+        'Penyediaan zon e-hailing, teksi, dan kawasan punggah barang (loading bay) bawah tanah khusus.'
       ];
     } else {
       recommendations = [
         'Penyediaan Laporan Penilaian Impak Trafik (TIA) Terperinci adalah DIWAJIBKAN sebelum kelulusan Kebenaran Merancang (KM).',
-        'Pelebaran jalan masuk utama kepada minimum 4 lorong (2 hala) dan pembinaan lorong membelok khas (dedicated turning lane).',
+        'Pelebaran jalan masuk utama kepada minimum 4 lorong (2 hala) dan pembinaan lorong membelok khas.',
         'Pemasangan lampu isyarat pintar di simpang keluar-masuk tapak pemajuan.',
         'Kajian semula jumlah unit pemajuan atau penambahan akses keluar-masuk sekunder.'
       ];
@@ -205,24 +212,20 @@ function calculateTrafficStress(units, devType, accessRoads) {
 /**
  * 2. Transit-Oriented Development (TOD) Score Calculation (0 - 100)
  */
-function calculateTODScore(railStations, busStops, schools, devType) {
+function calculateTODScore(railStations, busStops, schools, devType, pbt) {
   let score = 0;
-  let breakdown = {
-    railPoints: 0,
-    busPoints: 0,
-    walkabilityPoints: 0
-  };
+  let breakdown = { railPoints: 0, busPoints: 0, walkabilityPoints: 0 };
 
   const nearestRail = railStations[0] || null;
   const nearestRailDist = nearestRail ? nearestRail.distanceMeters : Infinity;
 
   // Rail Transit Catchment Score (Max 45 pts)
   if (nearestRailDist <= 400) {
-    breakdown.railPoints = 45; // Core Walking Catchment
+    breakdown.railPoints = 45;
   } else if (nearestRailDist <= 800) {
-    breakdown.railPoints = 32; // Secondary TOD Catchment
+    breakdown.railPoints = 32;
   } else if (nearestRailDist <= 1000) {
-    breakdown.railPoints = 18; // Marginal Transit Zone
+    breakdown.railPoints = 18;
   } else {
     breakdown.railPoints = 5;
   }
@@ -243,25 +246,19 @@ function calculateTODScore(railStations, busStops, schools, devType) {
 
   // Active Mobility & Community Walkability (Max 25 pts)
   const schoolsNear = schools.filter((s) => s.distanceMeters <= 600).length;
-  if (schoolsNear >= 2) {
-    breakdown.walkabilityPoints += 15;
-  } else if (schoolsNear >= 1) {
-    breakdown.walkabilityPoints += 10;
-  } else {
-    breakdown.walkabilityPoints += 4;
-  }
+  if (schoolsNear >= 2) breakdown.walkabilityPoints += 15;
+  else if (schoolsNear >= 1) breakdown.walkabilityPoints += 10;
+  else breakdown.walkabilityPoints += 4;
 
-  // Bus stop within 300m walking
   const busStop300m = busStops.some((b) => b.distanceMeters <= 300);
   if (busStop300m) breakdown.walkabilityPoints += 10;
   else breakdown.walkabilityPoints += 4;
 
   score = Math.min(breakdown.railPoints + breakdown.busPoints + breakdown.walkabilityPoints, 100);
 
-  // For industrial / logistics zones, TOD expectations are adjusted
-  if (devType.category === 'industrial' || devType.category === 'logistics') {
-    // Industrial priority is logistics access, not pedestrian TOD
-    score = Math.min(score + 15, 100);
+  // Council Specific Bonus (e.g. Johor RTS Link / DBKL CBD TOD)
+  if (pbt.policyFlags && pbt.policyFlags.hasRTSLink && nearestRailDist <= 800) {
+    score = Math.min(score + 10, 100);
   }
 
   let hazard = 'GREEN';
@@ -274,7 +271,7 @@ function calculateTODScore(railStations, busStops, schools, devType) {
     label = 'Cemerlang (Zon TOD Tinggi)';
     color = '#10b981';
     recommendations = [
-      'Layak menerima insentif Pelepasan Kuota Tempat Letak Kereta sehingga 30% di bawah Garis Panduan TOD PLANMalaysia.',
+      `Layak menerima insentif Pelepasan Kuota Tempat Letak Kereta sehingga 30% di bawah ${pbt.localPlan}.`,
       'Layak memohon Peningkatan Nisbah Plot (Plot Ratio Bonus) sehingga 1:8 atau 1:10.',
       'Wajib menyediakan laluan pejalan kaki berbumbung bersepadu terus ke stesen transit.',
       'Sediakan kemudahan mobiliti mikro (parkir e-skuter & basikal berbumbung).'
@@ -293,7 +290,7 @@ function calculateTODScore(railStations, busStops, schools, devType) {
     label = 'Rendah (Bergantung Kenderaan Persendirian)';
     color = '#ef4444';
     recommendations = [
-      'Kawasan berkepadatan transit rendah; kuota penuh tempat letak kenderaan diwajibkan mengikut piawaian PBT.',
+      `Kawasan berkepadatan transit rendah; kuota penuh tempat letak kenderaan diwajibkan mengikut piawaian ${pbt.shortName}.`,
       'Tiada insentif nisbah plot TOD dibenarkan.',
       'Pemaju disyorkan membina hentian bas berbumbung baharu sebagai sebahagian daripada sumbangan infrastruktur (ISF).'
     ];
@@ -313,105 +310,163 @@ function calculateTODScore(railStations, busStops, schools, devType) {
 }
 
 /**
- * 3. Zoning, Environmental (JAS) & Heritage Law Compliance Check
+ * 3. Statutory, Jurisdiction & Specific Council Policy Audit
  */
-function evaluateZoningAndHeritage(siteName, units, siteAreaAcres, floors, devType, heritageSites, schools) {
+function evaluateZoningAndCouncilPolicies(
+  pbt,
+  siteName,
+  units,
+  siteAreaAcres,
+  floors,
+  devType,
+  heritageSites,
+  schools,
+  jurisdictionResult,
+  policyOptions
+) {
   const densityPerAcre = siteAreaAcres > 0 ? Math.round(units / siteAreaAcres) : 80;
-  const isKgBaru = siteName.toLowerCase().includes('kampung baru') || siteName.toLowerCase().includes('kg baru');
-  const isHeritagePreset = siteName.toLowerCase().includes('georgetown') || siteName.toLowerCase().includes('melaka') || isKgBaru;
-
   const nearestHeritage = heritageSites[0] || null;
   const heritageDistance = nearestHeritage ? nearestHeritage.distanceMeters : Infinity;
-
   const nearestSchool = schools[0] || null;
   const schoolDistance = nearestSchool ? nearestSchool.distanceMeters : Infinity;
 
   const issues = [];
   const clearances = [];
   let hazard = 'GREEN';
-  let label = 'Mematuhi Rancangan Tempatan (RTD)';
-  let color = '#10b981';
 
-  // Check 1: Density Limit (Akta 172)
-  const maxAllowableDensity = devType.densityLimitPerAcre || (isHeritagePreset ? 40 : 100);
-  if (densityPerAcre > maxAllowableDensity) {
+  // CHECK 0: Spatial Jurisdiction Match
+  if (jurisdictionResult && !jurisdictionResult.isValid) {
     issues.push({
-      law: 'Akta Perancangan Bandar dan Desa 1976 (Akta 172)',
-      clause: `Seksyen 21 - Had Ketumpatan Siling (${devType.categoryLabel})`,
-      severity: 'HIGH',
-      text: `Ketumpatan cadangan (${densityPerAcre} ${devType.unitLabel}/ekar) melebihi had siling zon perancangan (${maxAllowableDensity} ${devType.unitLabel}/ekar).`
+      law: pbt.act,
+      clause: 'Seksyen 19 - Bidang Kuasa Pihak Berkuasa Perancang Tempatan',
+      severity: 'FATAL',
+      text: jurisdictionResult.message
     });
-    hazard = 'YELLOW';
+    hazard = 'RED';
   } else {
-    clearances.push(`Ketumpatan ${densityPerAcre} ${devType.unitLabel}/ekar mematuhi had zon (${maxAllowableDensity}/ekar).`);
+    clearances.push(`Permohonan sah di bawah bidang kuasa pentadbiran ${pbt.name} (${pbt.act}).`);
   }
 
-  // Check 2: Environmental Buffer Zone (Akta Kualiti Alam Sekeliling 1974 - JAS) for Industrial & Logistics
+  // CHECK 1: Density Limit
+  const maxAllowableDensity = devType.densityLimitPerAcre || 100;
+  if (densityPerAcre > maxAllowableDensity) {
+    issues.push({
+      law: pbt.act,
+      clause: `Seksyen 21 - Had Ketumpatan Kawasan (${pbt.localPlan})`,
+      severity: 'HIGH',
+      text: `Ketumpatan cadangan (${densityPerAcre} ${devType.unitLabel}/ekar) melebihi had siling zon perancangan ${pbt.shortName} (${maxAllowableDensity} ${devType.unitLabel}/ekar).`
+    });
+    if (hazard !== 'RED') hazard = 'YELLOW';
+  } else {
+    clearances.push(`Ketumpatan ${densityPerAcre} ${devType.unitLabel}/ekar mematuhi had zon ${pbt.shortName} (${maxAllowableDensity}/ekar).`);
+  }
+
+  // CHECK 2: Selangor Specific Policy (Rumah Selangorku 3.0)
+  if (pbt.stateId === 'selangor' && siteAreaAcres >= 5.0 && devType.category === 'residential') {
+    const affordablePct = policyOptions.affordableHousingPercent || 30;
+    if (affordablePct < 20) {
+      issues.push({
+        law: 'Garis Panduan dan Piawaian Perancangan Negeri Selangor 2025 (LPHS)',
+        clause: 'Dasar Rumah Selangorku 3.0 (Ketetapan MMKN Selangor)',
+        severity: 'HIGH',
+        text: `Pemajuan kediaman seluas ${siteAreaAcres} ekar (>= 5 ekar) WAJIB memperuntukkan sekurang-kurangnya 20%-40% unit Rumah Selangorku 3.0 (Peruntukan semasa: ${affordablePct}%).`
+      });
+      if (hazard !== 'RED') hazard = 'YELLOW';
+    } else {
+      clearances.push(`Mematuhi Dasar Rumah Selangorku 3.0 (${affordablePct}% unit kuota mampu milik disediakan).`);
+    }
+  }
+
+  // CHECK 3: Penang Specific Policy (Penang Hillside Guidelines 2020 & UNESCO Heritage)
+  if (pbt.stateId === 'penang') {
+    const slopeClass = policyOptions.slopeClass || 'kelas_1';
+    const elevationM = policyOptions.elevationMeters || 25;
+
+    if (slopeClass === 'kelas_3' || slopeClass === 'kelas_4') {
+      issues.push({
+        law: 'Penang Safety Guideline for Hill Site Development (Edisi Kedua 2020)',
+        clause: 'Larangan Mutlak Pembangunan Cerun Bukit Kelas 3 & 4 (> 25°)',
+        severity: 'CRITICAL',
+        text: `Kerajaan Negeri Pulau Pinang melarang sebarang pemajuan di cerun berkecerunan melebihi 25 darjah (${slopeClass.replace('_', ' ').toUpperCase()}). Permohonan KM tidak boleh diluluskan.`
+      });
+      hazard = 'RED';
+    }
+
+    if (elevationM > 76) {
+      issues.push({
+        law: 'Garis Panduan Kawalan Ketinggian Tanah Tinggi MBPP',
+        clause: 'Had Ketinggian 76 Meter (250 Kaki) dari Aras Laut',
+        severity: 'HIGH',
+        text: `Aras tanah cadangan (${elevationM}m) melebihi had siling pemajuan bukit Pulau Pinang (76 meter). Kelulusan Khas Jawatankuasa Rayuan Negeri diperlukan.`
+      });
+      if (hazard !== 'RED') hazard = 'YELLOW';
+    }
+
+    if (pbt.policyFlags && pbt.policyFlags.hasUNESCOHeritage && floors > 5) {
+      issues.push({
+        law: 'George Town World Heritage Site Special Area Plan (SAP)',
+        clause: 'Kawalan Ketinggian Maksimum UNESCO (Had 18m / ~5 Tingkat)',
+        severity: 'CRITICAL',
+        text: `Cadangan ${floors} tingkat melebihi had siling $18\\text{m}$ Zon Warisan Dunia UNESCO George Town.`
+      });
+      hazard = 'RED';
+    }
+  }
+
+  // CHECK 4: Industrial Environmental Buffer Zone (Akta 127 JAS)
   if (devType.category === 'industrial' || devType.category === 'logistics') {
     const requiredBuffer = devType.doeBufferRequired || 50;
-    if (schoolDistance < requiredBuffer) {
+    const providedBuffer = policyOptions.industrialBufferMeters !== undefined ? policyOptions.industrialBufferMeters : requiredBuffer;
+
+    if (providedBuffer < requiredBuffer || schoolDistance < requiredBuffer) {
       issues.push({
         law: 'Akta Kualiti Alam Sekeliling 1974 (Akta 127) & Garis Panduan JAS',
-        clause: 'Zon Penampan Alam Sekitar (DOE Buffer Zone)',
+        clause: 'Zon Penampan Fizikal Hijau Alam Sekitar (DOE Buffer Zone)',
         severity: 'CRITICAL',
-        text: `Aktiviti perindustrian berada pada jarak ${schoolDistance}m dari institusi sensitif/sekolah terdekat (Had minima zon penampan JAS: ${requiredBuffer}m). Penampan fizikal hijau dan Laporan EIA diwajibkan.`
+        text: `Zon penampan fizikal (${providedBuffer}m disediakan / institusi sensitif pada ${schoolDistance}m) tidak memenuhi syarat minima JAS (${requiredBuffer}m). Laporan EIA diwajibkan.`
       });
       hazard = 'RED';
     } else {
-      clearances.push(`Mematuhi zon penampan alam sekitar JAS (${requiredBuffer}m penampan fizikal hijau).`);
+      clearances.push(`Mematuhi zon penampan alam sekitar JAS (${providedBuffer}m penampan fizikal hijau).`);
     }
   }
 
-  // Check 3: Data Center / High-Tech Utilities Check
+  // CHECK 5: High-Tech Data Center Guidelines (MP Sepang / PLANMalaysia 2024)
   if (devType.id === 'data_center_tech') {
-    issues.push({
-      law: 'Garis Panduan Perancangan Pusat Data PLANMalaysia 2024',
-      clause: 'Bebanan Utiliti (Bekalan Elektrik TNB & Air Pengurusan)',
-      severity: 'MODERATE',
-      text: 'Pusat Data memerlukan Surat Pengesahan Kapasiti Beban Kuasa Elektrik (TNB MVA Allocation) dan Laporan Kecekapan Penggunaan Tenaga (PUE < 1.4).'
-    });
-    if (hazard !== 'RED') hazard = 'YELLOW';
-  }
-
-  // Check 4: Heritage Buffer Zone (Akta 645)
-  if (heritageDistance <= 200 || (isHeritagePreset && devType.category !== 'heritage')) {
-    const distText = heritageDistance !== Infinity ? `${heritageDistance}m` : 'Zon Warisan Berwarta';
-    issues.push({
-      law: 'Akta Warisan Kebangsaan 2005 (Akta 645)',
-      clause: 'Zon Penampan Warisan (200m Buffer Zone)',
-      severity: isHeritagePreset && floors > 6 ? 'CRITICAL' : 'MODERATE',
-      text: `Tapak berada dalam Zon Penampan Warisan (${distText} dari tapak warisan). Kawalan ketinggian maksimum (had ${floors > 6 ? 'melepasi' : 'mematuhi'} garis panduan) dan kelulusan Jawatankuasa Pemuliharaan Warisan PBT diperlukan.`
-    });
-
-    if (floors > 6 && isHeritagePreset) {
-      hazard = 'RED';
-    } else if (hazard !== 'RED') {
-      hazard = 'YELLOW';
+    const targetPue = policyOptions.pue || 1.35;
+    if (targetPue > 1.4) {
+      issues.push({
+        law: 'Garis Panduan Perancangan Pusat Data PLANMalaysia 2024',
+        clause: 'Had Kecekapan Penggunaan Tenaga (PUE Siling < 1.4)',
+        severity: 'HIGH',
+        text: `Sasaran PUE (${targetPue}) melebihi piawaian kebangsaan (PUE < 1.4). Pengesahan sistem penyejukan hijau diperlukan.`
+      });
+      if (hazard !== 'RED') hazard = 'YELLOW';
+    } else {
+      clearances.push(`Mematuhi Garis Panduan Pusat Data PLANMalaysia (PUE sasaran: ${targetPue} < 1.4).`);
     }
-  } else {
-    clearances.push('Tapak berada di luar zon penampan warisan 200m Akta 645.');
   }
 
-  // Check 5: Malay Agricultural Settlement (M.A.S) / Malay Reserve Enactment
-  if (isKgBaru) {
+  // CHECK 6: Malay Agricultural Settlement (M.A.S. Kampung Baru By-Laws)
+  if (siteName.toLowerCase().includes('kampung baru') || siteName.toLowerCase().includes('kg baru') || pbt.id === 'pkb') {
     issues.push({
-      law: 'Enakmen Penempatan Pertanian Melayu (M.A.S By-Laws 1900 / Perbadanan Kampong Bharu)',
-      clause: 'Status Tanah Rizab Tradisional',
+      law: 'Akta Perbadanan Pembangunan Kampong Bharu 2011 (Akta 733)',
+      clause: 'Enakmen Penempatan Pertanian Melayu (M.A.S. By-Laws 1900)',
       severity: 'MODERATE',
-      text: 'Pemilikan dan transaksi unit tertakluk kepada Enakmen M.A.S dan Akta Perbadanan Kampong Bharu 2011 (Akta 733).'
+      text: 'Pemilikan dan transaksi unit tertakluk kepada Enakmen M.A.S dan sekatan pindah milik bumiputera tradisi.'
     });
     if (hazard !== 'RED') hazard = 'YELLOW';
   }
+
+  let label = 'Mematuhi Rancangan Tempatan (RTD)';
+  let color = '#10b981';
 
   if (hazard === 'RED') {
-    label = 'Berisiko / Tidak Mematuhi Enakmen PBT / JAS';
+    label = 'Berisiko / Tidak Mematuhi Enakmen PBT';
     color = '#ef4444';
   } else if (hazard === 'YELLOW') {
     label = 'Kelulusan Bersyarat (Perlu Semakan Jawatankuasa PBT)';
     color = '#f59e0b';
-  } else {
-    label = 'Mematuhi Sepenuhnya Rancangan Tempatan (RTD)';
-    color = '#10b981';
   }
 
   return {
@@ -425,14 +480,27 @@ function evaluateZoningAndHeritage(siteName, units, siteAreaAcres, floors, devTy
     nearestSchoolDistance: schoolDistance === Infinity ? 'Tiada dalam 1km' : `${schoolDistance} m`,
     issues,
     clearances,
-    statutoryReferences: MALAYSIAN_STATUTORY_LAWS
+    statutoryReferences: [
+      { act: pbt.act, section: pbt.localPlan, description: 'Rancangan pemajuan berkanun PBT.' },
+      ...MALAYSIAN_STATUTORY_LAWS
+    ]
   };
 }
 
 /**
  * Determines Overall Planning Recommendation
  */
-function determineOverallApproval(traffic, tod, zoning) {
+function determineOverallApproval(traffic, tod, zoning, jurisdictionResult) {
+  if (jurisdictionResult && !jurisdictionResult.isValid) {
+    return {
+      status: 'BATAL_LUAR_BIDANG_KUASA',
+      badge: 'RED',
+      title: 'PERMOHONAN BATAL / TIDAK SAH (DI LUAR BIDANG KUASA PBT)',
+      color: '#ef4444',
+      summary: `Tapak cadangan berada di luar kawasan pentadbiran ${jurisdictionResult.selectedPbt.shortName}. Di bawah ${jurisdictionResult.statutoryAct}, Kebenaran Merancang (KM) hanya boleh diproses oleh ${jurisdictionResult.detectedPbt.name}. Sila selaraskan PBT.`
+    };
+  }
+
   const redCount = [traffic.hazard, tod.hazard, zoning.hazard].filter((h) => h === 'RED').length;
   const yellowCount = [traffic.hazard, tod.hazard, zoning.hazard].filter((h) => h === 'YELLOW').length;
 
@@ -442,7 +510,7 @@ function determineOverallApproval(traffic, tod, zoning) {
       badge: 'RED',
       title: 'DITOLAK / PERLU PINDAAN PELAN UTAMA (MAJOR REVISION REQUIRED)',
       color: '#ef4444',
-      summary: 'Cadangan pemajuan menghadapi halangan ketara berkaitan kesesakan jalan masuk kritikal, pelanggaran zon penampan JAS, atau enakmen warisan. Pemaju perlu mengemukakan Laporan Impak Trafik (TIA) dan Pelan Mitigasi PBT sebelum KM boleh dipertimbangkan.'
+      summary: 'Cadangan pemajuan menghadapi halangan ketara berkaitan kesesakan jalan masuk kritikal, pelanggaran zon penampan JAS, atau ketetapan enakmen statutori PBT. Pemaju perlu mengemukakan pelan mitigasi komprehensif.'
     };
   }
 
@@ -452,7 +520,7 @@ function determineOverallApproval(traffic, tod, zoning) {
       badge: 'YELLOW',
       title: 'SOKONGAN BERSYARAT (CONDITIONAL APPROVAL)',
       color: '#f59e0b',
-      summary: 'Cadangan pemajuan secara amnya berpotensi untuk diluluskan dengan syarat pemaju melaksanakan pelan mitigasi trafik, penyediaan infrastruktur pematuhan zon penampan, dan mematuhi garis panduan PBT.'
+      summary: 'Cadangan pemajuan berpotensi untuk dipertimbangkan dengan syarat pemaju melaksanakan pelan mitigasi trafik, pematuhan kuota statutori, dan penyediaan infrastruktur mengikut piawaian PBT.'
     };
   }
 
@@ -461,6 +529,6 @@ function determineOverallApproval(traffic, tod, zoning) {
     badge: 'GREEN',
     title: 'DISOKONG UNTUK KELULUSAN KEBENARAN MERANCANG (KM)',
     color: '#10b981',
-    summary: 'Cadangan pemajuan mematuhi piawaian perancangan bandar, mempunyai jaringan akses jalan yang mencukupi, dan mematuhi peruntukan Rancangan Tempatan (RTD).'
+    summary: 'Cadangan pemajuan mematuhi piawaian perancangan bandar, mempunyai jaringan akses jalan yang mencukupi, dan mematuhi sepenuhnya peruntukan Rancangan Tempatan (RTD).'
   };
 }

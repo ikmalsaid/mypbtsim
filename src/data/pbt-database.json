@@ -1,0 +1,3749 @@
+{
+  "version": "2.0.0",
+  "description": "Pangkalan Data Lengkap 156 Pihak Berkuasa Tempatan (PBT) Malaysia & Akta Kawal Selia Statutori",
+  "lastUpdated": "2026-08-18",
+  "totalStates": 16,
+  "totalPbts": 157,
+  "states": [
+    {
+      "id": "kl",
+      "name": "W.P. Kuala Lumpur",
+      "code": "WPKL",
+      "region": "central"
+    },
+    {
+      "id": "selangor",
+      "name": "Selangor",
+      "code": "SGR",
+      "region": "central"
+    },
+    {
+      "id": "putrajaya",
+      "name": "W.P. Putrajaya",
+      "code": "WPPTJ",
+      "region": "central"
+    },
+    {
+      "id": "johor",
+      "name": "Johor",
+      "code": "JHR",
+      "region": "southern"
+    },
+    {
+      "id": "penang",
+      "name": "Pulau Pinang",
+      "code": "PNG",
+      "region": "northern"
+    },
+    {
+      "id": "perak",
+      "name": "Perak",
+      "code": "PRK",
+      "region": "northern"
+    },
+    {
+      "id": "melaka",
+      "name": "Melaka",
+      "code": "MLK",
+      "region": "southern"
+    },
+    {
+      "id": "nsembilan",
+      "name": "Negeri Sembilan",
+      "code": "NSN",
+      "region": "southern"
+    },
+    {
+      "id": "pahang",
+      "name": "Pahang",
+      "code": "PHG",
+      "region": "east_coast"
+    },
+    {
+      "id": "kedah",
+      "name": "Kedah",
+      "code": "KDH",
+      "region": "northern"
+    },
+    {
+      "id": "kelantan",
+      "name": "Kelantan",
+      "code": "KTN",
+      "region": "east_coast"
+    },
+    {
+      "id": "terengganu",
+      "name": "Terengganu",
+      "code": "TRG",
+      "region": "east_coast"
+    },
+    {
+      "id": "perlis",
+      "name": "Perlis",
+      "code": "PLS",
+      "region": "northern"
+    },
+    {
+      "id": "sabah",
+      "name": "Sabah",
+      "code": "SBH",
+      "region": "borneo"
+    },
+    {
+      "id": "sarawak",
+      "name": "Sarawak",
+      "code": "SWK",
+      "region": "borneo"
+    },
+    {
+      "id": "labuan",
+      "name": "W.P. Labuan",
+      "code": "WPLBN",
+      "region": "borneo"
+    }
+  ],
+  "pbts": [
+    {
+      "id": "dbkl",
+      "name": "Dewan Bandaraya Kuala Lumpur (DBKL)",
+      "shortName": "DBKL",
+      "stateId": "kl",
+      "stateName": "W.P. Kuala Lumpur",
+      "tier": "bandaraya",
+      "tierLabel": "Dewan Bandaraya",
+      "act": "Akta (Perancangan) Wilayah Persekutuan 1982 (Akta 267)",
+      "localPlan": "Pelan Tempatan Kuala Lumpur 2040 (PTKL2040) & PSKL2040",
+      "lat": 3.1408,
+      "lng": 101.6932,
+      "radiusKm": 18,
+      "keywords": [
+        "kuala lumpur",
+        "kl",
+        "kampung baru",
+        "bukit bintang",
+        "bangsar",
+        "cheras",
+        "setapak",
+        "kepong",
+        "titiwangsa",
+        "mont kiara",
+        "damansara heights",
+        "seputeh",
+        "wangsa maju"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true,
+        "hasTODBonus": true,
+        "hasMASHouse": true,
+        "defaultAffordable": "RUMAWIP"
+      }
+    },
+    {
+      "id": "pkb",
+      "name": "Perbadanan Pembangunan Kampong Bharu (PKB)",
+      "shortName": "PKB",
+      "stateId": "kl",
+      "stateName": "W.P. Kuala Lumpur",
+      "tier": "khas",
+      "tierLabel": "Pihak Berkuasa Khas",
+      "act": "Akta Perbadanan Pembangunan Kampong Bharu 2011 (Akta 733)",
+      "localPlan": "Pelan Induk Pembangunan Kampong Bharu (PIPKB 2040)",
+      "lat": 3.1612,
+      "lng": 101.7088,
+      "radiusKm": 3,
+      "keywords": [
+        "kampung baru",
+        "kampong bharu",
+        "mas kampung baru",
+        "raja abdullah",
+        "raja muda musa"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true,
+        "hasMASHouse": true,
+        "defaultAffordable": "RUMAWIP"
+      }
+    },
+    {
+      "id": "pjaya",
+      "name": "Perbadanan Putrajaya (PPj)",
+      "shortName": "PPj",
+      "stateId": "putrajaya",
+      "stateName": "W.P. Putrajaya",
+      "tier": "khas",
+      "tierLabel": "Perbadanan PBT",
+      "act": "Akta Perbadanan Putrajaya 1995 (Akta 536)",
+      "localPlan": "Pelan Struktur & Pelan Tempatan Putrajaya 2025/2030",
+      "lat": 2.9264,
+      "lng": 101.6964,
+      "radiusKm": 8,
+      "keywords": [
+        "putrajaya",
+        "presint 1",
+        "presint 2",
+        "presint 3",
+        "presint 4",
+        "presint 8",
+        "presint 9",
+        "presint 11",
+        "presint 14",
+        "presint 16",
+        "presint 18"
+      ],
+      "policyFlags": {
+        "hasProtocolCorridor": true,
+        "hasGreenCity": true,
+        "defaultAffordable": "PPA1M"
+      }
+    },
+    {
+      "id": "plabuan",
+      "name": "Perbadanan Labuan",
+      "shortName": "PL",
+      "stateId": "labuan",
+      "stateName": "W.P. Labuan",
+      "tier": "khas",
+      "tierLabel": "Perbadanan PBT",
+      "act": "Akta Perbadanan Labuan 1992 (Akta 465)",
+      "localPlan": "Pelan Struktur Labuan 2030",
+      "lat": 5.2831,
+      "lng": 115.2308,
+      "radiusKm": 12,
+      "keywords": [
+        "labuan",
+        "victoria",
+        "layang-layangan",
+        "rancha-rancha"
+      ],
+      "policyFlags": {
+        "hasOffshoreFinance": true
+      }
+    },
+    {
+      "id": "mbpj",
+      "name": "Majlis Bandaraya Petaling Jaya (MBPJ)",
+      "shortName": "MBPJ",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Petaling Jaya 2 (RTPJ2 Penggantian)",
+      "lat": 3.1073,
+      "lng": 101.6441,
+      "radiusKm": 12,
+      "keywords": [
+        "petaling jaya",
+        "pj",
+        "seksyen 13",
+        "ss2",
+        "damansara utama",
+        "kelana jaya",
+        "kota damansara",
+        "bandar utama",
+        "aradamansara",
+        "sunway damansara"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasLCCF": true,
+        "hasTODBonus": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mbsa",
+      "name": "Majlis Bandaraya Shah Alam (MBSA)",
+      "shortName": "MBSA",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Draf Rancangan Tempatan MBSA 2035",
+      "lat": 3.0738,
+      "lng": 101.5183,
+      "radiusKm": 18,
+      "keywords": [
+        "shah alam",
+        "seksyen 7",
+        "seksyen 15",
+        "bukit jelutong",
+        "setia alam",
+        "kota kemuning",
+        "i-city",
+        "denai alam",
+        "sungai buloh selatan"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasLCCF": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mbsj",
+      "name": "Majlis Bandaraya Subang Jaya (MBSJ)",
+      "shortName": "MBSJ",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Subang Jaya 2035 (Pengubahan 1)",
+      "lat": 3.0556,
+      "lng": 101.5878,
+      "radiusKm": 15,
+      "keywords": [
+        "subang jaya",
+        "usj",
+        "bandar sunway",
+        "puchong",
+        "seri kembangan",
+        "kinrara",
+        "putra heights",
+        "equine park"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasTODBonus": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mbdk",
+      "name": "Majlis Bandaraya Diraja Klang (MBDK)",
+      "shortName": "MBDK",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan MBDK 2035",
+      "lat": 3.0449,
+      "lng": 101.4456,
+      "radiusKm": 18,
+      "keywords": [
+        "klang",
+        "bukit raja",
+        "port klang",
+        "pelabuhan klang",
+        "pandamaran",
+        "kapar",
+        "meru",
+        "bandar botanic",
+        "telok gong"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasIndustrialPortBuffer": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mpsepang",
+      "name": "Majlis Perbandaran Sepang (MPSp - Cyberjaya/KLIA)",
+      "shortName": "MPSp",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Sepang 2035",
+      "lat": 2.9213,
+      "lng": 101.6559,
+      "radiusKm": 22,
+      "keywords": [
+        "cyberjaya",
+        "sepang",
+        "klia",
+        "salak tinggi",
+        "dengkil",
+        "kota warisan",
+        "putrajaya sentral"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasDataCenterGuidelines": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mpaj",
+      "name": "Majlis Perbandaran Ampang Jaya (MPAJ)",
+      "shortName": "MPAJ",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan MPAJ 2035",
+      "lat": 3.1499,
+      "lng": 101.7629,
+      "radiusKm": 12,
+      "keywords": [
+        "ampang",
+        "ampang jaya",
+        "pandan indah",
+        "pandan jaya",
+        "ulu klang",
+        "taman melawati",
+        "bukit antarabangsa"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasHillsideGuidelines": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mpkj",
+      "name": "Majlis Perbandaran Kajang (MPKj)",
+      "shortName": "MPKj",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan MPKj 2035",
+      "lat": 2.9935,
+      "lng": 101.7897,
+      "radiusKm": 20,
+      "keywords": [
+        "kajang",
+        "bangi",
+        "bandar baru bangi",
+        "semenyih",
+        "cheras selatan",
+        "balakong",
+        "hulu langat"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mpselayang",
+      "name": "Majlis Perbandaran Selayang (MPS)",
+      "shortName": "MPS",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Selayang 2030",
+      "lat": 3.2389,
+      "lng": 101.6558,
+      "radiusKm": 16,
+      "keywords": [
+        "selayang",
+        "rawang",
+        "batu caves",
+        "kepong utara",
+        "kundang",
+        "kuang"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mpkl",
+      "name": "Majlis Perbandaran Kuala Langat (MPKL)",
+      "shortName": "MPKL",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuala Langat 2035",
+      "lat": 2.8228,
+      "lng": 101.4984,
+      "radiusKm": 22,
+      "keywords": [
+        "banting",
+        "kuala langat",
+        "telok panglima garang",
+        "jenjarom",
+        "morib",
+        "carey island"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mphs",
+      "name": "Majlis Perbandaran Hulu Selangor (MPHS)",
+      "shortName": "MPHS",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Hulu Selangor 2035",
+      "lat": 3.5621,
+      "lng": 101.6568,
+      "radiusKm": 25,
+      "keywords": [
+        "kuala kubu bharu",
+        "batang kali",
+        "bukit beruntung",
+        "serendah",
+        "hulu selangor"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "hasHillsideGuidelines": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mpks",
+      "name": "Majlis Perbandaran Kuala Selangor (MPKS)",
+      "shortName": "MPKS",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuala Selangor 2035",
+      "lat": 3.3364,
+      "lng": 101.2592,
+      "radiusKm": 22,
+      "keywords": [
+        "kuala selangor",
+        "ijok",
+        "puncak alam",
+        "tanjong karang",
+        "bestari jaya"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mdsb",
+      "name": "Majlis Daerah Sabak Bernam (MDSB)",
+      "shortName": "MDSB",
+      "stateId": "selangor",
+      "stateName": "Selangor",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Sabak Bernam 2025",
+      "lat": 3.6738,
+      "lng": 100.9877,
+      "radiusKm": 25,
+      "keywords": [
+        "sabak bernam",
+        "sungai besar",
+        "sekinchan"
+      ],
+      "policyFlags": {
+        "hasRSKU": true,
+        "defaultAffordable": "Rumah Selangorku 3.0"
+      }
+    },
+    {
+      "id": "mbpp",
+      "name": "Majlis Bandaraya Pulau Pinang (MBPP)",
+      "shortName": "MBPP",
+      "stateId": "penang",
+      "stateName": "Pulau Pinang",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Draf Pelan Tempatan Pulau Pinang (Pulau) 2030 & George Town SAP",
+      "lat": 5.4164,
+      "lng": 100.3327,
+      "radiusKm": 15,
+      "keywords": [
+        "george town",
+        "pulau pinang",
+        "penang",
+        "lebuh chulia",
+        "bayan lepas",
+        "batu ferringhi",
+        "gelugor",
+        "tanjung bungah",
+        "jelutong",
+        "air itam"
+      ],
+      "policyFlags": {
+        "hasUNESCOHeritage": true,
+        "hasPenangHillside": true,
+        "defaultAffordable": "Rumah Mampu Milik Pulau Pinang"
+      }
+    },
+    {
+      "id": "mbsp",
+      "name": "Majlis Bandaraya Seberang Perai (MBSP)",
+      "shortName": "MBSP",
+      "stateId": "penang",
+      "stateName": "Pulau Pinang",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Seberang Perai 2030",
+      "lat": 5.3688,
+      "lng": 100.4356,
+      "radiusKm": 25,
+      "keywords": [
+        "butterworth",
+        "seberang perai",
+        "batu kawan",
+        "bukit mertajam",
+        "nibong tebal",
+        "perai",
+        "kepala batas"
+      ],
+      "policyFlags": {
+        "hasPenangHillside": true,
+        "defaultAffordable": "Rumah Mampu Milik Pulau Pinang"
+      }
+    },
+    {
+      "id": "mbjb",
+      "name": "Majlis Bandaraya Johor Bahru (MBJB)",
+      "shortName": "MBJB",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan MBJB 2030 (Pengubahan 1)",
+      "lat": 1.4927,
+      "lng": 103.7414,
+      "radiusKm": 16,
+      "keywords": [
+        "johor bahru",
+        "jb",
+        "bukit chagar",
+        "tanjung puteri",
+        "tebrau",
+        "larkin",
+        "tampoi",
+        "stulang",
+        "rts link"
+      ],
+      "policyFlags": {
+        "hasJSSEZ": true,
+        "hasRTSLink": true,
+        "defaultAffordable": "Polisi Perumahan Mampu Milik Johor (RMBJ)"
+      }
+    },
+    {
+      "id": "mbip",
+      "name": "Majlis Bandaraya Iskandar Puteri (MBIP)",
+      "shortName": "MBIP",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan MBIP 2030",
+      "lat": 1.4233,
+      "lng": 103.6558,
+      "radiusKm": 18,
+      "keywords": [
+        "iskandar puteri",
+        "nusajaya",
+        "medini",
+        "gelang patah",
+        "skudai",
+        "bukit indah",
+        "forest city",
+        "puteri harbour"
+      ],
+      "policyFlags": {
+        "hasJSSEZ": true,
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mbpg",
+      "name": "Majlis Bandaraya Pasir Gudang (MBPG)",
+      "shortName": "MBPG",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Pasir Gudang 2030",
+      "lat": 1.4728,
+      "lng": 103.9038,
+      "radiusKm": 16,
+      "keywords": [
+        "pasir gudang",
+        "tanjung langsat",
+        "masai",
+        "taman scientex"
+      ],
+      "policyFlags": {
+        "hasPetrochemBuffer": true,
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mpkulai",
+      "name": "Majlis Perbandaran Kulai (MPKu)",
+      "shortName": "MPKu",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kulai 2035",
+      "lat": 1.6628,
+      "lng": 103.5989,
+      "radiusKm": 20,
+      "keywords": [
+        "kulai",
+        "senai",
+        "sedenak",
+        "kulaijaya"
+      ],
+      "policyFlags": {
+        "hasDataCenterGuidelines": true,
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mpkluang",
+      "name": "Majlis Perbandaran Kluang (MPKluang)",
+      "shortName": "MPK",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kluang 2030",
+      "lat": 2.0305,
+      "lng": 103.3183,
+      "radiusKm": 22,
+      "keywords": [
+        "kluang",
+        "paloh",
+        "kahang",
+        "mengkibol"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mpbp",
+      "name": "Majlis Perbandaran Batu Pahat (MPBP)",
+      "shortName": "MPBP",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Batu Pahat 2030",
+      "lat": 1.8548,
+      "lng": 102.9325,
+      "radiusKm": 22,
+      "keywords": [
+        "batu pahat",
+        "penggaram",
+        "tongkang pecah",
+        "sri gading"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mpmuar",
+      "name": "Majlis Perbandaran Muar (MPMuar)",
+      "shortName": "MPM",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Muar 2030",
+      "lat": 2.0442,
+      "lng": 102.5689,
+      "radiusKm": 20,
+      "keywords": [
+        "muar",
+        "bandar maharani",
+        "bakri",
+        "sungai abong"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mppontian",
+      "name": "Majlis Perbandaran Pontian (MPPontian)",
+      "shortName": "MPP",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Pontian 2030",
+      "lat": 1.4889,
+      "lng": 103.3899,
+      "radiusKm": 22,
+      "keywords": [
+        "pontian",
+        "pontian kechil",
+        "pekan nanas",
+        "kukup",
+        "tanjung piai"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mpsegamat",
+      "name": "Majlis Perbandaran Segamat (MPSegamat)",
+      "shortName": "MPSeg",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Segamat 2030",
+      "lat": 2.5089,
+      "lng": 102.8158,
+      "radiusKm": 22,
+      "keywords": [
+        "segamat",
+        "buloh kasap",
+        "jementah"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mppengerang",
+      "name": "Majlis Perbandaran Pengerang",
+      "shortName": "MPPengerang",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Kawasan Khas Pengerang 2030",
+      "lat": 1.3658,
+      "lng": 104.1128,
+      "radiusKm": 25,
+      "keywords": [
+        "pengerang",
+        "desaru",
+        "sungai rengit",
+        "pipc"
+      ],
+      "policyFlags": {
+        "hasPetrochemBuffer": true,
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mdkt",
+      "name": "Majlis Perbandaran Kota Tinggi (MPKT)",
+      "shortName": "MPKT",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kota Tinggi 2030",
+      "lat": 1.7381,
+      "lng": 103.8999,
+      "radiusKm": 25,
+      "keywords": [
+        "kota tinggi",
+        "teluk sengat"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mdmersing",
+      "name": "Majlis Daerah Mersing (MDM)",
+      "shortName": "MDM",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Mersing 2030",
+      "lat": 2.4312,
+      "lng": 103.8405,
+      "radiusKm": 25,
+      "keywords": [
+        "mersing",
+        "endau",
+        "pulau tioman transit"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mdtangkak",
+      "name": "Majlis Daerah Tangkak (MDT)",
+      "shortName": "MDT",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Tangkak 2030",
+      "lat": 2.2678,
+      "lng": 102.5456,
+      "radiusKm": 20,
+      "keywords": [
+        "tangkak",
+        "bukit gambir",
+        "ledang"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mdsimpangrenggam",
+      "name": "Majlis Daerah Simpang Renggam (MDSR)",
+      "shortName": "MDSR",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kluang-Simpang Renggam 2030",
+      "lat": 1.8256,
+      "lng": 103.3105,
+      "radiusKm": 18,
+      "keywords": [
+        "simpang renggam",
+        "renggam",
+        "machap"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mdyongpeng",
+      "name": "Majlis Daerah Yong Peng (MDYP)",
+      "shortName": "MDYP",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Batu Pahat-Yong Peng 2030",
+      "lat": 2.0135,
+      "lng": 103.0658,
+      "radiusKm": 18,
+      "keywords": [
+        "yong peng",
+        "ayer hitam"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mdlabis",
+      "name": "Majlis Daerah Labis (MDL)",
+      "shortName": "MDL",
+      "stateId": "johor",
+      "stateName": "Johor",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Segamat-Labis 2030",
+      "lat": 2.3856,
+      "lng": 103.0214,
+      "radiusKm": 20,
+      "keywords": [
+        "labis",
+        "chaah",
+        "bekok"
+      ],
+      "policyFlags": {
+        "defaultAffordable": "RMBJ"
+      }
+    },
+    {
+      "id": "mbmb",
+      "name": "Majlis Bandaraya Melaka Bersejarah (MBMB)",
+      "shortName": "MBMB",
+      "stateId": "melaka",
+      "stateName": "Melaka",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "RKK Tapak Warisan Dunia UNESCO Melaka & RT MBMB 2035",
+      "lat": 2.1896,
+      "lng": 102.2501,
+      "radiusKm": 15,
+      "keywords": [
+        "melaka",
+        "malacca",
+        "jonker street",
+        "bandar hilir",
+        "klebang",
+        "ayer keroh"
+      ],
+      "policyFlags": {
+        "hasUNESCOHeritage": true,
+        "hasStraitsArchitecture": true
+      }
+    },
+    {
+      "id": "mphtj",
+      "name": "Majlis Perbandaran Hang Tuah Jaya (MPHTJ)",
+      "shortName": "MPHTJ",
+      "stateId": "melaka",
+      "stateName": "Melaka",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Hang Tuah Jaya 2035",
+      "lat": 2.2742,
+      "lng": 102.2858,
+      "radiusKm": 15,
+      "keywords": [
+        "hang tuah jaya",
+        "ayer keroh",
+        "bukit katil",
+        "batu berendam"
+      ],
+      "policyFlags": {
+        "hasLCCF": true
+      }
+    },
+    {
+      "id": "mpag",
+      "name": "Majlis Perbandaran Alor Gajah (MPAG)",
+      "shortName": "MPAG",
+      "stateId": "melaka",
+      "stateName": "Melaka",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Alor Gajah 2035",
+      "lat": 2.3831,
+      "lng": 102.2089,
+      "radiusKm": 22,
+      "keywords": [
+        "alor gajah",
+        "masjid tanah",
+        "simpang ampat melaka",
+        "pulau sebang"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mpjasin",
+      "name": "Majlis Perbandaran Jasin (MPJasin)",
+      "shortName": "MPJ",
+      "stateId": "melaka",
+      "stateName": "Melaka",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Jasin 2035",
+      "lat": 2.3112,
+      "lng": 102.4325,
+      "radiusKm": 22,
+      "keywords": [
+        "jasin",
+        "merlimau",
+        "bemban"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mbseremban",
+      "name": "Majlis Bandaraya Seremban (MBS)",
+      "shortName": "MBS",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Seremban 2035",
+      "lat": 2.7258,
+      "lng": 101.9424,
+      "radiusKm": 20,
+      "keywords": [
+        "seremban",
+        "seremban 2",
+        "nilai",
+        "senawang",
+        "labu",
+        "bandar sri sendayan"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mppd",
+      "name": "Majlis Perbandaran Port Dickson (MPPD)",
+      "shortName": "MPPD",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Port Dickson 2030",
+      "lat": 2.5228,
+      "lng": 101.7958,
+      "radiusKm": 22,
+      "keywords": [
+        "port dickson",
+        "lukut",
+        "teluk kemang",
+        "pasir panjang"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mpjempol",
+      "name": "Majlis Perbandaran Jempol",
+      "shortName": "MPJempol",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Jempol 2030",
+      "lat": 2.8089,
+      "lng": 102.4058,
+      "radiusKm": 25,
+      "keywords": [
+        "jempol",
+        "bahau",
+        "batu kikir"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdkualapilah",
+      "name": "Majlis Daerah Kuala Pilah",
+      "shortName": "MDKP",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuala Pilah 2030",
+      "lat": 2.7389,
+      "lng": 102.2489,
+      "radiusKm": 22,
+      "keywords": [
+        "kuala pilah",
+        "sri menanti",
+        "juasseh"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mdtampin",
+      "name": "Majlis Daerah Tampin",
+      "shortName": "MDTampin",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Tampin 2030",
+      "lat": 2.4728,
+      "lng": 102.2305,
+      "radiusKm": 22,
+      "keywords": [
+        "tampin",
+        "gemas",
+        "gemencheh"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdjelebu",
+      "name": "Majlis Daerah Jelebu",
+      "shortName": "MDJelebu",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Jelebu 2030",
+      "lat": 2.9389,
+      "lng": 102.0728,
+      "radiusKm": 25,
+      "keywords": [
+        "jelebu",
+        "kuala klawang",
+        "simpang pertang"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdrembau",
+      "name": "Majlis Daerah Rembau",
+      "shortName": "MDRembau",
+      "stateId": "nsembilan",
+      "stateName": "Negeri Sembilan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Rembau 2030",
+      "lat": 2.5896,
+      "lng": 102.0945,
+      "radiusKm": 20,
+      "keywords": [
+        "rembau",
+        "pedas",
+        "chemaut"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mbipoh",
+      "name": "Majlis Bandaraya Ipoh (MBI)",
+      "shortName": "MBI",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Bandaraya Ipoh 2035",
+      "lat": 4.5975,
+      "lng": 101.0901,
+      "radiusKm": 18,
+      "keywords": [
+        "ipoh",
+        "meru raya",
+        "tambun",
+        "lahat",
+        "bercham",
+        "gunung rapat",
+        "klebang perak"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mpmanjung",
+      "name": "Majlis Perbandaran Manjung",
+      "shortName": "MPM",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Manjung 2030",
+      "lat": 4.1989,
+      "lng": 100.6658,
+      "radiusKm": 22,
+      "keywords": [
+        "manjung",
+        "seri manjung",
+        "lumut",
+        "sitiawan",
+        "pangkor"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mptaiping",
+      "name": "Majlis Perbandaran Taiping",
+      "shortName": "MPT",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Taiping 2030 (Warisan)",
+      "lat": 4.8548,
+      "lng": 100.7414,
+      "radiusKm": 20,
+      "keywords": [
+        "taiping",
+        "kamunting",
+        "simpang taiping",
+        "kuala sepetang",
+        "bukit larut"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mptelukintan",
+      "name": "Majlis Perbandaran Teluk Intan",
+      "shortName": "MPTI",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Teluk Intan 2030",
+      "lat": 4.0258,
+      "lng": 101.0214,
+      "radiusKm": 22,
+      "keywords": [
+        "teluk intan",
+        "langkap",
+        "hutan melintang"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mpkualakangsar",
+      "name": "Majlis Perbandaran Kuala Kangsar",
+      "shortName": "MPKK",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuala Kangsar 2035",
+      "lat": 4.7738,
+      "lng": 100.9414,
+      "radiusKm": 22,
+      "keywords": [
+        "kuala kangsar",
+        "sungai siput",
+        "padang rengas"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mdbatugajah",
+      "name": "Majlis Daerah Batu Gajah",
+      "shortName": "MDBG",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Batu Gajah 2025",
+      "lat": 4.4689,
+      "lng": 101.0414,
+      "radiusKm": 20,
+      "keywords": [
+        "batu gajah",
+        "pusing",
+        "tronoh",
+        "siputeh"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdkampar",
+      "name": "Majlis Daerah Kampar",
+      "shortName": "MDKpr",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kampar 2030",
+      "lat": 4.3128,
+      "lng": 101.1528,
+      "radiusKm": 20,
+      "keywords": [
+        "kampar",
+        "gopeng",
+        "malim nawar"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdtapah",
+      "name": "Majlis Daerah Tapah",
+      "shortName": "MDTapah",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Batang Padang 2035",
+      "lat": 4.1989,
+      "lng": 101.2605,
+      "radiusKm": 22,
+      "keywords": [
+        "tapah",
+        "bidor",
+        "sungkai"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdtanjongmalim",
+      "name": "Majlis Daerah Tanjong Malim",
+      "shortName": "MDTM",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Muallim 2035 (Automotive Valley)",
+      "lat": 3.6842,
+      "lng": 101.5214,
+      "radiusKm": 20,
+      "keywords": [
+        "tanjong malim",
+        "proton city",
+        "behrang",
+        "slim river"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdkerian",
+      "name": "Majlis Daerah Kerian",
+      "shortName": "MDKerian",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kerian 2035",
+      "lat": 5.0442,
+      "lng": 100.4728,
+      "radiusKm": 22,
+      "keywords": [
+        "parit buntar",
+        "bagan serai",
+        "kuala kurau"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdselama",
+      "name": "Majlis Daerah Selama",
+      "shortName": "MDSelama",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Selama 2030",
+      "lat": 5.2214,
+      "lng": 100.6938,
+      "radiusKm": 20,
+      "keywords": [
+        "selama",
+        "sungai bayor"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdperaktengah",
+      "name": "Majlis Daerah Perak Tengah",
+      "shortName": "MDPT",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Perak Tengah 2030",
+      "lat": 4.3589,
+      "lng": 100.9128,
+      "radiusKm": 25,
+      "keywords": [
+        "seri iskandar",
+        "parit",
+        "bota"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdpengkalanhulu",
+      "name": "Majlis Daerah Pengkalan Hulu",
+      "shortName": "MDPH",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Pengkalan Hulu 2030",
+      "lat": 5.7042,
+      "lng": 100.9989,
+      "radiusKm": 22,
+      "keywords": [
+        "pengkalan hulu",
+        "kroh",
+        "betong border"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdgerik",
+      "name": "Majlis Daerah Gerik",
+      "shortName": "MDGerik",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Hulu Perak 2035",
+      "lat": 5.4258,
+      "lng": 101.1305,
+      "radiusKm": 28,
+      "keywords": [
+        "gerik",
+        "hulu perak",
+        "belum"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdlenggong",
+      "name": "Majlis Daerah Lenggong",
+      "shortName": "MDLenggong",
+      "stateId": "perak",
+      "stateName": "Perak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "RKK Tapak Warisan Dunia Lembah Lenggong UNESCO",
+      "lat": 5.1089,
+      "lng": 100.9658,
+      "radiusKm": 22,
+      "keywords": [
+        "lenggong",
+        "lembah lenggong",
+        "kota tampan"
+      ],
+      "policyFlags": {
+        "hasUNESCOHeritage": true
+      }
+    },
+    {
+      "id": "mbkuantan",
+      "name": "Majlis Bandaraya Kuantan (MBK)",
+      "shortName": "MBK",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuantan 2035",
+      "lat": 3.8077,
+      "lng": 103.326,
+      "radiusKm": 22,
+      "keywords": [
+        "kuantan",
+        "gebeng",
+        "indera mahkota",
+        "teluk cempedak",
+        "tanjung lumpur",
+        "balok",
+        "kempadang"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true,
+        "hasIndustrialPortBuffer": true
+      }
+    },
+    {
+      "id": "mdch",
+      "name": "Majlis Daerah Cameron Highlands (MDCH)",
+      "shortName": "MDCH",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Cameron Highlands 2030 (Penggantian)",
+      "lat": 4.4728,
+      "lng": 101.3789,
+      "radiusKm": 20,
+      "keywords": [
+        "cameron highlands",
+        "tanah rata",
+        "brinchang",
+        "ringlet",
+        "kampung raja",
+        "tringkap"
+      ],
+      "policyFlags": {
+        "hasHillsideGuidelines": true,
+        "hasKSASProtected": true
+      }
+    },
+    {
+      "id": "mpbentong",
+      "name": "Majlis Perbandaran Bentong",
+      "shortName": "MPBentong",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Bentong 2035",
+      "lat": 3.5228,
+      "lng": 101.9089,
+      "radiusKm": 25,
+      "keywords": [
+        "bentong",
+        "genting highlands",
+        "bukit tinggi",
+        "karak",
+        "janda baik"
+      ],
+      "policyFlags": {
+        "hasHillsideGuidelines": true,
+        "hasKSASProtected": true
+      }
+    },
+    {
+      "id": "mptemerloh",
+      "name": "Majlis Perbandaran Temerloh",
+      "shortName": "MPTemerloh",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Temerloh 2035",
+      "lat": 3.4489,
+      "lng": 102.4178,
+      "radiusKm": 22,
+      "keywords": [
+        "temerloh",
+        "mentakab",
+        "kuala krau"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdjerantut",
+      "name": "Majlis Daerah Jerantut",
+      "shortName": "MDJ",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Jerantut 2030",
+      "lat": 3.9389,
+      "lng": 102.3614,
+      "radiusKm": 28,
+      "keywords": [
+        "jerantut",
+        "taman negara",
+        "kuala tahan"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdlipis",
+      "name": "Majlis Daerah Lipis",
+      "shortName": "MDLipis",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Lipis 2035",
+      "lat": 4.1842,
+      "lng": 102.0456,
+      "radiusKm": 25,
+      "keywords": [
+        "kuala lipis",
+        "benta",
+        "padang tengku"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mdpekan",
+      "name": "Majlis Daerah Pekan",
+      "shortName": "MDPekan",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Pekan 2035 (Bandar Diraja)",
+      "lat": 3.4889,
+      "lng": 103.3989,
+      "radiusKm": 25,
+      "keywords": [
+        "pekan",
+        "nenasi",
+        "kuala pahang",
+        "peramu"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mdraub",
+      "name": "Majlis Daerah Raub",
+      "shortName": "MDRaub",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Raub 2035",
+      "lat": 3.7912,
+      "lng": 101.8568,
+      "radiusKm": 25,
+      "keywords": [
+        "raub",
+        "bukit fraser",
+        "tras",
+        "dong"
+      ],
+      "policyFlags": {
+        "hasHillsideGuidelines": true
+      }
+    },
+    {
+      "id": "mdrompin",
+      "name": "Majlis Daerah Rompin",
+      "shortName": "MDRompin",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Rompin 2035",
+      "lat": 2.8089,
+      "lng": 103.4856,
+      "radiusKm": 30,
+      "keywords": [
+        "kuala rompin",
+        "muadzam shah",
+        "tioman transit"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdmaran",
+      "name": "Majlis Daerah Maran",
+      "shortName": "MDMaran",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Maran 2035",
+      "lat": 3.5856,
+      "lng": 102.7728,
+      "radiusKm": 25,
+      "keywords": [
+        "maran",
+        "chenor",
+        "sungai jerik"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdbera",
+      "name": "Majlis Daerah Bera",
+      "shortName": "MDBera",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Bera 2030",
+      "lat": 3.2389,
+      "lng": 102.4356,
+      "radiusKm": 25,
+      "keywords": [
+        "bera",
+        "triang",
+        "tasik bera"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "tioman",
+      "name": "Lembaga Pembangunan Tioman (TDA)",
+      "shortName": "TDA",
+      "stateId": "pahang",
+      "stateName": "Pahang",
+      "tier": "khas",
+      "tierLabel": "Pihak Berkuasa Khas",
+      "act": "Enakmen Lembaga Pembangunan Tioman 1997",
+      "localPlan": "Rancangan Kawasan Khas Pulau Tioman 2030",
+      "lat": 2.7831,
+      "lng": 104.1628,
+      "radiusKm": 18,
+      "keywords": [
+        "pulau tioman",
+        "kampung tekek",
+        "salang",
+        "juara"
+      ],
+      "policyFlags": {
+        "hasEcoTourism": true,
+        "hasMarinePark": true
+      }
+    },
+    {
+      "id": "mbalorsetar",
+      "name": "Majlis Bandaraya Alor Setar (MBAS)",
+      "shortName": "MBAS",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan MBAS 2035",
+      "lat": 6.1248,
+      "lng": 100.3678,
+      "radiusKm": 18,
+      "keywords": [
+        "alor setar",
+        "kuala kedah",
+        "langgar",
+        "anak bukit",
+        "pokok sena"
+      ],
+      "policyFlags": {
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mpsungapipetani",
+      "name": "Majlis Perbandaran Sungai Petani (MPSPK)",
+      "shortName": "MPSPK",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuala Muda 2035",
+      "lat": 5.6442,
+      "lng": 100.4878,
+      "radiusKm": 20,
+      "keywords": [
+        "sungai petani",
+        "kuala muda",
+        "amanjaya",
+        "tikam batu",
+        "bedong"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mpkulim",
+      "name": "Majlis Perbandaran Kulim (MPK / KHTP)",
+      "shortName": "MPK",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kulim 2035 & Garis Panduan KHTP",
+      "lat": 5.3648,
+      "lng": 100.5568,
+      "radiusKm": 20,
+      "keywords": [
+        "kulim",
+        "kulim hi-tech",
+        "khtp",
+        "padang serai",
+        "lunas"
+      ],
+      "policyFlags": {
+        "hasHighTechSemiconductor": true
+      }
+    },
+    {
+      "id": "mplangkawi",
+      "name": "Majlis Perbandaran Langkawi Bandaraya Pelancongan (MPLBP)",
+      "shortName": "MPLBP",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Langkawi 2030 (UNESCO Geopark)",
+      "lat": 6.3265,
+      "lng": 99.8432,
+      "radiusKm": 22,
+      "keywords": [
+        "langkawi",
+        "kuah",
+        "pantai cenang",
+        "padang matsirat",
+        "ayer hangat"
+      ],
+      "policyFlags": {
+        "hasUNESCOGeopark": true,
+        "hasDutyFree": true
+      }
+    },
+    {
+      "id": "mpkubangpasu",
+      "name": "Majlis Perbandaran Kubang Pasu (MPKP)",
+      "shortName": "MPKP",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kubang Pasu 2035",
+      "lat": 6.3089,
+      "lng": 100.4178,
+      "radiusKm": 22,
+      "keywords": [
+        "jitra",
+        "kubang pasu",
+        "bukit kayu hitam",
+        "changlun"
+      ],
+      "policyFlags": {
+        "hasBorderLogistics": true
+      }
+    },
+    {
+      "id": "mdbaling",
+      "name": "Majlis Daerah Baling",
+      "shortName": "MDBaling",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Baling 2035",
+      "lat": 5.6789,
+      "lng": 100.9178,
+      "radiusKm": 25,
+      "keywords": [
+        "baling",
+        "kuala ketil",
+        "kupang"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdbandarbaharu",
+      "name": "Majlis Daerah Bandar Baharu",
+      "shortName": "MDBB",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Bandar Baharu 2035",
+      "lat": 5.1389,
+      "lng": 100.4958,
+      "radiusKm": 20,
+      "keywords": [
+        "bandar baharu",
+        "serdang kedah",
+        "lubuk buntar"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdpadangterap",
+      "name": "Majlis Daerah Padang Terap",
+      "shortName": "MDPT",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Padang Terap 2035",
+      "lat": 6.2556,
+      "lng": 100.6089,
+      "radiusKm": 25,
+      "keywords": [
+        "kuala nerang",
+        "padang terap",
+        "durian burung"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdpendang",
+      "name": "Majlis Daerah Pendang",
+      "shortName": "MDPendang",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Pendang 2035",
+      "lat": 5.9928,
+      "lng": 100.4789,
+      "radiusKm": 20,
+      "keywords": [
+        "pendang",
+        "tanah merah kedah"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdsik",
+      "name": "Majlis Daerah Sik",
+      "shortName": "MDSik",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Sik 2035",
+      "lat": 5.8228,
+      "lng": 100.7489,
+      "radiusKm": 25,
+      "keywords": [
+        "sik",
+        "gulau",
+        "jeneri"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdyan",
+      "name": "Majlis Daerah Yan",
+      "shortName": "MDYan",
+      "stateId": "kedah",
+      "stateName": "Kedah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Yan 2035",
+      "lat": 5.8012,
+      "lng": 100.3728,
+      "radiusKm": 18,
+      "keywords": [
+        "yan",
+        "guar chempedak",
+        "gunung jerai"
+      ],
+      "policyFlags": {
+        "hasHillsideGuidelines": true
+      }
+    },
+    {
+      "id": "mpkbbri",
+      "name": "Majlis Perbandaran Kota Bharu Bandar Raya Islam (MPKB-BRI)",
+      "shortName": "MPKB-BRI",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran (Bandar Raya Islam)",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Kota Bharu 2035 & Garis Panduan Ubudiyyah",
+      "lat": 6.1254,
+      "lng": 102.2381,
+      "radiusKm": 18,
+      "keywords": [
+        "kota bharu",
+        "pengkalan chepa",
+        "kubang kerian",
+        "wakaf che yeh",
+        "pantai cahaya bulan"
+      ],
+      "policyFlags": {
+        "hasIslamicPlanningUbudiyyah": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdbachok",
+      "name": "Majlis Daerah Bachok",
+      "shortName": "MDBachok",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Bachok 2035",
+      "lat": 6.0658,
+      "lng": 102.4012,
+      "radiusKm": 20,
+      "keywords": [
+        "bachok",
+        "pantai irama",
+        "jelawat"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdguamusang",
+      "name": "Majlis Daerah Gua Musang",
+      "shortName": "MDGM",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Gua Musang 2035",
+      "lat": 4.8828,
+      "lng": 101.9658,
+      "radiusKm": 35,
+      "keywords": [
+        "gua musang",
+        "chiku",
+        "lojing",
+        "galas"
+      ],
+      "policyFlags": {
+        "hasHillsideGuidelines": true
+      }
+    },
+    {
+      "id": "mdjeli",
+      "name": "Majlis Daerah Jeli",
+      "shortName": "MDJeli",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Jeli 2035",
+      "lat": 5.6989,
+      "lng": 101.8428,
+      "radiusKm": 25,
+      "keywords": [
+        "jeli",
+        "kuala balah",
+        "ayer lanas"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdkualakrai",
+      "name": "Majlis Daerah Kuala Krai",
+      "shortName": "MDKK",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Kuala Krai 2035",
+      "lat": 5.5312,
+      "lng": 102.2012,
+      "radiusKm": 25,
+      "keywords": [
+        "kuala krai",
+        "manek urai",
+        "dabong"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdmachang",
+      "name": "Majlis Daerah Machang",
+      "shortName": "MDMachang",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Machang 2035",
+      "lat": 5.7658,
+      "lng": 102.2189,
+      "radiusKm": 20,
+      "keywords": [
+        "machang",
+        "temangan",
+        "pulai chondong"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdpasirmas",
+      "name": "Majlis Daerah Pasir Mas",
+      "shortName": "MDPM",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Pasir Mas 2035",
+      "lat": 6.0442,
+      "lng": 102.1414,
+      "radiusKm": 20,
+      "keywords": [
+        "pasir mas",
+        "rantau panjang",
+        "tendong"
+      ],
+      "policyFlags": {
+        "hasBorderLogistics": true
+      }
+    },
+    {
+      "id": "mdpasirputeh",
+      "name": "Majlis Daerah Pasir Puteh",
+      "shortName": "MDPP",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Pasir Puteh 2035",
+      "lat": 5.8342,
+      "lng": 102.4042,
+      "radiusKm": 20,
+      "keywords": [
+        "pasir puteh",
+        "tok bali",
+        "semerak"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true,
+        "hasIndustrialPortBuffer": true
+      }
+    },
+    {
+      "id": "mdtanahmerah",
+      "name": "Majlis Daerah Tanah Merah",
+      "shortName": "MDTM",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Tanah Merah 2035",
+      "lat": 5.8089,
+      "lng": 102.1478,
+      "radiusKm": 22,
+      "keywords": [
+        "tanah merah",
+        "bukit bunga",
+        "kusial"
+      ],
+      "policyFlags": {}
+    },
+    {
+      "id": "mdtumpat",
+      "name": "Majlis Daerah Tumpat",
+      "shortName": "MDTumpat",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Jajahan Tumpat 2035",
+      "lat": 6.1989,
+      "lng": 102.1678,
+      "radiusKm": 18,
+      "keywords": [
+        "tumpat",
+        "pengkalan kubor",
+        "wakaf bharu",
+        "geting"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mddabong",
+      "name": "Majlis Daerah Dabong",
+      "shortName": "MDDabong",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Dabong 2030 (Eco-Tourism)",
+      "lat": 5.3812,
+      "lng": 102.0128,
+      "radiusKm": 25,
+      "keywords": [
+        "dabong",
+        "gunung stong",
+        "jelawang"
+      ],
+      "policyFlags": {
+        "hasEcoTourism": true
+      }
+    },
+    {
+      "id": "mdketereh",
+      "name": "Majlis Daerah Ketereh Perbandaran Islam",
+      "shortName": "MDKetereh",
+      "stateId": "kelantan",
+      "stateName": "Kelantan",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Ketereh 2035",
+      "lat": 5.9589,
+      "lng": 102.2478,
+      "radiusKm": 18,
+      "keywords": [
+        "ketereh",
+        "melor",
+        "kadok",
+        "peringat"
+      ],
+      "policyFlags": {
+        "hasIslamicPlanningUbudiyyah": true
+      }
+    },
+    {
+      "id": "mbkt",
+      "name": "Majlis Bandaraya Kuala Terengganu (MBKT)",
+      "shortName": "MBKT",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kuala Terengganu 2035",
+      "lat": 5.3117,
+      "lng": 103.1324,
+      "radiusKm": 18,
+      "keywords": [
+        "kuala terengganu",
+        "kt",
+        "batu burok",
+        "losong",
+        "manir",
+        "chendering",
+        "drawbridge kt"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true,
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mpkemaman",
+      "name": "Majlis Perbandaran Kemaman",
+      "shortName": "MPKemaman",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Kemaman 2035",
+      "lat": 4.2389,
+      "lng": 103.4189,
+      "radiusKm": 25,
+      "keywords": [
+        "kemaman",
+        "cukai",
+        "kertih",
+        "kemasik",
+        "teluk kalong"
+      ],
+      "policyFlags": {
+        "hasPetrochemBuffer": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mpdungun",
+      "name": "Majlis Perbandaran Dungun",
+      "shortName": "MPDungun",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Dungun 2035",
+      "lat": 4.7738,
+      "lng": 103.4158,
+      "radiusKm": 22,
+      "keywords": [
+        "dungun",
+        "kuala dungun",
+        "sura",
+        "paka"
+      ],
+      "policyFlags": {
+        "hasPetrochemBuffer": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdbesut",
+      "name": "Majlis Daerah Besut",
+      "shortName": "MDBesut",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Besut 2035",
+      "lat": 5.7658,
+      "lng": 102.5528,
+      "radiusKm": 25,
+      "keywords": [
+        "jerteh",
+        "kuala besut",
+        "kampung raja besut",
+        "perhentian transit"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdhuluterengganu",
+      "name": "Majlis Daerah Hulu Terengganu",
+      "shortName": "MDHT",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Hulu Terengganu 2035",
+      "lat": 5.0712,
+      "lng": 103.0189,
+      "radiusKm": 28,
+      "keywords": [
+        "kuala berang",
+        "tasik kenyir",
+        "ajil"
+      ],
+      "policyFlags": {
+        "hasEcoTourism": true
+      }
+    },
+    {
+      "id": "mdmarang",
+      "name": "Majlis Daerah Marang",
+      "shortName": "MDMarang",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Marang 2035",
+      "lat": 5.2056,
+      "lng": 103.2058,
+      "radiusKm": 22,
+      "keywords": [
+        "marang",
+        "kelulut",
+        "kapas transit",
+        "ru rendah"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdsetiu",
+      "name": "Majlis Daerah Setiu",
+      "shortName": "MDSetiu",
+      "stateId": "terengganu",
+      "stateName": "Terengganu",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Daerah Setiu 2035",
+      "lat": 5.5689,
+      "lng": 102.7489,
+      "radiusKm": 25,
+      "keywords": [
+        "bandar permaisuri",
+        "setiu",
+        "penarik"
+      ],
+      "policyFlags": {
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mpkangar",
+      "name": "Majlis Perbandaran Kangar (MPKangar)",
+      "shortName": "MPKangar",
+      "stateId": "perlis",
+      "stateName": "Perlis",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Akta Perancangan Bandar dan Desa 1976 (Akta 172)",
+      "localPlan": "Rancangan Tempatan Negeri Perlis 2030 (Seluruh Negeri)",
+      "lat": 6.4414,
+      "lng": 100.1986,
+      "radiusKm": 25,
+      "keywords": [
+        "kangar",
+        "arau",
+        "kuala perlis",
+        "padang besar",
+        "chuping"
+      ],
+      "policyFlags": {
+        "hasBorderLogistics": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "dbkk",
+      "name": "Dewan Bandaraya Kota Kinabalu (DBKK)",
+      "shortName": "DBKK",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "bandaraya",
+      "tierLabel": "Dewan Bandaraya",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Struktur Kota Kinabalu 2030 & Draf Pelan Tempatan KK",
+      "lat": 5.9804,
+      "lng": 116.0735,
+      "radiusKm": 18,
+      "keywords": [
+        "kota kinabalu",
+        "kk",
+        "inanam",
+        "likas",
+        "tanjung aru",
+        "luyang",
+        "menggatal",
+        "sepanggar"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasCoastalSetback": true,
+        "hasPortBuffer": true
+      }
+    },
+    {
+      "id": "mpsandakan",
+      "name": "Majlis Perbandaran Sandakan",
+      "shortName": "MPSandakan",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Sandakan 2030",
+      "lat": 5.8394,
+      "lng": 118.1172,
+      "radiusKm": 22,
+      "keywords": [
+        "sandakan",
+        "batu sapi",
+        "elopura",
+        "gum-gum"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mptawau",
+      "name": "Majlis Perbandaran Tawau",
+      "shortName": "MPTawau",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Tawau 2030",
+      "lat": 4.2447,
+      "lng": 117.8912,
+      "radiusKm": 22,
+      "keywords": [
+        "tawau",
+        "balung",
+        "sri tanjung",
+        "merotai"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mppenampang",
+      "name": "Majlis Perbandaran Penampang",
+      "shortName": "MPPenampang",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Penampang 2030",
+      "lat": 5.9128,
+      "lng": 116.0828,
+      "radiusKm": 18,
+      "keywords": [
+        "penampang",
+        "donggongon",
+        "itcc",
+        "putatan transit"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdlahaddatu",
+      "name": "Majlis Daerah Lahad Datu",
+      "shortName": "MDLD",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Lahad Datu (POIC)",
+      "lat": 5.0268,
+      "lng": 118.3278,
+      "radiusKm": 25,
+      "keywords": [
+        "lahad datu",
+        "poic",
+        "silabukan"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasIndustrialPortBuffer": true
+      }
+    },
+    {
+      "id": "mdsemporna",
+      "name": "Majlis Daerah Semporna",
+      "shortName": "MDSemporna",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Semporna 2030 (Eco-Marine)",
+      "lat": 4.4812,
+      "lng": 118.6112,
+      "radiusKm": 20,
+      "keywords": [
+        "semporna",
+        "sipadan transit",
+        "mabul transit",
+        "bum bum"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasEcoTourism": true
+      }
+    },
+    {
+      "id": "mdtuaran",
+      "name": "Majlis Daerah Tuaran",
+      "shortName": "MDTuaran",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Tuaran 2030",
+      "lat": 6.1789,
+      "lng": 116.2305,
+      "radiusKm": 22,
+      "keywords": [
+        "tuaran",
+        "tamparuli",
+        "telipok"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdranau",
+      "name": "Majlis Daerah Ranau",
+      "shortName": "MDRanau",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Kawalan Pembangunan Taman Kinabalu UNESCO",
+      "lat": 5.9538,
+      "lng": 116.6641,
+      "radiusKm": 25,
+      "keywords": [
+        "ranau",
+        "kundasang",
+        "kinabalu park"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasHillsideGuidelines": true,
+        "hasUNESCOGeopark": true
+      }
+    },
+    {
+      "id": "mdbeaufort",
+      "name": "Majlis Daerah Beaufort",
+      "shortName": "MDBeaufort",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Beaufort 2030",
+      "lat": 5.3472,
+      "lng": 115.7456,
+      "radiusKm": 22,
+      "keywords": [
+        "beaufort",
+        "membakut",
+        "gadong sabah"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkualapenyu",
+      "name": "Majlis Daerah Kuala Penyu",
+      "shortName": "MDKPenyu",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Kuala Penyu 2030",
+      "lat": 5.5728,
+      "lng": 115.5989,
+      "radiusKm": 20,
+      "keywords": [
+        "kuala penyu",
+        "tempurong",
+        "menumbok transit"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdsipitang",
+      "name": "Majlis Daerah Sipitang",
+      "shortName": "MDSipitang",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Sipitang (SOGIP)",
+      "lat": 5.0812,
+      "lng": 115.5528,
+      "radiusKm": 25,
+      "keywords": [
+        "sipitang",
+        "sogip",
+        "mesapol"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasIndustrialPortBuffer": true
+      }
+    },
+    {
+      "id": "mdpapar",
+      "name": "Majlis Daerah Papar",
+      "shortName": "MDPapar",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Papar 2030",
+      "lat": 5.7333,
+      "lng": 115.9333,
+      "radiusKm": 22,
+      "keywords": [
+        "papar",
+        "kinarut",
+        "bongawan",
+        "benoni"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdputatan",
+      "name": "Majlis Daerah Putatan",
+      "shortName": "MDPutatan",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Putatan 2030",
+      "lat": 5.8942,
+      "lng": 116.0505,
+      "radiusKm": 15,
+      "keywords": [
+        "putatan",
+        "petagas",
+        "lok kawi"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkotabelud",
+      "name": "Majlis Daerah Kota Belud",
+      "shortName": "MDKotaBelud",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Kota Belud 2030",
+      "lat": 6.3512,
+      "lng": 116.4305,
+      "radiusKm": 25,
+      "keywords": [
+        "kota belud",
+        "usukan",
+        "kadamaian"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkotamarudu",
+      "name": "Majlis Daerah Kota Marudu",
+      "shortName": "MDKotaMarudu",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Kota Marudu 2030",
+      "lat": 6.4989,
+      "lng": 116.7658,
+      "radiusKm": 25,
+      "keywords": [
+        "kota marudu",
+        "tandek",
+        "bandau"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkudat",
+      "name": "Majlis Daerah Kudat",
+      "shortName": "MDKudat",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Kudat 2030",
+      "lat": 6.8837,
+      "lng": 116.8478,
+      "radiusKm": 25,
+      "keywords": [
+        "kudat",
+        "tip of borneo",
+        "tanjung simpang mengayau",
+        "bak-bak"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdpitas",
+      "name": "Majlis Daerah Pitas",
+      "shortName": "MDPitas",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Pitas 2030",
+      "lat": 6.7128,
+      "lng": 117.0089,
+      "radiusKm": 25,
+      "keywords": [
+        "pitas",
+        "bengkoka"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdbeluran",
+      "name": "Majlis Daerah Beluran",
+      "shortName": "MDBeluran",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Beluran 2030",
+      "lat": 5.8889,
+      "lng": 117.5589,
+      "radiusKm": 28,
+      "keywords": [
+        "beluran",
+        "telupid",
+        "sugut"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkinabatangan",
+      "name": "Majlis Daerah Kinabatangan",
+      "shortName": "MDKinabatangan",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Kinabatangan 2030 (Eco-Corridor)",
+      "lat": 5.5312,
+      "lng": 117.8428,
+      "radiusKm": 30,
+      "keywords": [
+        "kinabatangan",
+        "sukau",
+        "kota kinabatangan",
+        "bilit"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true,
+        "hasEcoTourism": true
+      }
+    },
+    {
+      "id": "mdtongod",
+      "name": "Majlis Daerah Tongod",
+      "shortName": "MDTongod",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Tongod 2030",
+      "lat": 5.2678,
+      "lng": 116.9689,
+      "radiusKm": 30,
+      "keywords": [
+        "tongod",
+        "kuamut"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkeningau",
+      "name": "Majlis Daerah Keningau",
+      "shortName": "MDKeningau",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Keningau 2030",
+      "lat": 5.3442,
+      "lng": 116.1605,
+      "radiusKm": 25,
+      "keywords": [
+        "keningau",
+        "bingkor",
+        "liawan"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdtambunan",
+      "name": "Majlis Daerah Tambunan",
+      "shortName": "MDTambunan",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Tambunan 2030",
+      "lat": 5.6728,
+      "lng": 116.3658,
+      "radiusKm": 25,
+      "keywords": [
+        "tambunan",
+        "mahua"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdtenom",
+      "name": "Majlis Daerah Tenom",
+      "shortName": "MDTenom",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Tenom 2030",
+      "lat": 5.1258,
+      "lng": 115.9456,
+      "radiusKm": 25,
+      "keywords": [
+        "tenom",
+        "kemabong",
+        "melalap"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdnabawan",
+      "name": "Majlis Daerah Nabawan",
+      "shortName": "MDNabawan",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Nabawan 2030",
+      "lat": 5.0389,
+      "lng": 116.4528,
+      "radiusKm": 30,
+      "keywords": [
+        "nabawan",
+        "pagalungan",
+        "pensiangan"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdkunak",
+      "name": "Majlis Daerah Kunak",
+      "shortName": "MDKunak",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Kunak 2030",
+      "lat": 4.6842,
+      "lng": 118.2489,
+      "radiusKm": 22,
+      "keywords": [
+        "kunak",
+        "madai"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "mdtelupid",
+      "name": "Majlis Daerah Telupid",
+      "shortName": "MDTelupid",
+      "stateId": "sabah",
+      "stateName": "Sabah",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Town and Country Planning Ordinance (Sabah Cap. 141)",
+      "localPlan": "Pelan Tempatan Daerah Telupid 2030",
+      "lat": 5.6258,
+      "lng": 117.1214,
+      "radiusKm": 25,
+      "keywords": [
+        "telupid",
+        "taviu"
+      ],
+      "policyFlags": {
+        "hasSabahCap141": true
+      }
+    },
+    {
+      "id": "dbku",
+      "name": "Dewan Bandaraya Kuching Utara (DBKU)",
+      "shortName": "DBKU",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "bandaraya",
+      "tierLabel": "Dewan Bandaraya",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Induk Bandaraya Kuching & eSPA Master Plan",
+      "lat": 1.5644,
+      "lng": 110.3442,
+      "radiusKm": 16,
+      "keywords": [
+        "kuching utara",
+        "petra jaya",
+        "satok",
+        "santubong",
+        "matang kuching"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mbks",
+      "name": "Majlis Bandaraya Kuching Selatan (MBKS)",
+      "shortName": "MBKS",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Pembangunan Kuching Selatan 2030",
+      "lat": 1.5389,
+      "lng": 110.3589,
+      "radiusKm": 16,
+      "keywords": [
+        "kuching selatan",
+        "padungan",
+        "tabuan jaya",
+        "stutong",
+        "bdc kuching",
+        "pending"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasHeritageZone": true
+      }
+    },
+    {
+      "id": "mbm",
+      "name": "Majlis Bandaraya Miri (MBM)",
+      "shortName": "MBM",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "bandaraya",
+      "tierLabel": "Majlis Bandaraya",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Induk Bandaraya Peranginan Miri 2030",
+      "lat": 4.3995,
+      "lng": 113.9914,
+      "radiusKm": 20,
+      "keywords": [
+        "miri",
+        "lutong",
+        "senadin",
+        "tanjung lobang",
+        "pujut",
+        "bakeng"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasPetrochemBuffer": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "bda",
+      "name": "Lembaga Kemajuan Bintulu (Bintulu Development Authority - BDA)",
+      "shortName": "BDA",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "khas",
+      "tierLabel": "Lembaga Pembangunan PBT Khas",
+      "act": "Sarawak Land Code (Cap. 81) & Enakmen BDA 1978",
+      "localPlan": "Pelan Struktur Perindustrian Berat Bintulu (Samalaju & Tanjung Kidurong)",
+      "lat": 3.1768,
+      "lng": 113.0428,
+      "radiusKm": 25,
+      "keywords": [
+        "bintulu",
+        "tanjung kidurong",
+        "samalaju",
+        "kidurong",
+        "medan jaya"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasPetrochemBuffer": true,
+        "hasIndustrialPortBuffer": true
+      }
+    },
+    {
+      "id": "mpsibu",
+      "name": "Majlis Perbandaran Sibu",
+      "shortName": "MPSibu",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Pembangunan Sibu 2030",
+      "lat": 2.2878,
+      "lng": 111.8305,
+      "radiusKm": 20,
+      "keywords": [
+        "sibu",
+        "sungai merah",
+        "lanang",
+        "rejang"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasRiverfrontReserve": true
+      }
+    },
+    {
+      "id": "mppadawan",
+      "name": "Majlis Perbandaran Padawan",
+      "shortName": "MPPadawan",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Padawan 2030",
+      "lat": 1.4812,
+      "lng": 110.3205,
+      "radiusKm": 22,
+      "keywords": [
+        "padawan",
+        "batu kawah",
+        "kota sentosa",
+        "siburan",
+        "matang selatan"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mpkotasamarahan",
+      "name": "Majlis Perbandaran Kota Samarahan",
+      "shortName": "MPKS",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "perbandaran",
+      "tierLabel": "Majlis Perbandaran",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Induk Kota Ilmu Kota Samarahan 2030",
+      "lat": 1.4589,
+      "lng": 110.4568,
+      "radiusKm": 20,
+      "keywords": [
+        "kota samarahan",
+        "unimas",
+        "uitm samarahan",
+        "asajaya"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdbau",
+      "name": "Majlis Daerah Bau",
+      "shortName": "MDBau",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Bau 2030",
+      "lat": 1.4178,
+      "lng": 110.1558,
+      "radiusKm": 22,
+      "keywords": [
+        "bau",
+        "tasik biru",
+        "wind cave",
+        "fairy cave"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdlundu",
+      "name": "Majlis Daerah Lundu",
+      "shortName": "MDLundu",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Lundu 2030",
+      "lat": 1.6742,
+      "lng": 109.8556,
+      "radiusKm": 25,
+      "keywords": [
+        "lundu",
+        "semetan",
+        "telok melano"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasCoastalSetback": true
+      }
+    },
+    {
+      "id": "mdserian",
+      "name": "Majlis Daerah Serian",
+      "shortName": "MDSerian",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Serian 2030",
+      "lat": 1.1689,
+      "lng": 110.5678,
+      "radiusKm": 25,
+      "keywords": [
+        "serian",
+        "tebedu",
+        "tarat",
+        "ranchan"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdsimunjan",
+      "name": "Majlis Daerah Simunjan",
+      "shortName": "MDSimunjan",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Simunjan 2030",
+      "lat": 1.3989,
+      "lng": 110.7528,
+      "radiusKm": 25,
+      "keywords": [
+        "simunjan",
+        "gedong",
+        "sebuyau"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdsriaman",
+      "name": "Majlis Daerah Sri Aman",
+      "shortName": "MDSA",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Sri Aman 2030",
+      "lat": 1.2389,
+      "lng": 111.4628,
+      "radiusKm": 25,
+      "keywords": [
+        "sri aman",
+        "simanggang",
+        "batang lupar"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdlubokantu",
+      "name": "Majlis Daerah Lubok Antu",
+      "shortName": "MDLA",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Lubok Antu (Batang Ai)",
+      "lat": 1.0442,
+      "lng": 111.8389,
+      "radiusKm": 28,
+      "keywords": [
+        "lubok antu",
+        "batang ai",
+        "engkilili"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasEcoTourism": true
+      }
+    },
+    {
+      "id": "mdbetong",
+      "name": "Majlis Daerah Betong",
+      "shortName": "MDBetong",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Betong 2030",
+      "lat": 1.4089,
+      "lng": 111.5289,
+      "radiusKm": 25,
+      "keywords": [
+        "betong",
+        "spak",
+        "layar"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdsaratok",
+      "name": "Majlis Daerah Saratok",
+      "shortName": "MDSaratok",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Saratok 2030",
+      "lat": 1.7389,
+      "lng": 111.3414,
+      "radiusKm": 25,
+      "keywords": [
+        "saratok",
+        "roban",
+        "kabong"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdsarikei",
+      "name": "Majlis Daerah Sarikei",
+      "shortName": "MDSarikei",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Sarikei 2030",
+      "lat": 2.1248,
+      "lng": 111.5248,
+      "radiusKm": 25,
+      "keywords": [
+        "sarikei",
+        "sebangoi",
+        "rejang delta"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdmeradongjulau",
+      "name": "Majlis Daerah Meradong dan Julau (MDMJ)",
+      "shortName": "MDMJ",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Meradong dan Julau 2030",
+      "lat": 2.0128,
+      "lng": 111.6628,
+      "radiusKm": 28,
+      "keywords": [
+        "bintangor",
+        "meradong",
+        "julau",
+        "pakan"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdluarsibu",
+      "name": "Majlis Daerah Luar Bandar Sibu (SRDC)",
+      "shortName": "SRDC",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Luar Bandar Sibu (Sibu Jaya) 2030",
+      "lat": 2.2989,
+      "lng": 111.9058,
+      "radiusKm": 28,
+      "keywords": [
+        "sibu jaya",
+        "selangau",
+        "stapang",
+        "durin"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdkanowit",
+      "name": "Majlis Daerah Kanowit",
+      "shortName": "MDKanowit",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Kanowit 2030",
+      "lat": 2.1012,
+      "lng": 112.1558,
+      "radiusKm": 25,
+      "keywords": [
+        "kanowit",
+        "machan",
+        "ngemah"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdkapit",
+      "name": "Majlis Daerah Kapit",
+      "shortName": "MDKapit",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Kapit 2030",
+      "lat": 2.0168,
+      "lng": 112.9389,
+      "radiusKm": 35,
+      "keywords": [
+        "kapit",
+        "pelagus",
+        "baleh"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdsong",
+      "name": "Majlis Daerah Song",
+      "shortName": "MDSong",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Song 2030",
+      "lat": 2.0056,
+      "lng": 112.5489,
+      "radiusKm": 28,
+      "keywords": [
+        "song",
+        "katibas"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdbelaga",
+      "name": "Majlis Daerah Belaga",
+      "shortName": "MDBelaga",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Belaga (Bakun & Murum)",
+      "lat": 2.7012,
+      "lng": 113.7812,
+      "radiusKm": 35,
+      "keywords": [
+        "belaga",
+        "bakun",
+        "murum",
+        "sungai asap"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdmatudaro",
+      "name": "Majlis Daerah Matu dan Daro (MDMD)",
+      "shortName": "MDMD",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Matu dan Daro 2030",
+      "lat": 2.6789,
+      "lng": 111.7456,
+      "radiusKm": 28,
+      "keywords": [
+        "daro",
+        "matu",
+        "igan"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdmukahdalat",
+      "name": "Majlis Daerah Dalat dan Mukah (MDDM)",
+      "shortName": "MDDM",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Mukah 2030",
+      "lat": 2.8989,
+      "lng": 112.0889,
+      "radiusKm": 28,
+      "keywords": [
+        "mukah",
+        "dalat",
+        "oking",
+        "balingian"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdsubis",
+      "name": "Majlis Daerah Subis",
+      "shortName": "MDSubis",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Subis (Taman Negara Niah)",
+      "lat": 3.7912,
+      "lng": 113.8214,
+      "radiusKm": 28,
+      "keywords": [
+        "subis",
+        "niah",
+        "batu niah",
+        "bekenu"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasUNESCOHeritage": true
+      }
+    },
+    {
+      "id": "mdmarudi",
+      "name": "Majlis Daerah Marudi",
+      "shortName": "MDMarudi",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Marudi & Mulu",
+      "lat": 4.1812,
+      "lng": 114.3289,
+      "radiusKm": 30,
+      "keywords": [
+        "marudi",
+        "mulu",
+        "baram",
+        "long lama"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true,
+        "hasUNESCOHeritage": true,
+        "hasEcoTourism": true
+      }
+    },
+    {
+      "id": "mdlimbang",
+      "name": "Majlis Daerah Limbang",
+      "shortName": "MDLimbang",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Bahagian Limbang 2030",
+      "lat": 4.7512,
+      "lng": 115.0089,
+      "radiusKm": 28,
+      "keywords": [
+        "limbang",
+        "tedungan",
+        "pandaruan"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    },
+    {
+      "id": "mdlawas",
+      "name": "Majlis Daerah Lawas",
+      "shortName": "MDLawas",
+      "stateId": "sarawak",
+      "stateName": "Sarawak",
+      "tier": "daerah",
+      "tierLabel": "Majlis Daerah",
+      "act": "Sarawak Land Code (Cap. 81) & State Planning Authority (SPA)",
+      "localPlan": "Pelan Tempatan Daerah Lawas 2030",
+      "lat": 4.8589,
+      "lng": 115.4056,
+      "radiusKm": 28,
+      "keywords": [
+        "lawas",
+        "trusan",
+        "merapok",
+        "punang"
+      ],
+      "policyFlags": {
+        "hasSarawakSPA": true
+      }
+    }
+  ]
+}

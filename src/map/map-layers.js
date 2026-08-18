@@ -93,6 +93,26 @@ export function createCustomIcon(type, label = '') {
         popupAnchor: [0, -13]
       });
 
+    case 'worship':
+      iconHtml = `
+        <div class="pin-body worship-pin" title="${label}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4"/>
+            <path d="M4 22h16"/>
+            <path d="M6 18h12"/>
+            <path d="M6 18V9a6 6 0 0 1 12 0v9"/>
+            <path d="M9 18v-4a3 3 0 0 1 6 0v4"/>
+          </svg>
+        </div>
+      `;
+      return L.divIcon({
+        className,
+        html: iconHtml,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14]
+      });
+
     case 'heritage':
       iconHtml = `
         <div class="pin-body heritage-pin" title="${label}">
@@ -135,8 +155,11 @@ export function buildPopupHtml(item, type) {
   } else if (type === 'education') {
     typeLabel = '🏫 Institusi Pendidikan';
     badgeColor = '#10b981';
+  } else if (type === 'worship') {
+    typeLabel = '🕌 Rumah Ibadat & Keagamaan';
+    badgeColor = '#06b6d4';
   } else if (type === 'heritage') {
-    typeLabel = '🏛️ Tapak Warisan Berwarta';
+    typeLabel = '🏛️ Tapak Warisan Berwarta (Akta 645)';
     badgeColor = '#ec4899';
   } else if (type === 'site') {
     typeLabel = '📍 Tapak Cadangan Pemajuan';
@@ -151,6 +174,7 @@ export function buildPopupHtml(item, type) {
       <h4 class="popup-title">${item.name || 'Infrastruktur PBT'}</h4>
       <div class="popup-meta">
         ${item.distanceMeters !== undefined ? `<div class="meta-row"><span>Jarak Geodesik:</span> <strong>${item.distanceMeters} meter</strong></div>` : ''}
+        ${item.religiousType ? `<div class="meta-row"><span>Jenis Ibadat:</span> <strong>${item.religiousType}</strong></div>` : ''}
         ${item.operator ? `<div class="meta-row"><span>Pengendali:</span> <strong>${item.operator}</strong></div>` : ''}
         ${item.category ? `<div class="meta-row"><span>Kategori:</span> <strong>${item.category}</strong></div>` : ''}
         ${item.heritageLevel ? `<div class="meta-row"><span>Status Warisan:</span> <strong>${item.heritageLevel}</strong></div>` : ''}

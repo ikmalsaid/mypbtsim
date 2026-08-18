@@ -17,10 +17,10 @@ export const PBT_AUTHORITIES = [
 ];
 
 export const DEVELOPMENT_TYPES = [
-  // 1. Residential Projects
+  // 1. Projek Kediaman
   {
     id: 'high_rise_residential',
-    name: 'Pangsapuri / Kondominium Servis (High-Rise Residential)',
+    name: 'Pangsapuri / Kondominium Servis Bertingkat',
     category: 'residential',
     categoryLabel: 'Kediaman Bertingkat',
     unitLabel: 'Unit Kediaman',
@@ -32,7 +32,7 @@ export const DEVELOPMENT_TYPES = [
   },
   {
     id: 'affordable_housing',
-    name: 'Rumah Mampu Milik (Residensi Wilayah / Selangorku)',
+    name: 'Perumahan Mampu Milik (Residensi Wilayah / Selangorku)',
     category: 'residential',
     categoryLabel: 'Perumahan Awam Mampu Milik',
     unitLabel: 'Unit Kediaman',
@@ -44,7 +44,7 @@ export const DEVELOPMENT_TYPES = [
   },
   {
     id: 'landed_residential',
-    name: 'Perumahan Teres / Berkembar (Landed Residential)',
+    name: 'Perumahan Bertanah (Teres / Berkembar / Sesebuah)',
     category: 'residential',
     categoryLabel: 'Perumahan Bertanah',
     unitLabel: 'Unit Rumah',
@@ -55,10 +55,10 @@ export const DEVELOPMENT_TYPES = [
     densityLimitPerAcre: 24
   },
 
-  // 2. Commercial & Retail Projects
+  // 2. Projek Komersial & Perniagaan
   {
     id: 'retail_mall_commercial',
-    name: 'Pusat Beli-Belah & Kompleks Komersial (Shopping Mall / Retail Hub)',
+    name: 'Pusat Beli-Belah & Kompleks Komersial',
     category: 'commercial',
     categoryLabel: 'Komersial & Runcit Utama',
     unitLabel: 'Lot Komersial / Premis',
@@ -70,7 +70,7 @@ export const DEVELOPMENT_TYPES = [
   },
   {
     id: 'mixed_commercial',
-    name: 'Pembangunan Bercampur (Mixed Commercial & SOHO/Serviced Suites)',
+    name: 'Pembangunan Komersial Bercampur & Suite Servis',
     category: 'commercial',
     categoryLabel: 'Komersial Bercampur',
     unitLabel: 'Unit / Suite',
@@ -82,7 +82,7 @@ export const DEVELOPMENT_TYPES = [
   },
   {
     id: 'office_corporate_cbd',
-    name: 'Menara Pejabat Korporat / CBD (Office Tower & Business District)',
+    name: 'Menara Pejabat Korporat & Pusat Perniagaan',
     category: 'commercial',
     categoryLabel: 'Komersial Pejabat',
     unitLabel: 'Unit Pejabat / Suite',
@@ -93,46 +93,46 @@ export const DEVELOPMENT_TYPES = [
     densityLimitPerAcre: 90
   },
 
-  // 3. Industrial & Logistics Projects
+  // 3. Projek Perindustrian & Logistik
   {
     id: 'light_industrial_sme',
-    name: 'Taman Perindustrian Ringan & PKS (Light Industrial / SME Factory)',
+    name: 'Taman Perindustrian Ringan & Perusahaan Kecil Sederhana (PKS)',
     category: 'industrial',
     categoryLabel: 'Perindustrian Ringan',
     unitLabel: 'Lot Kilang / Bengkel',
     tripRate: 1.1,
     parkingRatio: 1.2,
     heavyVehicleRatio: 0.25,
-    doeBufferRequired: 50, // 50m green buffer to residential under JAS
+    doeBufferRequired: 50,
     densityLimitPerAcre: 15
   },
   {
     id: 'medium_heavy_industrial',
-    name: 'Perindustrian Sederhana / Pembuatan (Medium Industrial & Manufacturing)',
+    name: 'Perindustrian Sederhana & Kilang Pembuatan',
     category: 'industrial',
     categoryLabel: 'Perindustrian Sederhana/Berat',
     unitLabel: 'Lot Kilang Pembuatan',
     tripRate: 1.4,
     parkingRatio: 1.0,
     heavyVehicleRatio: 0.40,
-    doeBufferRequired: 250, // 250m JAS environmental buffer mandatory
+    doeBufferRequired: 250,
     densityLimitPerAcre: 8
   },
   {
     id: 'logistics_warehouse_hub',
-    name: 'Hab Logistik, Pergudangan & E-Dagang (Logistics & Distribution Center)',
+    name: 'Hab Logistik, Pergudangan & Pengedaran',
     category: 'logistics',
     categoryLabel: 'Logistik & Pergudangan',
     unitLabel: 'Gudang / Bay Muatan',
     tripRate: 1.8,
     parkingRatio: 0.8,
-    heavyVehicleRatio: 0.60, // Heavy container truck traffic
+    heavyVehicleRatio: 0.60,
     doeBufferRequired: 100,
     densityLimitPerAcre: 6
   },
   {
     id: 'data_center_tech',
-    name: 'Pusat Data AI & Taman Teknologi Tinggi (AI Data Center & High-Tech Park)',
+    name: 'Pusat Data Kecerdasan Buatan (AI) & Fasiliti Awan',
     category: 'industrial',
     categoryLabel: 'Teknologi Tinggi & Data Center',
     unitLabel: 'Modul Server / Fasiliti',
@@ -143,10 +143,10 @@ export const DEVELOPMENT_TYPES = [
     densityLimitPerAcre: 10
   },
 
-  // 4. Institutional, Healthcare & Heritage
+  // 4. Institusi, Kesihatan & Warisan
   {
     id: 'private_hospital_specialist',
-    name: 'Hospital Pakar & Kompleks Perubatan (Private Specialist Hospital)',
+    name: 'Hospital Pakar & Kompleks Kesihatan Swasta',
     category: 'institutional',
     categoryLabel: 'Institusi Kesihatan',
     unitLabel: 'Katil Rawatan / Klinik',
@@ -158,7 +158,7 @@ export const DEVELOPMENT_TYPES = [
   },
   {
     id: 'heritage_boutique',
-    name: 'Pembangunan Warisan / Hotel Butik Pelancongan (Heritage & Boutique)',
+    name: 'Pemuliharaan Warisan & Hotel Butik Pelancongan',
     category: 'heritage',
     categoryLabel: 'Warisan & Pelancongan',
     unitLabel: 'Bilik / Premis Warisan',

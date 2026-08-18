@@ -24,16 +24,20 @@ export class MapController {
       rail: L.layerGroup(),
       bus: L.layerGroup(),
       education: L.layerGroup(),
+      worship: L.layerGroup(),
       heritage: L.layerGroup(),
       roads: L.layerGroup(),
       measurements: L.layerGroup()
     };
 
-    this.activeBasemap = 'dark';
+    this.activeBasemap = 'satellite';
     this.measuringMode = null; // 'distance' | 'area' | null
     this.measurePoints = []; // Array of [lng, lat]
     this.activeShapeLayer = null;
     this.activeLabelMarker = null;
+    this.activeBufferCircle = null;
+    this.activeBufferHalo = null;
+    this.pendingRelocateMarker = null;
     this.vertexMarkers = [];
     this.onSiteSelectedCallback = null;
 
@@ -53,6 +57,10 @@ export class MapController {
 
     // Add Basemaps
     this.basemaps = {
+      satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 19
+      }),
       dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
@@ -62,10 +70,6 @@ export class MapController {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19
       }),
-      satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        maxZoom: 19
-      }),
       light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
         subdomains: 'abcd',
@@ -73,7 +77,7 @@ export class MapController {
       })
     };
 
-    this.basemaps.dark.addTo(this.map);
+    this.basemaps.satellite.addTo(this.map);
 
     // Add all layer groups to map
     Object.values(this.layers).forEach((layerGroup) => layerGroup.addTo(this.map));
@@ -87,6 +91,78 @@ export class MapController {
     Object.values(this.basemaps).forEach((layer) => this.map.removeLayer(layer));
     this.basemaps[type].addTo(this.map);
     this.activeBasemap = type;
+    this.updateBufferStyle();
+  }
+
+  getBufferStyles(basemapType = 'dark') {
+    switch (basemapType) {
+      case 'light':
+        return {
+          strokeColor: '#1d4ed8', // Bold Cobalt Blue for bright positron map
+          weight: 2.8,
+          dashArray: '8, 8',
+          fillColor: '#2563eb',
+          fillOpacity: 0.16,
+          haloColor: '#60a5fa',
+          haloWeight: 6,
+          haloOpacity: 0.35
+        };
+      case 'osm':
+        return {
+          strokeColor: '#0369a1', // Deep Cerulean for colorful OSM standard
+          weight: 3.0,
+          dashArray: '8, 8',
+          fillColor: '#0284c7',
+          fillOpacity: 0.18,
+          haloColor: '#38bdf8',
+          haloWeight: 6,
+          haloOpacity: 0.35
+        };
+      case 'satellite':
+        return {
+          strokeColor: '#00f5d4', // Vivid Electric Mint/Teal for dark Earth terrain
+          weight: 3.2,
+          dashArray: '8, 6',
+          fillColor: '#00f5d4',
+          fillOpacity: 0.20,
+          haloColor: '#ffffff',
+          haloWeight: 7,
+          haloOpacity: 0.45
+        };
+      case 'dark':
+      default:
+        return {
+          strokeColor: '#38bdf8', // Luminous Cyber Cyan for Dark Matter
+          weight: 2.5,
+          dashArray: '7, 7',
+          fillColor: '#0284c7',
+          fillOpacity: 0.15,
+          haloColor: '#0ea5e9',
+          haloWeight: 6,
+          haloOpacity: 0.35
+        };
+    }
+  }
+
+  updateBufferStyle() {
+    if (!this.activeBufferCircle) return;
+    const style = this.getBufferStyles(this.activeBasemap);
+
+    if (this.activeBufferHalo) {
+      this.activeBufferHalo.setStyle({
+        color: style.haloColor,
+        weight: style.haloWeight,
+        opacity: style.haloOpacity
+      });
+    }
+
+    this.activeBufferCircle.setStyle({
+      color: style.strokeColor,
+      weight: style.weight,
+      dashArray: style.dashArray,
+      fillColor: style.fillColor,
+      fillOpacity: style.fillOpacity
+    });
   }
 
   toggleLayer(layerName, isVisible) {
@@ -115,17 +191,30 @@ export class MapController {
     marker.bindPopup(buildPopupHtml({ name: siteName, units, lat, lng }, 'site'));
     this.layers.siteMarker.addLayer(marker);
 
-    // 2. Add 1km Radius Buffer Circle (Geodesic 1000m)
-    const circle = L.circle([lat, lng], {
+    // 2. Add Adaptive Dual-Ring 1km Buffer (Geodesic 1,000m)
+    const style = this.getBufferStyles(this.activeBasemap);
+
+    // Outer Contrast Halo Ring (gives sharp pop across all map types)
+    this.activeBufferHalo = L.circle([lat, lng], {
       radius: this.bufferRadiusMeters,
-      color: '#38bdf8',
-      weight: 2,
-      dashArray: '6, 8',
-      fillColor: '#0284c7',
-      fillOpacity: 0.08
+      color: style.haloColor,
+      weight: style.haloWeight,
+      opacity: style.haloOpacity,
+      fill: false
     });
-    circle.bindTooltip(`Zon Penampan 1km (1,000m Radius Buffer)`, { permanent: false, direction: 'top' });
-    this.layers.bufferCircle.addLayer(circle);
+    this.layers.bufferCircle.addLayer(this.activeBufferHalo);
+
+    // Primary Luminous Dashed Buffer Circle
+    this.activeBufferCircle = L.circle([lat, lng], {
+      radius: this.bufferRadiusMeters,
+      color: style.strokeColor,
+      weight: style.weight,
+      dashArray: style.dashArray,
+      fillColor: style.fillColor,
+      fillOpacity: style.fillOpacity
+    });
+    this.activeBufferCircle.bindTooltip(`⭕ Zon Penampan 1km (1,000m Radius Kawasan Impak)`, { permanent: false, direction: 'top' });
+    this.layers.bufferCircle.addLayer(this.activeBufferCircle);
 
     // Smooth flyTo
     this.map.flyTo([lat, lng], 15, { duration: 1.2 });
@@ -139,6 +228,7 @@ export class MapController {
     this.layers.rail.clearLayers();
     this.layers.bus.clearLayers();
     this.layers.education.clearLayers();
+    this.layers.worship.clearLayers();
     this.layers.heritage.clearLayers();
 
     // 1. Rail Stations
@@ -165,7 +255,15 @@ export class MapController {
       this.layers.education.addLayer(marker);
     });
 
-    // 4. Heritage Sites
+    // 4. Places of Worship (Kemudahan Keagamaan)
+    (spatialData.worshipPlaces || []).forEach((item) => {
+      const icon = createCustomIcon('worship', item.name);
+      const marker = L.marker([item.lat, item.lng], { icon });
+      marker.bindPopup(buildPopupHtml(item, 'worship'));
+      this.layers.worship.addLayer(marker);
+    });
+
+    // 5. Heritage Sites (Akta 645)
     (spatialData.heritageSites || []).forEach((item) => {
       const icon = createCustomIcon('heritage', item.name);
       const marker = L.marker([item.lat, item.lng], { icon });
@@ -201,9 +299,7 @@ export class MapController {
 
   handleMapClick(e) {
     if (!this.measuringMode) {
-      if (this.onSiteSelectedCallback) {
-        this.onSiteSelectedCallback(e.latlng.lat, e.latlng.lng);
-      }
+      this.showRelocateConfirmation(e.latlng.lat, e.latlng.lng);
       return;
     }
 
@@ -430,6 +526,76 @@ export class MapController {
     if (statusSpan) {
       statusSpan.innerText = text;
     }
+  }
+
+  showRelocateConfirmation(lat, lng) {
+    // Clear any previous pending confirmation marker
+    if (this.pendingRelocateMarker) {
+      this.map.removeLayer(this.pendingRelocateMarker);
+      this.pendingRelocateMarker = null;
+    }
+
+    const popupHtml = `
+      <div class="site-relocate-confirm-popup">
+        <div class="confirm-header">
+          <span class="confirm-icon">📍</span>
+          <strong>Pindahkan Tapak & Zon 1km?</strong>
+        </div>
+        <p class="confirm-desc">Adakah anda ingin menukar tapak pemajuan ke titik ini dan menjana semula simulasi impak?</p>
+        <div class="confirm-coords">
+          <code>Lat: ${lat.toFixed(5)}</code> | <code>Lng: ${lng.toFixed(5)}</code>
+        </div>
+        <div class="confirm-actions">
+          <button type="button" class="btn-confirm-yes" id="btn-confirm-move-site">✓ Sahkan & Kira</button>
+          <button type="button" class="btn-confirm-no" id="btn-cancel-move-site">✕ Batal</button>
+        </div>
+      </div>
+    `;
+
+    const pinIcon = L.divIcon({
+      className: 'pending-site-pin',
+      html: `
+        <div class="pending-pin-wrapper">
+          <div class="pending-pin-pulse"></div>
+          <div class="pending-pin-dot">?</div>
+        </div>
+      `,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    });
+
+    this.pendingRelocateMarker = L.marker([lat, lng], { icon: pinIcon, zIndexOffset: 2000 })
+      .addTo(this.map)
+      .bindPopup(popupHtml, { closeButton: false, minWidth: 260, className: 'relocate-confirm-leaflet-popup' })
+      .openPopup();
+
+    // Attach listeners on next tick when popup DOM is rendered
+    setTimeout(() => {
+      const btnConfirm = document.getElementById('btn-confirm-move-site');
+      const btnCancel = document.getElementById('btn-cancel-move-site');
+
+      if (btnConfirm) {
+        btnConfirm.addEventListener('click', () => {
+          if (this.pendingRelocateMarker) {
+            this.map.removeLayer(this.pendingRelocateMarker);
+            this.pendingRelocateMarker = null;
+          }
+          if (this.onSiteSelectedCallback) {
+            this.onSiteSelectedCallback(lat, lng);
+          }
+        });
+      }
+
+      if (btnCancel) {
+        btnCancel.addEventListener('click', () => {
+          if (this.pendingRelocateMarker) {
+            this.map.removeLayer(this.pendingRelocateMarker);
+            this.pendingRelocateMarker = null;
+          }
+        });
+      }
+    }, 50);
   }
 
   onSiteSelected(callback) {

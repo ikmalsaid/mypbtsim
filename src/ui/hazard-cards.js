@@ -132,3 +132,24 @@ export function renderHazardCards(containerElement, results) {
 
   containerElement.innerHTML = html;
 }
+
+/**
+ * Renders an informative empty state for AI Simulation calculations
+ * @param {HTMLElement} containerElement
+ */
+export function renderEmptyHazardCards(containerElement) {
+  if (!containerElement) return;
+
+  containerElement.innerHTML = `
+    <div class="empty-state-box">
+      <div class="empty-state-icon-pulse">⚖️</div>
+      <div class="empty-state-title">Simulasi AI Belum Dijalankan</div>
+      <div class="empty-state-desc">
+        Kiraan Bebanan Trafik (TSI), Aksesibiliti Transit (TOD), dan Pematuhan Statutori Akta PBT akan diproses selepas carian OSM selesai.
+      </div>
+      <div class="empty-state-hint">
+        Status: <strong>Sedia Untuk Analisis</strong>
+      </div>
+    </div>
+  `;
+}

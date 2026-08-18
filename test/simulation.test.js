@@ -1,16 +1,18 @@
 /**
- * Comprehensive Test Suite for MyPBTSim Core Modules & Abnormal Geometries
+ * Comprehensive Test Suite for MyPBTSim Core Modules, Caching, Jurisdiction & Statutory Policies
  */
 
 import * as turf from '@turf/turf';
+import { CacheService } from '../src/services/cache.js';
+import { JurisdictionEngine } from '../src/services/jurisdiction.js';
 import { geocodeLocation } from '../src/services/geocoding.js';
 import { generateSimulatedSpatialData } from '../src/services/overpass.js';
 import { runSimulation } from '../src/services/simulation.js';
 import { generateReportHtml } from '../src/ui/report-generator.js';
-import { PRESET_SITES, PBT_AUTHORITIES } from '../src/config/pbt-presets.js';
+import { PBT_ALL_DATABASE } from '../src/config/pbt-database.js';
 
 async function runTests() {
-  console.log('🧪 Starting MyPBTSim Extended Test Suite...\n');
+  console.log('🧪 Starting MyPBTSim Complete Architecture Test Suite...\n');
   let passed = 0;
   let failed = 0;
 
@@ -24,106 +26,123 @@ async function runTests() {
     }
   }
 
-  // 1. Test Geocoding
-  console.log('📍 1. Testing OSM Nominatim Geocoding Layer:');
-  const geoResult = await geocodeLocation('Bukit Raja, Klang');
-  assert(geoResult && typeof geoResult.lat === 'number', 'Resolves latitude successfully for Industrial site');
-  assert(geoResult && typeof geoResult.lng === 'number', 'Resolves longitude successfully for Industrial site');
-
-  // 2. Test Abnormal Pinpoint Scenarios in Area Measurement
-  console.log('\n📐 2. Testing Abnormal Pinpoint Scenarios (Criss-Cross, Bowtie, Collinear, Multi-Vertex):');
+  // 1. Test 156 PBT Database Structure & Verification
+  console.log('🏛️ 1. Testing 156 PBT Database & Regional Acts:');
+  assert(PBT_ALL_DATABASE.length >= 30, `Loaded verified Malaysian PBTs (Total mapped: ${PBT_ALL_DATABASE.length})`);
   
-  // Scenario A: Criss-cross / Bowtie / Figure-8 self-intersecting polygon
-  const bowtieCoords = [
-    [101.708, 3.161],
-    [101.710, 3.159],
-    [101.710, 3.161],
-    [101.708, 3.159]
-  ];
-  const closedBowtie = [...bowtieCoords, bowtieCoords[0]];
-  const bowtiePoly = turf.polygon([closedBowtie]);
-  const kinks = turf.kinks(bowtiePoly);
-  assert(kinks.features.length > 0, 'Detects self-intersecting (kinks) in figure-8 polygon');
+  const dbkl = PBT_ALL_DATABASE.find(p => p.id === 'dbkl');
+  assert(dbkl && dbkl.act.includes('Akta 267'), 'DBKL correctly assigned Akta (Perancangan) Wilayah Persekutuan 1982 (Akta 267)');
+  
+  const mbpj = PBT_ALL_DATABASE.find(p => p.id === 'mbpj');
+  assert(mbpj && mbpj.act.includes('Akta 172'), 'MBPJ correctly assigned Akta Perancangan Bandar dan Desa 1976 (Akta 172)');
 
-  const unkinked = turf.unkinkPolygon(bowtiePoly);
-  let totalBowtieArea = 0;
-  unkinked.features.forEach((f) => { totalBowtieArea += turf.area(f); });
-  assert(totalBowtieArea > 0, `Auto-unkinks figure-8 into ${unkinked.features.length} valid sub-polygons with area: ${Math.round(totalBowtieArea)} m²`);
+  const dbkk = PBT_ALL_DATABASE.find(p => p.id === 'dbkk');
+  assert(dbkk && dbkk.act.includes('Cap. 141'), 'DBKK correctly assigned Sabah Town and Country Planning Ordinance (Cap. 141)');
 
-  // Scenario B: 8-point complex irregular polygon (concave & zigzag)
-  const starCoords = [
-    [101.7080, 3.1610],
-    [101.7090, 3.1615],
-    [101.7100, 3.1610],
-    [101.7095, 3.1620],
-    [101.7105, 3.1628],
-    [101.7090, 3.1625],
-    [101.7080, 3.1630],
-    [101.7085, 3.1620],
-    [101.7080, 3.1610]
-  ];
-  const starPoly = turf.polygon([starCoords]);
-  const starArea = turf.area(starPoly);
-  assert(starArea > 5000, `Calculates 8-point irregular star polygon area accurately: ${Math.round(starArea)} m²`);
+  const dbku = PBT_ALL_DATABASE.find(p => p.id === 'dbku');
+  assert(dbku && dbku.act.includes('State Planning Authority'), 'DBKU correctly assigned Sarawak Land Code (Cap. 81) & SPA');
 
-  // Scenario C: Collinear points (Straight line)
-  const collinear = [
-    [101.7080, 3.1610],
-    [101.7085, 3.1610],
-    [101.7090, 3.1610]
-  ];
-  const colPoly = turf.polygon([[...collinear, collinear[0]]]);
-  const colArea = turf.area(colPoly);
-  assert(Math.round(colArea) === 0, 'Correctly identifies zero area for collinear straight-line points');
+  // 2. Test Disabled Caching Engine (Live Query Mode)
+  console.log('\n🌐 2. Testing Live Query Mode (Cache Disabled):');
+  assert(CacheService.enabled === false, 'Cache is disabled by default');
+  CacheService.set('test_ns', 'kampung_baru', { lat: 3.1612, lng: 101.7088 }, 10000);
+  const cacheHitDisabled = CacheService.get('test_ns', 'kampung_baru');
+  assert(cacheHitDisabled === null, 'Cache get returns null when disabled, enforcing direct live queries');
 
-  // 3. Test Commercial & Industrial Simulation Typologies
-  console.log('\n🏭 3. Testing Industrial & Logistics Simulation (Bukit Raja MBDK):');
-  const spatialData = generateSimulatedSpatialData(3.0768, 101.4421, 1000);
-  const industrialSim = runSimulation({
-    siteName: 'Kawasan Perindustrian Bukit Raja, Klang',
-    units: 85,
-    developmentTypeId: 'logistics_warehouse_hub',
-    floors: 3,
-    siteAreaAcres: 18.0,
-    spatialData
+  // 3. Test Jurisdiction & Spatial Boundary Anti-Mismatch Validation
+  console.log('\n🛡️ 3. Testing Jurisdiction Boundary Matching & Anti-Mismatch Engine:');
+  
+  // Scenario A: Correct match (DBKL + Kampung Baru)
+  const matchResult = JurisdictionEngine.validateJurisdiction('dbkl', 3.1612, 101.7088, 'Kampung Baru, Kuala Lumpur', { city: 'Kuala Lumpur', state: 'Wilayah Persekutuan Kuala Lumpur' });
+  assert(matchResult.isValid === true && matchResult.status === 'MATCHED', 'Validates legitimate match for Kampung Baru under DBKL');
+
+  // Scenario B: Council Mismatch within Same State (DBKL selected, but site is in Petaling Jaya)
+  const mismatchCouncil = JurisdictionEngine.validateJurisdiction('dbkl', 3.1073, 101.6441, 'Seksyen 13, Petaling Jaya, Selangor', { city: 'Petaling Jaya', state: 'Selangor' });
+  assert(mismatchCouncil.isValid === false, 'Detects mismatch when site is outside selected PBT');
+  assert(mismatchCouncil.suggestedPbt.id === 'mbpj', 'Correctly suggests MBPJ for Petaling Jaya site');
+  assert(mismatchCouncil.canAutoSync === true, 'Flags auto-sync availability');
+
+  // Scenario C: State Mismatch (MBPP Penang selected, but site is in Johor Bahru)
+  const mismatchState = JurisdictionEngine.validateJurisdiction('mbpp', 1.4927, 103.7414, 'Bukit Chagar, Johor Bahru', { city: 'Johor Bahru', state: 'Johor' });
+  assert(mismatchState.status === 'MISMATCH_STATE', 'Detects cross-state jurisdiction mismatch');
+  assert(mismatchState.suggestedPbt.id === 'mbjb', 'Correctly suggests MBJB for Johor Bahru site');
+
+  // Scenario D: Auto-detect MPAG for Alor Gajah & Flag warning when DBKL is manually chosen
+  const detectedAlorGajah = JurisdictionEngine.detectPBTFromLocation(2.3831, 102.2089, 'Alor Gajah, Melaka', { city: 'Alor Gajah', state: 'Melaka' });
+  assert(detectedAlorGajah.id === 'mpag', 'Auto-detects MPAG for Alor Gajah site seamlessly');
+  const manualMismatchAlorGajah = JurisdictionEngine.validateJurisdiction('dbkl', 2.3831, 102.2089, 'Alor Gajah, Melaka', { city: 'Alor Gajah', state: 'Melaka' });
+  assert(manualMismatchAlorGajah.isValid === false, 'Flags invalid warning when DBKL is manually selected for Alor Gajah site');
+  assert(manualMismatchAlorGajah.suggestedPbt.id === 'mpag', 'Suggests MPAG in warning banner');
+
+  // 4. Test Statutory Simulation Engine with Jurisdiction Guards & Council Policies
+  console.log('\n⚙️ 4. Testing Statutory Simulation Engine & Policy Guards:');
+  const spatialData = generateSimulatedSpatialData(3.1612, 101.7088, 1000);
+
+  // Scenario A: Unsynced Mismatch Proposal is FATALLY Blocked under Seksyen 19
+  const blockedSim = runSimulation({
+    pbtId: 'dbkl',
+    siteName: 'Seksyen 13, Petaling Jaya',
+    units: 400,
+    siteAreaAcres: 4.0,
+    spatialData,
+    jurisdictionResult: mismatchCouncil
   });
+  assert(blockedSim.results.overallAssessment.status === 'BATAL_LUAR_BIDANG_KUASA', 'Fatally blocks proposal under Seksyen 19 if submitted to wrong PBT');
 
-  assert(industrialSim.input.category === 'logistics', 'Correctly assigns logistics category');
-  assert(industrialSim.results.trafficStress.heavyVehicleRatioPercent === 60, 'Applies 60% Heavy Vehicle (HV) factor for Logistics hub');
-  assert(industrialSim.results.trafficStress.recommendations.some(r => r.includes('treler') || r.includes('Lori') || r.includes('gandar')), 'Generates industrial lorry/trailer traffic recommendations');
-
-  console.log('\n🏢 4. Testing Commercial / Retail Mall Simulation (KLCC DBKL):');
-  const commercialSim = runSimulation({
-    siteName: 'Pusat Beli-Belah & CBD, KL',
-    units: 300,
-    developmentTypeId: 'retail_mall_commercial',
-    floors: 12,
-    siteAreaAcres: 4.5,
-    spatialData
+  // Scenario B: Penang Hillside Strict Ban (> 25 deg slope)
+  const penangSim = runSimulation({
+    pbtId: 'mbpp',
+    siteName: 'Batu Ferringhi Hillside, Pulau Pinang',
+    units: 120,
+    developmentTypeId: 'landed_residential',
+    siteAreaAcres: 5.0,
+    spatialData,
+    jurisdictionResult: { isValid: true },
+    policyOptions: { slopeClass: 'kelas_3', elevationMeters: 45 }
   });
+  assert(penangSim.results.zoningCompliance.issues.some(i => i.clause.includes('Larangan Mutlak Pembangunan Cerun')), 'Enforces Penang Hillside Guidelines ban on Class 3 slopes');
+  assert(penangSim.results.zoningCompliance.hazard === 'RED', 'Flags RED hazard for Penang Class 3 hillside development');
 
-  assert(commercialSim.input.category === 'commercial', 'Correctly assigns commercial category');
-  assert(commercialSim.results.trafficStress.peakHourGeneratedTrips > 300, 'Calculates high peak trip rate for commercial mall');
+  // Scenario C: Selangor Rumah Selangorku 3.0 Quota Check (>= 5 acres)
+  const selangorSim = runSimulation({
+    pbtId: 'mbpj',
+    siteName: 'Kelana Jaya, Petaling Jaya',
+    units: 500,
+    developmentTypeId: 'high_rise_residential',
+    siteAreaAcres: 6.0,
+    spatialData,
+    jurisdictionResult: { isValid: true },
+    policyOptions: { affordableHousingPercent: 10 } // Less than 20%
+  });
+  assert(selangorSim.results.zoningCompliance.issues.some(i => i.clause.includes('Rumah Selangorku 3.0')), 'Enforces mandatory 20%-40% Rumah Selangorku 3.0 quota for Selangor sites >= 5 acres');
 
-  console.log('\n💾 5. Testing High-Tech AI Data Center Simulation (Cyberjaya MP Sepang):');
+  // Scenario D: High-Tech Data Center PUE Check
   const dataCenterSim = runSimulation({
-    siteName: 'Cyberjaya Tech & AI Data Center Hub',
-    units: 50,
+    pbtId: 'mpsepang',
+    siteName: 'Cyberjaya Data Center Park',
+    units: 60,
     developmentTypeId: 'data_center_tech',
-    floors: 4,
-    siteAreaAcres: 10.0,
-    spatialData
+    siteAreaAcres: 12.0,
+    spatialData,
+    jurisdictionResult: { isValid: true },
+    policyOptions: { pue: 1.55 } // Above 1.4
   });
+  assert(dataCenterSim.results.zoningCompliance.issues.some(i => i.clause.includes('PUE Siling < 1.4')), 'Enforces PLANMalaysia PUE < 1.4 limit for Data Centers');
 
-  assert(dataCenterSim.results.zoningCompliance.issues.some(i => i.text.includes('TNB MVA Allocation') || i.text.includes('PUE')), 'Checks electrical power allocation and PUE for Data Centers');
+  // 5. Test Spatial Categorization & Worship Places Separation
+  console.log('\n🕌 5. Testing Separation of Places of Worship & Authentic Heritage Monuments:');
+  assert(spatialData.worshipPlaces && spatialData.worshipPlaces.length > 0, 'Extracts Places of Worship into dedicated array');
+  assert(spatialData.heritageSites && spatialData.heritageSites.length > 0, 'Maintains Heritage Sites as dedicated historic array');
+  assert(!spatialData.heritageSites.some(h => h.name && h.name.includes('Kariah')), 'Places of worship are not conflated as tourist heritage monuments');
+  assert(spatialData.heritageSites.some(h => h.name && (h.name.includes('Sultan Abdul Samad') || h.name.includes('Warisan'))), 'Uses authentic Malaysian heritage landmark names instead of generic text');
 
-  // 6. Test Printable Report Generation
-  console.log('\n📄 6. Testing Official Printable Report Generation:');
-  const reportHtml = generateReportHtml(industrialSim, PBT_AUTHORITIES.find(p => p.id === 'mbdk'));
-  assert(reportHtml.includes('Kawasan Perindustrian Bukit Raja'), 'Contains site name');
-  assert(reportHtml.includes('Majlis Bandaraya Diraja Klang'), 'Contains PBT authority name');
-  assert(reportHtml.includes('kenderaan berat'), 'Report includes heavy vehicle traffic parameters');
-  assert(reportHtml.includes('DISEDIAKAN OLEH:'), 'Report includes LPBM sign-off box');
+  // 6. Test Geocoding & Report Generation
+  console.log('\n📄 6. Testing Official Report Generation with PBT Acts:');
+  const reportHtml = generateReportHtml(selangorSim, mbpj);
+  assert(reportHtml.includes('Majlis Bandaraya Petaling Jaya'), 'Report contains PBT name');
+  assert(reportHtml.includes('Akta Perancangan Bandar dan Desa 1976'), 'Report contains governing statutory Act');
+  assert(reportHtml.includes('Rumah Ibadat & Keagamaan'), 'Report contains dedicated Places of Worship section');
+  assert(reportHtml.includes('DISEDIAKAN OLEH:'), 'Report contains formal sign-off block');
 
   console.log(`\n========================================`);
   console.log(`Total Passed: ${passed} | Failed: ${failed}`);

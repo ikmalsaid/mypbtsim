@@ -448,7 +448,7 @@ function evaluateZoningAndCouncilPolicies(
   }
 
   // CHECK 6: Malay Agricultural Settlement (M.A.S. Kampung Baru By-Laws)
-  if (siteName.toLowerCase().includes('kampung baru') || siteName.toLowerCase().includes('kg baru') || pbt.id === 'pkb') {
+  if (siteName.toLowerCase().includes('kampung baru') || siteName.toLowerCase().includes('kg baru')) {
     issues.push({
       law: 'Akta Perbadanan Pembangunan Kampong Bharu 2011 (Akta 733)',
       clause: 'Enakmen Penempatan Pertanian Melayu (M.A.S. By-Laws 1900)',

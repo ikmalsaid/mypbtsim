@@ -28,7 +28,7 @@ async function runTests() {
 
   // 1. Test 156 PBT Database Structure & Verification
   console.log('🏛️ 1. Testing 156 PBT Database & Regional Acts:');
-  assert(PBT_ALL_DATABASE.length >= 30, `Loaded verified Malaysian PBTs (Total mapped: ${PBT_ALL_DATABASE.length})`);
+  assert(PBT_ALL_DATABASE.length === 156, `Loaded verified Malaysian PBTs (Total mapped: ${PBT_ALL_DATABASE.length} PBTs)`);
   
   const dbkl = PBT_ALL_DATABASE.find(p => p.id === 'dbkl');
   assert(dbkl && dbkl.act.includes('Akta 267'), 'DBKL correctly assigned Akta (Perancangan) Wilayah Persekutuan 1982 (Akta 267)');
@@ -37,10 +37,10 @@ async function runTests() {
   assert(mbpj && mbpj.act.includes('Akta 172'), 'MBPJ correctly assigned Akta Perancangan Bandar dan Desa 1976 (Akta 172)');
 
   const dbkk = PBT_ALL_DATABASE.find(p => p.id === 'dbkk');
-  assert(dbkk && dbkk.act.includes('Cap. 141'), 'DBKK correctly assigned Sabah Town and Country Planning Ordinance (Cap. 141)');
+  assert(dbkk && dbkk.act.includes('Cap. 141') && dbkk.act.includes('Local Government Ordinance 1961'), 'DBKK correctly assigned Sabah Local Government Ordinance 1961 & Cap. 141');
 
   const dbku = PBT_ALL_DATABASE.find(p => p.id === 'dbku');
-  assert(dbku && dbku.act.includes('State Planning Authority'), 'DBKU correctly assigned Sarawak Land Code (Cap. 81) & SPA');
+  assert(dbku && dbku.act.includes('Local Authorities Ordinance 1996') && dbku.act.includes('Sarawak Land Code'), 'DBKU correctly assigned Sarawak Local Authorities Ordinance 1996 & Sarawak Land Code (Cap. 81)');
 
   // 2. Test Disabled Caching Engine (Live Query Mode)
   console.log('\n🌐 2. Testing Live Query Mode (Cache Disabled):');

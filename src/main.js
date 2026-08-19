@@ -109,7 +109,7 @@ function initUI() {
   const stateSelect = document.getElementById('state-filter-select');
   if (stateSelect) {
     stateSelect.innerHTML = [
-      `<option value="all">Semua Negeri (${MALAYSIA_STATES.length})</option>`,
+      `<option value="all">Semua Negeri & WP (${MALAYSIA_STATES.length})</option>`,
       ...MALAYSIA_STATES.map((s) => `<option value="${s.id}" ${s.id === state.selectedStateId ? 'selected' : ''}>${s.name}</option>`)
     ].join('');
 
@@ -1174,8 +1174,8 @@ function updatePolicyOptionsForTargetPbt(pbt, devTypeId) {
     policyName = 'Kuota RMM Pulau Pinang:';
     policyHint = 'Garis Panduan Perumahan Mampu Milik MBPP / MBSP';
   } else if (stateId === 'putrajaya') {
-    policyName = 'Kuota PPA1M / Residensi Madani:';
-    policyHint = 'Dasar Perumahan Penjawat Awam PPj';
+    policyName = 'Kuota PPAM / Residensi Madani:';
+    policyHint = 'Dasar Perumahan Penjawat Awam Malaysia (PPAM) & PPj';
   } else if (stateId === 'melaka') {
     policyName = 'Kuota RMM Melaka:';
     policyHint = 'Dasar Lembaga Perumahan Melaka (LPM)';

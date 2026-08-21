@@ -19,6 +19,7 @@ import { geocodeLocation, reverseGeocode, fetchNearbySuggestions } from './servi
 import { queryOverpassRadius } from './services/overpass.js';
 import { runSimulation } from './services/simulation.js';
 import { JurisdictionEngine } from './services/jurisdiction.js';
+import { fetchTerrainElevation } from './services/elevation.js';
 import { MapController } from './map/map-controller.js';
 import { renderHazardCards, renderEmptyHazardCards } from './ui/hazard-cards.js';
 import { renderInfrastructureCounters, renderEmptyInfrastructureCounters, updateStepperProgress } from './ui/summary-panel.js';
@@ -33,6 +34,7 @@ const state = {
   currentLng: 101.7088,
   addressDetails: {},
   jurisdictionResult: null,
+  terrainData: null,
   isManualPbtSelection: false, // true only when user explicitly overrides PBT dropdown
   units: 350,
   developmentTypeId: 'high_rise_residential',
@@ -83,7 +85,15 @@ function initInitialSiteView() {
   );
 
   renderJurisdictionBanner(state.jurisdictionResult);
-  updateGeocodeDisplay(state.currentLat, state.currentLng, state.currentSiteName);
+  updateGeocodeDisplay(state.currentLat, state.currentLng, state.currentSiteName, state.terrainData);
+
+  // Fetch initial terrain elevation & slope gradient immediately on site set
+  fetchTerrainElevation(state.currentLat, state.currentLng).then((terrain) => {
+    state.terrainData = terrain;
+    state.policyOptions.elevationMeters = terrain.elevation;
+    state.policyOptions.slopeClass = terrain.slopeClass;
+    updateGeocodeDisplay(state.currentLat, state.currentLng, state.currentSiteName, terrain);
+  }).catch(() => {});
 
   const overlayTitle = document.getElementById('overlay-site-title');
   const overlayPbtSub = document.getElementById('overlay-pbt-sub');
@@ -522,8 +532,16 @@ function updateSiteLocationOnly(lat, lng, siteName, addressDetails = {}, pbtId =
     addressDetails
   );
   renderJurisdictionBanner(state.jurisdictionResult);
-  updateGeocodeDisplay(lat, lng, siteName);
+  updateGeocodeDisplay(lat, lng, siteName, state.terrainData);
   updateNearbyLocationChips(siteName, state.currentPbt);
+
+  // Fetch real-time satellite elevation & slope gradient in background
+  fetchTerrainElevation(lat, lng).then((terrain) => {
+    state.terrainData = terrain;
+    state.policyOptions.elevationMeters = terrain.elevation;
+    state.policyOptions.slopeClass = terrain.slopeClass;
+    updateGeocodeDisplay(lat, lng, siteName, terrain);
+  }).catch(() => {});
 
   // Clean reset of previous simulation results to ready state (zero Overpass queries!)
   resetSimulationToReadyState();
@@ -903,6 +921,12 @@ async function executeStep2GeocodingAndJurisdiction(signal = null) {
       updatePolicyOptionsForTargetPbt(detectedPbt, state.developmentTypeId);
     }
 
+    // Fetch real-time satellite elevation and calculate ground slope gradient
+    const terrain = await fetchTerrainElevation(geoResult.lat, geoResult.lng);
+    state.terrainData = terrain;
+    state.policyOptions.elevationMeters = terrain.elevation;
+    state.policyOptions.slopeClass = terrain.slopeClass;
+
     // Validate Spatial Jurisdiction against selected PBT
     // If the user manually selected an unmatched PBT, this generates a clear warning banner!
     state.jurisdictionResult = JurisdictionEngine.validateJurisdiction(
@@ -914,10 +938,37 @@ async function executeStep2GeocodingAndJurisdiction(signal = null) {
     );
 
     renderJurisdictionBanner(state.jurisdictionResult);
-    updateGeocodeDisplay(geoResult.lat, geoResult.lng, geoResult.displayName);
+    updateGeocodeDisplay(geoResult.lat, geoResult.lng, geoResult.displayName, terrain);
   } catch (err) {
     if (err.name === 'AbortError') throw err;
     console.warn('[Geocoding] Fallback:', err.message);
+  }
+}
+
+/**
+ * Updates Geocoding status box in Card 2 with clean address, coordinates, and live satellite elevation / slope
+ */
+function updateGeocodeDisplay(lat, lng, displayName, terrainData = null) {
+  const addressDisplay = document.getElementById('geo-address-display');
+  const coordsVal = document.getElementById('geo-coords-val');
+  const elevVal = document.getElementById('geo-elevation-val');
+  const slopeVal = document.getElementById('geo-slope-val');
+
+  if (addressDisplay) {
+    addressDisplay.innerText = displayName || 'Tapak Cadangan';
+  }
+  if (coordsVal) {
+    coordsVal.innerText = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  }
+  if (elevVal && slopeVal) {
+    if (terrainData) {
+      elevVal.innerText = `${terrainData.elevation}m`;
+      const shortClass = terrainData.slopeClassLabel ? terrainData.slopeClassLabel.split('-')[0].trim() : 'Kelas I';
+      slopeVal.innerText = `${terrainData.slopeDegrees}° (${shortClass})`;
+    } else {
+      elevVal.innerText = `...`;
+      slopeVal.innerText = `...`;
+    }
   }
 }
 
@@ -1133,14 +1184,6 @@ function autoSyncPbt(targetPbt) {
     // Idle state: not simulated yet -> keep stepper at ready state
     updateStepperProgress(1);
   }
-}
-
-function updateGeocodeDisplay(lat, lng, address) {
-  const coordsDisplay = document.getElementById('geo-coords-display');
-  const addressDisplay = document.getElementById('geo-address-display');
-
-  if (coordsDisplay) coordsDisplay.innerText = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
-  if (addressDisplay) addressDisplay.innerText = address;
 }
 
 /**

@@ -251,15 +251,25 @@
           <!-- Rendered dynamically -->
         </div>
 
-        <div id="geocoding-status-box" style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-            <div style="display: flex; align-items: center; gap: 0.4rem; color: #38bdf8; font-weight: 700;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span id="geo-coords-display">Lat: 3.1612, Lng: 101.7088</span>
-            </div>
+        <div id="geocoding-status-box" class="site-geo-status-card">
+          <!-- Top Row: Address / Site Name with single crisp map pin -->
+          <div class="geo-site-address-row">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" class="geo-pin-icon"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span id="geo-address-display">Kampung Baru, Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur</span>
           </div>
-          <div id="geo-address-display" style="font-size: 0.74rem; color: #cbd5e1;">
-            Kampung Baru, Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur
+
+          <!-- Bottom Row: 2-Column Info Pills (Coordinates & Live Topography) -->
+          <div class="geo-meta-chips-grid">
+            <div class="geo-meta-chip">
+              <span class="meta-chip-lbl">📍 GPS:</span>
+              <span id="geo-coords-val" class="meta-chip-val">3.1612, 101.7088</span>
+            </div>
+            <div class="geo-meta-chip" id="geo-terrain-chip">
+              <span class="meta-chip-lbl">🏔️ Aras:</span>
+              <span id="geo-elevation-val" class="meta-chip-val">33m</span>
+              <span class="meta-chip-sep">•</span>
+              <span id="geo-slope-val" class="meta-chip-val meta-chip-highlight">0.6° (Kelas I)</span>
+            </div>
           </div>
         </div>
       </section>

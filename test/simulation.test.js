@@ -10,6 +10,7 @@ import { generateSimulatedSpatialData } from '../src/services/overpass.js';
 import { runSimulation } from '../src/services/simulation.js';
 import { generateReportHtml } from '../src/ui/report-generator.js';
 import { PBT_ALL_DATABASE } from '../src/config/pbt-database.js';
+import { classifyMalaysianSlope, fetchTerrainElevation } from '../src/services/elevation.js';
 
 async function runTests() {
   console.log('🧪 Starting MyPBTSim Complete Architecture Test Suite...\n');
@@ -89,7 +90,7 @@ async function runTests() {
   });
   assert(blockedSim.results.overallAssessment.status === 'BATAL_LUAR_BIDANG_KUASA', 'Fatally blocks proposal under Seksyen 19 if submitted to wrong PBT');
 
-  // Scenario B: Penang Hillside Strict Ban (> 25 deg slope)
+  // Scenario B: Penang Hillside Strict Review (> 25 deg slope) & Height Ceiling (> 76m)
   const penangSim = runSimulation({
     pbtId: 'mbpp',
     siteName: 'Batu Ferringhi Hillside, Pulau Pinang',
@@ -98,10 +99,11 @@ async function runTests() {
     siteAreaAcres: 5.0,
     spatialData,
     jurisdictionResult: { isValid: true },
-    policyOptions: { slopeClass: 'kelas_3', elevationMeters: 45 }
+    policyOptions: { slopeClass: 'kelas_3', elevationMeters: 85 }
   });
-  assert(penangSim.results.zoningCompliance.issues.some(i => i.clause.includes('Larangan Mutlak Pembangunan Cerun')), 'Enforces Penang Hillside Guidelines ban on Class 3 slopes');
-  assert(penangSim.results.zoningCompliance.hazard === 'RED', 'Flags RED hazard for Penang Class 3 hillside development');
+  assert(penangSim.results.zoningCompliance.issues.some(i => i.clause.includes('Sekatan Pembangunan Tanah Bukit Melebihi Aras 76 Meter')), 'Enforces Penang Hillside 76m height ceiling restriction');
+  assert(penangSim.results.zoningCompliance.issues.some(i => i.clause.includes('Cerun Kelas III')), 'Enforces Penang Hillside Guidelines strict technical procedure for Class 3 slopes');
+  assert(penangSim.results.zoningCompliance.hazard === 'RED', 'Flags RED hazard for Penang Hillside development exceeding 76m elevation');
 
   // Scenario C: Selangor Rumah Selangorku 3.0 Quota Check (>= 5 acres)
   const selangorSim = runSimulation({
@@ -143,6 +145,24 @@ async function runTests() {
   assert(reportHtml.includes('Akta Perancangan Bandar dan Desa 1976'), 'Report contains governing statutory Act');
   assert(reportHtml.includes('Rumah Ibadat & Keagamaan'), 'Report contains dedicated Places of Worship section');
   assert(reportHtml.includes('DISEDIAKAN OLEH:'), 'Report contains formal sign-off block');
+
+  // 7. Test DEM Satellite Elevation & Slope Gradient Engine
+  console.log('\n🏔️ 7. Testing DEM Satellite Elevation & Slope Gradient Engine:');
+  const flatClass = classifyMalaysianSlope(4.5);
+  assert(flatClass.slopeClass === 'kelas_1', 'Correctly classifies < 15 deg as Kelas I (Rendah)');
+
+  const boundaryClass2 = classifyMalaysianSlope(15.0);
+  assert(boundaryClass2.slopeClass === 'kelas_2', 'Correctly classifies exact 15.0 deg boundary as Kelas II (Sederhana)');
+
+  const steepClass = classifyMalaysianSlope(28.0);
+  assert(steepClass.slopeClass === 'kelas_3' && steepClass.description.includes('CDLR'), 'Correctly classifies 28 deg as Kelas III (Curam - SSA/CDLR)');
+
+  const ksasClass = classifyMalaysianSlope(38.5);
+  assert(ksasClass.slopeClass === 'kelas_4' && ksasClass.description.includes('KSAS Tahap 1'), 'Correctly classifies > 35 deg as Kelas IV (KSAS Tahap 1)');
+
+  const terrainLive = await fetchTerrainElevation(3.1612, 101.7088); // Kampung Baru
+  assert(terrainLive && typeof terrainLive.elevation === 'number' && terrainLive.elevation > 0, `Fetches valid satellite elevation (${terrainLive.elevation}m for KL)`);
+  assert(terrainLive.slopeDegrees >= 0 && terrainLive.slopeClass, `Computes valid ground slope gradient (${terrainLive.slopeDegrees} deg, ${terrainLive.slopeClassLabel})`);
 
   console.log(`\n========================================`);
   console.log(`Total Passed: ${passed} | Failed: ${failed}`);

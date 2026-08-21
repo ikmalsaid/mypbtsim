@@ -1,0 +1,98 @@
+{
+  "version": "2.0.0",
+  "description": "Pangkalan Data Statutori Cerun & Topografi Malaysia (PLANMalaysia GP007, JKR, & Dasar Negeri)",
+  "lastUpdated": "2026-08-21",
+  "statutoryFrameworks": [
+    {
+      "code": "GP007",
+      "name": "Garis Panduan Perancangan Pembangunan di Kawasan Bukit dan Tanah Tinggi (PLANMalaysia)",
+      "authority": "PLANMalaysia / KPKT"
+    },
+    {
+      "code": "JKR-HILLSIDE",
+      "name": "Garis Panduan Kejuruteraan Cerun JKR",
+      "authority": "Jabatan Kerja Raya (JKR)"
+    },
+    {
+      "code": "PENANG-2020",
+      "name": "Penang Safety Guideline for Hill Site Development (Edisi Ke-2 2020)",
+      "authority": "Kerajaan Negeri Pulau Pinang / MBPP / MBSP"
+    },
+    {
+      "code": "AKTA-172-S22",
+      "name": "Akta Perancangan Bandar dan Desa 1976 (Seksyen 22(2A)(c) - Rujukan MPFN)",
+      "authority": "Majlis Perancangan Fizikal Negara (MPFN)"
+    }
+  ],
+  "elevationLimits": {
+    "penangHeightCeilingMeters": 76.0,
+    "penangHeightCeilingFeet": 250,
+    "penangHeightRegulation": "Pelan Struktur Negeri Pulau Pinang 2030 & Garis Panduan Kawalan Bukit MBPP",
+    "penangHeightDescription": "Sekatan pembangunan tanah bukit melebihi aras 76 meter (250 kaki) dari aras laut bagi pemajuan kediaman dan komersial."
+  },
+  "slopeClasses": [
+    {
+      "id": "kelas_4",
+      "minDegree": 35.0001,
+      "maxDegree": 90.0,
+      "minPercent": 70.0,
+      "label": "Kelas IV (> 35°) - Amat Curam",
+      "category": "KSAS Tahap 1",
+      "severity": "CRITICAL",
+      "hazardLevel": "RED",
+      "description": "Kawasan Sensitif Alam Sekitar (KSAS Tahap 1). Pembangunan am tidak dibenarkan kecuali projek infrastruktur linear berkepentingan awam, kerja penstabilan cerun, atau keselamatan tertakluk kepada EIA dan Pemeriksa Bebas Berdaftar (Accredited Checker).",
+      "requiredDocuments": [
+        "Laporan Penilaian Kesan Kepada Alam Sekeliling (EIA)",
+        "Laporan Geoteknikal Terperinci",
+        "Perakuan Pemeriksa Bebas Berdaftar (Accredited Checker)"
+      ]
+    },
+    {
+      "id": "kelas_3",
+      "minDegree": 25.0001,
+      "maxDegree": 35.0,
+      "minPercent": 46.6,
+      "label": "Kelas III (> 25° - 35°) - Curam",
+      "category": "Cerun Curam Terkawal",
+      "severity": "HIGH",
+      "hazardLevel": "YELLOW",
+      "description": "Cerun curam. Memerlukan Laporan Geoteknikal & Geologi, Analisis Kestabilan Cerun (SSA), pelantikan Jurutera Geoteknik Bertauliah, semakan Pemeriksa Bebas Berdaftar (Accredited Checker / IC), dan kelulusan Jawatankuasa Teknikal Negeri (seperti JTPKSAS / CDLR) atau rujukan MPFN di bawah Seksyen 22(2A)(c) Akta 172.",
+      "requiredDocuments": [
+        "Laporan Geoteknikal & Geologi",
+        "Analisis Kestabilan Cerun (Slope Stability Analysis - SSA)",
+        "Semakan Independent Checker (IC / Accredited Checker)",
+        "Kelulusan Jawatankuasa Teknikal Negeri (JTPKSAS / CDLR)"
+      ]
+    },
+    {
+      "id": "kelas_2",
+      "minDegree": 15.0,
+      "maxDegree": 25.0,
+      "minPercent": 26.8,
+      "label": "Kelas II (15° - 25°) - Sederhana",
+      "category": "Cerun Sederhana",
+      "severity": "MODERATE",
+      "hazardLevel": "GREEN",
+      "description": "Cerun sederhana. Laporan Geoteknikal & Geologi, Analisis Kestabilan Cerun (Slope Stability Analysis - SSA) serta pematuhan Garis Panduan Cerun JKR dan PBT diwajibkan.",
+      "requiredDocuments": [
+        "Laporan Geoteknikal & Geologi",
+        "Analisis Kestabilan Cerun (SSA)",
+        "Pelan Kerja Tanah (Earthwork Plan) Piawaian JKR"
+      ]
+    },
+    {
+      "id": "kelas_1",
+      "minDegree": 0.0,
+      "maxDegree": 14.9999,
+      "minPercent": 0.0,
+      "label": "Kelas I (< 15°) - Rendah",
+      "category": "Cerun Rendah / Tanah Rata",
+      "severity": "LOW",
+      "hazardLevel": "GREEN",
+      "description": "Cerun rendah / tanah rata. Sesuai untuk pembangunan perbandaran umum tertakluk kepada piawaian saliran dan kerja tanah asas PBT.",
+      "requiredDocuments": [
+        "Pelan Kerja Tanah dan Saliran Asas"
+      ]
+    }
+  ]
+}

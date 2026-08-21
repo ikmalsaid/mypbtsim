@@ -721,6 +721,71 @@ html, body {
   color: #f87171;
 }
 
+/* Site Geocoding & Topography Status Card (Step 2) */
+.site-geo-status-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.geo-site-address-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: #e2e8f0;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.geo-pin-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.geo-meta-chips-grid {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.geo-meta-chip {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.71rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #cbd5e1;
+}
+
+.meta-chip-lbl {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.meta-chip-val {
+  color: #f1f5f9;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+.meta-chip-sep {
+  color: #475569;
+  margin: 0 1px;
+}
+
+.meta-chip-highlight {
+  color: #38bdf8;
+}
+
 /* PBT Jurisdiction Conflict Resolution Modal (Solid Slate 900) */
 .conflict-modal-content {
   max-width: 580px;

@@ -58,6 +58,10 @@ export function generateReportHtml(simulationData, pbtInfo) {
             <th>Penjanaan Trafik</th>
             <td>Kadar: ${input.tripRate} trip/unit (~${trafficStress.peakHourGeneratedTrips} PCU kend/jam puncak, ${trafficStress.heavyVehicleRatioPercent || 2}% kenderaan berat)</td>
           </tr>
+          <tr>
+            <th>Topografi & Cerun</th>
+            <td>Aras Tanah: <strong>${input.policyOptions && input.policyOptions.elevationMeters !== undefined ? input.policyOptions.elevationMeters : 25}m</strong> dari aras laut | Kelas Cerun: <strong>${(input.policyOptions && input.policyOptions.slopeClass ? input.policyOptions.slopeClass.replace('_', ' ').toUpperCase() : 'KELAS 1')}</strong> (Kajian Cerun PLANMalaysia/JKR)</td>
+          </tr>
         </table>
       </div>
 

@@ -377,29 +377,39 @@ function evaluateZoningAndCouncilPolicies(
     }
   }
 
-  // CHECK 3: Penang Specific Policy (Penang Hillside Guidelines 2020 & UNESCO Heritage)
-  if (pbt.stateId === 'penang') {
-    const slopeClass = policyOptions.slopeClass || 'kelas_1';
-    const elevationM = policyOptions.elevationMeters || 25;
+  // CHECK 3: Hillside Sensitivity & Topography Policies (Penang Hillside Guidelines / PLANMalaysia GP007)
+  const slopeClass = policyOptions.slopeClass || 'kelas_1';
+  const elevationM = policyOptions.elevationMeters !== undefined ? policyOptions.elevationMeters : 25;
 
-    if (slopeClass === 'kelas_3' || slopeClass === 'kelas_4') {
+  if (pbt.stateId === 'penang') {
+    if (elevationM > 76 && (devType.category === 'residential' || devType.category === 'commercial')) {
       issues.push({
-        law: 'Penang Safety Guideline for Hill Site Development (Edisi Kedua 2020)',
-        clause: 'Larangan Mutlak Pembangunan Cerun Bukit Kelas 3 & 4 (> 25°)',
+        law: 'Pelan Struktur Negeri Pulau Pinang 2030 & Garis Panduan Kawalan Bukit MBPP',
+        clause: 'Sekatan Pembangunan Tanah Bukit Melebihi Aras 76 Meter (250 Kaki)',
         severity: 'CRITICAL',
-        text: `Kerajaan Negeri Pulau Pinang melarang sebarang pemajuan di cerun berkecerunan melebihi 25 darjah (${slopeClass.replace('_', ' ').toUpperCase()}). Permohonan KM tidak boleh diluluskan.`
+        text: `Aras tanah cadangan (${elevationM}m) melebihi had siling pemajuan tanah bukit Pulau Pinang (76 meter dari aras laut). Pemajuan kediaman/komersial di atas paras ini adalah disekat.`
       });
       hazard = 'RED';
     }
 
-    if (elevationM > 76) {
+    if (slopeClass === 'kelas_4') {
       issues.push({
-        law: 'Garis Panduan Kawalan Ketinggian Tanah Tinggi MBPP',
-        clause: 'Had Ketinggian 76 Meter (250 Kaki) dari Aras Laut',
+        law: 'Penang Safety Guideline for Hill Site Development (Edisi Kedua 2020)',
+        clause: 'Kawalan Ketat Cerun Bukit Kelas IV (> 35°)',
+        severity: 'CRITICAL',
+        text: 'Kawasan Sensitif Alam Sekitar (KSAS Tahap 1). Pembangunan am tidak dibenarkan kecuali infrastruktur linear berkepentingan awam, kerja pembaikan/penstabilan cerun, atau pertahanan tertakluk kepada kelulusan EIA dan Pemeriksa Bebas Berdaftar (Accredited Checker).'
+      });
+      hazard = 'RED';
+    } else if (slopeClass === 'kelas_3') {
+      issues.push({
+        law: 'Penang Safety Guideline for Hill Site Development (Edisi Kedua 2020)',
+        clause: 'Syarat Ketat Kejuruteraan Cerun Kelas III (> 25° hingga 35°)',
         severity: 'HIGH',
-        text: `Aras tanah cadangan (${elevationM}m) melebihi had siling pemajuan bukit Pulau Pinang (76 meter). Kelulusan Khas Jawatankuasa Rayuan Negeri diperlukan.`
+        text: 'Memerlukan Laporan Geoteknikal & Geologi Terperinci, pelantikan Jurutera Geoteknik Bertauliah, semakan Pemeriksa Bebas Berdaftar (Independent Checker - IC), dan kelulusan Jawatankuasa Tanah Berisiko Negeri Pulau Pinang (CDLR).'
       });
       if (hazard !== 'RED') hazard = 'YELLOW';
+    } else if (slopeClass === 'kelas_2') {
+      clearances.push('Cerun Kelas II (15° - 25°): Laporan Geoteknikal & Analisis Kestabilan Cerun (SSA) tertakluk kepada kelulusan MBPP/MBSP.');
     }
 
     if (pbt.policyFlags && pbt.policyFlags.hasUNESCOHeritage && floors > 5) {
@@ -407,9 +417,30 @@ function evaluateZoningAndCouncilPolicies(
         law: 'George Town World Heritage Site Special Area Plan (SAP)',
         clause: 'Kawalan Ketinggian Maksimum UNESCO (Had 18m / ~5 Tingkat)',
         severity: 'CRITICAL',
-        text: `Cadangan ${floors} tingkat melebihi had siling $18\\text{m}$ Zon Warisan Dunia UNESCO George Town.`
+        text: `Cadangan ${floors} tingkat melebihi had siling 18m Zon Warisan Dunia UNESCO George Town.`
       });
       hazard = 'RED';
+    }
+  } else {
+    // Nationwide Hillside Guidelines (PLANMalaysia GP007)
+    if (slopeClass === 'kelas_4') {
+      issues.push({
+        law: 'Garis Panduan Pembangunan Kawasan Bukit dan Tanah Tinggi (PLANMalaysia GP007) & JKR',
+        clause: 'Sekatan Kawasan Sensitif Alam Sekitar (KSAS Tahap 1 - Cerun > 35°)',
+        severity: 'CRITICAL',
+        text: 'Pembangunan am di atas cerun Kelas IV (> 35°) adalah disekat di bawah dasar KSAS Tahap 1, kecuali bagi projek infrastruktur linear berkepentingan awam/nasional, penstabilan cerun, atau keselamatan tertakluk kepada EIA dan Pemeriksa Bebas Berdaftar (Accredited Checker).'
+      });
+      hazard = 'RED';
+    } else if (slopeClass === 'kelas_3') {
+      issues.push({
+        law: 'Garis Panduan Pembangunan Kawasan Bukit dan Tanah Tinggi (PLANMalaysia GP007)',
+        clause: 'Syarat Kelulusan Cerun Kelas III (> 25° hingga 35°)',
+        severity: 'HIGH',
+        text: 'Memerlukan Laporan Geoteknikal & Geologi, Analisis Kestabilan Cerun (SSA), perakuan Jurutera Geoteknik Bertauliah, semakan Pemeriksa Bebas Berdaftar (Accredited Checker), dan kelulusan Jawatankuasa Teknikal Negeri (seperti JTPKSAS) atau rujukan MPFN di bawah Seksyen 22(2A)(c) Akta 172.'
+      });
+      if (hazard !== 'RED') hazard = 'YELLOW';
+    } else if (slopeClass === 'kelas_2') {
+      clearances.push('Cerun Kelas II (15° - 25°): Laporan Geoteknikal & Geologi serta Analisis Kestabilan Cerun (SSA) perlu dikemukakan mengikut piawaian JKR.');
     }
   }
 

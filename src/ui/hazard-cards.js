@@ -8,21 +8,46 @@ export function renderHazardCards(containerElement, results) {
 
   const { trafficStress, todScore, zoningCompliance, overallAssessment } = results;
 
+  // Concise, punchy badge labels
+  const overallBadgeText = overallAssessment.badge === 'GREEN'
+    ? 'DISOKONG PENUH'
+    : overallAssessment.badge === 'YELLOW'
+    ? 'SOKONGAN BERSYARAT'
+    : 'DITOLAK / PINDAAN';
+
+  const trafficBadgeText = trafficStress.hazard === 'RED'
+    ? 'BEBANAN TINGGI'
+    : trafficStress.hazard === 'YELLOW'
+    ? 'SEDERHANA'
+    : 'TERKAWAL';
+
+  const todBadgeText = todScore.hazard === 'GREEN'
+    ? 'TOD TINGGI'
+    : todScore.hazard === 'YELLOW'
+    ? 'TOD SEDERHANA'
+    : 'TOD RENDAH';
+
+  const zoningBadgeText = zoningCompliance.hazard === 'GREEN'
+    ? 'PATUH RTD'
+    : zoningCompliance.hazard === 'YELLOW'
+    ? 'BERSYARAT'
+    : 'TIDAK PATUH';
+
   const html = `
     <!-- Overall Assessment Banner -->
-    <div class="overall-status-card glass-card" style="border-color: ${overallAssessment.color}55; background: ${overallAssessment.color}15;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-        <span style="font-size: 0.75rem; font-weight: 700; color: ${overallAssessment.color}; text-transform: uppercase; letter-spacing: 0.5px;">
+    <div class="overall-status-card glass-card status-theme-${overallAssessment.badge.toLowerCase()}">
+      <div class="overall-status-header">
+        <span class="overall-status-kicker">
           Keputusan Penilaian Pegawai Perancang
         </span>
         <span class="hazard-badge badge-${overallAssessment.badge.toLowerCase()}">
-          ${overallAssessment.status.replace(/_/g, ' ')}
+          ${overallBadgeText}
         </span>
       </div>
-      <h3 style="font-size: 1rem; font-weight: 800; color: white; margin-bottom: 0.4rem;">
+      <h3 class="overall-status-title">
         ${overallAssessment.title}
       </h3>
-      <p style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
+      <p class="overall-status-summary">
         ${overallAssessment.summary}
       </p>
     </div>
@@ -31,31 +56,37 @@ export function renderHazardCards(containerElement, results) {
     <div class="hazard-card card-${trafficStress.hazard.toLowerCase()}">
       <div class="hazard-header">
         <div>
-          <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Kiraaan 1: Aras Bebanan Jalan</div>
+          <div class="hazard-category-tag">Kiraan 1: Aras Bebanan Jalan</div>
           <div class="hazard-title">Traffic Stress Index (TSI)</div>
         </div>
         <span class="hazard-badge badge-${trafficStress.hazard.toLowerCase()}">
-          ${trafficStress.label}
+          ${trafficBadgeText}
         </span>
       </div>
 
       <div class="hazard-score-display">
-        <span class="hazard-score-num" style="color: ${trafficStress.color};">${trafficStress.indexScore}%</span>
-        <span class="hazard-score-sub">Bebanan Waktu Puncak (${trafficStress.levelOfService})</span>
+        <div class="hazard-score-num" style="color: ${trafficStress.color};">
+          ${trafficStress.indexScore}<span class="hazard-score-unit">%</span>
+        </div>
+        <div class="hazard-score-sub">
+          <span class="hazard-sub-title">${trafficStress.label}</span>
+          <span class="hazard-sub-detail">Bebanan Waktu Puncak (${trafficStress.levelOfService})</span>
+        </div>
       </div>
 
       <div class="hazard-bar-wrapper">
         <div class="hazard-bar-fill" style="width: ${trafficStress.indexScore}%; background: ${trafficStress.color};"></div>
       </div>
 
-      <div class="hazard-desc">
-        <strong>Penjanaan Trafik:</strong> ~${trafficStress.peakHourGeneratedTrips} kend/jam puncak vs 
-        <strong>Kapasiti Jalan Akses:</strong> ~${trafficStress.totalRoadCapacity} kend/jam (${trafficStress.availableLanes} lorong).
+      <div class="hazard-desc-box">
+        <div><strong>Penjanaan Trafik:</strong> ~${trafficStress.peakHourGeneratedTrips} kend/jam puncak vs <strong>Kapasiti Jalan Akses:</strong> ~${trafficStress.totalRoadCapacity} kend/jam (${trafficStress.availableLanes} lorong).</div>
       </div>
 
-      <div style="font-size: 0.75rem; font-weight: 700; color: white; margin-top: 0.6rem;">Syarat Mitigasi Trafik PBT:</div>
+      <div class="hazard-section-heading">
+        <span>🛡️</span> Syarat Mitigasi Trafik PBT:
+      </div>
       <ul class="hazard-actions-list">
-        ${trafficStress.recommendations.map((rec) => `<li>${rec}</li>`).join('')}
+        ${trafficStress.recommendations.map((rec) => `<li class="hazard-action-item">${rec}</li>`).join('')}
       </ul>
     </div>
 
@@ -63,31 +94,37 @@ export function renderHazardCards(containerElement, results) {
     <div class="hazard-card card-${todScore.hazard.toLowerCase()}">
       <div class="hazard-header">
         <div>
-          <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Kiraan 2: Aksesibiliti Transit</div>
+          <div class="hazard-category-tag">Kiraan 2: Aksesibiliti Transit</div>
           <div class="hazard-title">Transit-Oriented Score (TOD)</div>
         </div>
         <span class="hazard-badge badge-${todScore.hazard.toLowerCase()}">
-          ${todScore.label}
+          ${todBadgeText}
         </span>
       </div>
 
       <div class="hazard-score-display">
-        <span class="hazard-score-num" style="color: ${todScore.color};">${todScore.score}/100</span>
-        <span class="hazard-score-sub">Potensi Pembangunan TOD</span>
+        <div class="hazard-score-num" style="color: ${todScore.color};">
+          ${todScore.score}<span class="hazard-score-unit">/100</span>
+        </div>
+        <div class="hazard-score-sub">
+          <span class="hazard-sub-title">${todScore.label}</span>
+          <span class="hazard-sub-detail">Potensi Pembangunan Berorientasikan Transit</span>
+        </div>
       </div>
 
       <div class="hazard-bar-wrapper">
         <div class="hazard-bar-fill" style="width: ${todScore.score}%; background: ${todScore.color};"></div>
       </div>
 
-      <div class="hazard-desc">
-        <strong>Stesen Rel Terdekat:</strong> ${todScore.nearestRailName} (${todScore.nearestRailDistance}) | 
-        <strong>Hentian Bas:</strong> ${todScore.busStopsCount} dalam 1km.
+      <div class="hazard-desc-box">
+        <div><strong>Stesen Rel Terdekat:</strong> ${todScore.nearestRailName} (${todScore.nearestRailDistance}) | <strong>Hentian Bas:</strong> ${todScore.busStopsCount} dalam 1km.</div>
       </div>
 
-      <div style="font-size: 0.75rem; font-weight: 700; color: white; margin-top: 0.6rem;">Insentif & Tindakan Perancang:</div>
+      <div class="hazard-section-heading">
+        <span>🚆</span> Insentif & Tindakan Perancang:
+      </div>
       <ul class="hazard-actions-list">
-        ${todScore.recommendations.map((rec) => `<li>${rec}</li>`).join('')}
+        ${todScore.recommendations.map((rec) => `<li class="hazard-action-item">${rec}</li>`).join('')}
       </ul>
     </div>
 
@@ -95,35 +132,38 @@ export function renderHazardCards(containerElement, results) {
     <div class="hazard-card card-${zoningCompliance.hazard.toLowerCase()}">
       <div class="hazard-header">
         <div>
-          <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Kiraan 3: Pematuhan Statutori</div>
+          <div class="hazard-category-tag">Kiraan 3: Pematuhan Statutori</div>
           <div class="hazard-title">Zoning & Heritage Law Compliance</div>
         </div>
         <span class="hazard-badge badge-${zoningCompliance.hazard.toLowerCase()}">
-          ${zoningCompliance.label}
+          ${zoningBadgeText}
         </span>
       </div>
 
-      <div class="hazard-desc" style="margin-top: 0.4rem;">
-        <strong>Ketumpatan:</strong> ${zoningCompliance.densityPerAcre} unit/ekar (Had siling: ${zoningCompliance.maxAllowableDensity} unit/ekar)<br>
-        <strong>Zon Warisan Terdekat:</strong> ${zoningCompliance.nearestHeritageName} (${zoningCompliance.nearestHeritageDistance})
+      <div class="hazard-desc-box">
+        <div><strong>Ketumpatan:</strong> ${zoningCompliance.densityPerAcre} unit/ekar (Had siling: ${zoningCompliance.maxAllowableDensity} unit/ekar)</div>
+        <div style="margin-top: 0.25rem;"><strong>Zon Warisan Terdekat:</strong> ${zoningCompliance.nearestHeritageName} (${zoningCompliance.nearestHeritageDistance})</div>
       </div>
 
       ${
         zoningCompliance.issues.length > 0
           ? `
-        <div style="font-size: 0.75rem; font-weight: 700; color: #fca5a5; margin-top: 0.6rem;">Fasal Perhatian Statutori:</div>
+        <div class="hazard-section-heading hazard-heading-warning">
+          <span>⚠️</span> Fasal Perhatian Statutori:
+        </div>
         <ul class="hazard-actions-list">
           ${zoningCompliance.issues
             .map(
               (iss) =>
-                `<li><strong>${iss.law}:</strong> ${iss.text}</li>`
+                `<li class="hazard-action-item warning-item"><strong>${iss.law}:</strong> ${iss.text}</li>`
             )
             .join('')}
         </ul>
       `
           : `
-        <div style="font-size: 0.75rem; color: #6ee7b7; margin-top: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
-          <span>✓ Tiada perlanggaran zon penampan warisan atau had ketumpatan Akta 172.</span>
+        <div class="hazard-compliant-box">
+          <span class="compliant-icon">✓</span>
+          <span>Tiada perlanggaran zon penampan warisan atau had ketumpatan Akta 172.</span>
         </div>
       `
       }

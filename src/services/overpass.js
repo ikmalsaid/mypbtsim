@@ -7,114 +7,8 @@
 import * as turf from '@turf/turf';
 import { CacheService } from './cache.js';
 
-// Public Overpass API mirrors for high availability & 429 failover
-export const OVERPASS_ENDPOINTS = [
-  'https://overpass-api.de/api/interpreter',
-  'https://overpass.kumi.systems/api/interpreter',
-  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-  'https://overpass.private.coffee/api/interpreter',
-  'https://lz4.overpass-api.de/api/interpreter'
-];
-
-let cachedRankedEndpoints = null;
-let lastRankedCheckTime = 0;
-const MIRROR_BENCHMARK_TTL_MS = 3 * 60 * 1000; // 3 minutes
-
-/**
- * Pings an individual Overpass mirror to test latency and availability
- * @param {string} endpoint 
- * @param {number} timeoutMs 
- * @returns {Promise<{endpoint: string, latencyMs: number, ok: boolean, status: number}>}
- */
-export async function pingOverpassMirror(endpoint, timeoutMs = 2500) {
-  const start = Date.now();
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-    // 1. Try fastest zero-load status endpoint (e.g. /api/status)
-    const statusUrl = endpoint.endsWith('/interpreter')
-      ? endpoint.replace('/interpreter', '/status')
-      : `${endpoint}/status`;
-
-    let ok = false;
-    let status = 0;
-
-    try {
-      const statusRes = await fetch(statusUrl, {
-        method: 'GET',
-        signal: controller.signal
-      });
-      ok = statusRes.ok;
-      status = statusRes.status;
-    } catch {
-      // If /status fails or CORS blocked, ping with valid positive integer node(1)
-      const queryRes = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'Accept': 'application/json'
-        },
-        body: 'data=[out:json][timeout:2];node(1);out;',
-        signal: controller.signal
-      });
-      ok = queryRes.ok;
-      status = queryRes.status;
-    }
-
-    clearTimeout(timeoutId);
-    const latencyMs = Date.now() - start;
-
-    return {
-      endpoint,
-      latencyMs,
-      ok,
-      status
-    };
-  } catch (err) {
-    return {
-      endpoint,
-      latencyMs: 9999,
-      ok: false,
-      status: 0,
-      error: err.message
-    };
-  }
-}
-
-/**
- * Benchmarks and ranks all Overpass mirrors from fastest to slowest
- * @param {boolean} forceCheck 
- * @returns {Promise<Array<string>>}
- */
-export async function getRankedOverpassMirrors(forceCheck = false) {
-  const now = Date.now();
-  if (!forceCheck && cachedRankedEndpoints && now - lastRankedCheckTime < MIRROR_BENCHMARK_TTL_MS) {
-    return cachedRankedEndpoints;
-  }
-
-  try {
-    const pings = await Promise.all(
-      OVERPASS_ENDPOINTS.map((endpoint) => pingOverpassMirror(endpoint, 2500))
-    );
-
-    const successful = pings.filter((p) => p.ok).sort((a, b) => a.latencyMs - b.latencyMs);
-    const failed = pings.filter((p) => !p.ok);
-
-    const sorted = [...successful.map((p) => p.endpoint), ...failed.map((p) => p.endpoint)];
-
-    if (successful.length > 0) {
-      cachedRankedEndpoints = sorted;
-      lastRankedCheckTime = now;
-      console.info(`[Overpass Mirror Benchmark] Terpantas: ${successful[0].endpoint} (${successful[0].latencyMs}ms)`);
-    }
-
-    return sorted.length > 0 ? sorted : OVERPASS_ENDPOINTS;
-  } catch (err) {
-    console.warn('[Overpass Mirror Benchmark] Gagal uji mirror, guna senarai lalai:', err.message);
-    return OVERPASS_ENDPOINTS;
-  }
-}
+// Primary Official Overpass API Endpoint
+export const OVERPASS_ENDPOINT = 'https://overpass-api.de/api/interpreter';
 
 /**
  * Builds Overpass QL Query for 1km radius
@@ -165,7 +59,7 @@ export function buildOverpassQuery(lat, lng, radiusMeters = 1000) {
 }
 
 /**
- * Executes Overpass query with cache check, mirror ranking, and failover
+ * Executes Overpass query using official endpoint with cache check and fallback
  */
 export async function queryOverpassRadius(lat, lng, radiusMeters = 1000, signal = null) {
   const coordKey = `${lat.toFixed(3)}_${lng.toFixed(3)}_${radiusMeters}`;
@@ -176,56 +70,50 @@ export async function queryOverpassRadius(lat, lng, radiusMeters = 1000, signal 
     return { ...cached.data, fromCache: true, cacheSource: cached.source };
   }
 
-  // 2. Query Live Overpass Mirrors (Ordered by live benchmark speed)
+  // 2. Query Primary Official Overpass API Endpoint
   const query = buildOverpassQuery(lat, lng, radiusMeters);
-  const endpoints = await getRankedOverpassMirrors();
 
-  for (const endpoint of endpoints) {
-    try {
-      if (signal && signal.aborted) {
-        throw new DOMException('Aborted', 'AbortError');
-      }
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
-      const onExternalAbort = () => controller.abort();
-      if (signal) signal.addEventListener('abort', onExternalAbort);
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'Accept': 'application/json'
-        },
-        body: `data=${encodeURIComponent(query)}`,
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-      if (signal) signal.removeEventListener('abort', onExternalAbort);
-
-      if (response.status === 429) {
-        console.warn(`[Overpass] HTTP 429 on ${endpoint}, beralih ke mirror seterusnya...`);
-        continue;
-      }
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data && data.elements) {
-          const processed = processOverpassElements(data.elements, lat, lng);
-          processed.fromCache = false;
-          CacheService.set('overpass', coordKey, processed, 24 * 60 * 60 * 1000);
-          return processed;
-        }
-      }
-    } catch (err) {
-      if (err.name === 'AbortError') throw err;
-      console.warn(`[Overpass] Gagal via ${endpoint}:`, err.message);
+  try {
+    if (signal && signal.aborted) {
+      throw new DOMException('Aborted', 'AbortError');
     }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
+
+    const onExternalAbort = () => controller.abort();
+    if (signal) signal.addEventListener('abort', onExternalAbort);
+
+    const response = await fetch(OVERPASS_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept': 'application/json'
+      },
+      body: `data=${encodeURIComponent(query)}`,
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    if (signal) signal.removeEventListener('abort', onExternalAbort);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.elements) {
+        const processed = processOverpassElements(data.elements, lat, lng);
+        processed.fromCache = false;
+        CacheService.set('overpass', coordKey, processed, 24 * 60 * 60 * 1000);
+        return processed;
+      }
+    } else if (response.status === 429) {
+      console.warn('[Overpass] HTTP 429 Rate Limit encountered. Mengaktifkan enjin sintesis spatial tempatan.');
+    }
+  } catch (err) {
+    if (signal && signal.aborted) throw err;
+    console.warn('[Overpass] Live API query error/timeout, beralih ke sintesis tempatan:', err.message);
   }
 
-  // 3. Failover to Local High-Fidelity GIS Synthesis with authentic Malaysian naming
+  // 3. Graceful Failover to Local High-Fidelity GIS Synthesis with authentic Malaysian naming
   console.warn('[Overpass] Live API tidak dapat dicapai atau disekat kadar. Mengaktifkan enjin sintesis spatial tempatan.');
   const simulated = generateSimulatedSpatialData(lat, lng, radiusMeters);
   CacheService.set('overpass', coordKey, simulated, 2 * 60 * 60 * 1000);

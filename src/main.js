@@ -15,7 +15,7 @@
 
 import { MALAYSIA_STATES, PBT_ALL_DATABASE } from './config/pbt-database.js';
 import { PRESET_SITES, DEVELOPMENT_TYPES } from './config/pbt-presets.js';
-import { geocodeLocation, reverseGeocode, fetchNearbySuggestions } from './services/geocoding.js';
+import { geocodeLocation, reverseGeocode, fetchNearbySuggestions, isWithinMalaysia } from './services/geocoding.js';
 import { queryOverpassRadius } from './services/overpass.js';
 import { runSimulation } from './services/simulation.js';
 import { JurisdictionEngine } from './services/jurisdiction.js';
@@ -30,6 +30,7 @@ const state = {
   selectedStateId: 'kl',
   currentPbt: PBT_ALL_DATABASE[0], // Default DBKL
   currentSiteName: 'Kampung Baru, Kuala Lumpur',
+  lastGeocodedName: 'Kampung Baru, Kuala Lumpur',
   currentLat: 3.1612,
   currentLng: 101.7088,
   addressDetails: {},
@@ -59,6 +60,7 @@ let activeAbortController = null;
 let nearbyDebounceTimer = null;
 let simulationTimer = null;
 let simulationSeconds = 0;
+let simulationStartTime = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   initUI();
@@ -211,6 +213,12 @@ function initUI() {
       }, 350);
     });
 
+    siteInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        hideFlyout();
+      }
+    });
+
     // Close flyout when clicking outside
     document.addEventListener('click', (e) => {
       if (siteInputGroup && !siteInputGroup.contains(e.target)) {
@@ -222,24 +230,25 @@ function initUI() {
   const presetsContainer = document.getElementById('presets-container');
   if (presetsContainer) {
     presetsContainer.addEventListener('click', (e) => {
-      const chip = e.target.closest('.preset-chip');
-      if (!chip) return;
+      const row = e.target.closest('.suggestion-row');
+      if (!row) return;
 
       if (autocompleteFlyout) {
         autocompleteFlyout.style.display = 'none';
       }
 
       state.isManualPbtSelection = false; // Selecting a location preset
-      document.querySelectorAll('.preset-chip').forEach((c) => c.classList.remove('active'));
-      chip.classList.add('active');
+      document.querySelectorAll('.suggestion-row').forEach((c) => c.classList.remove('active'));
+      row.classList.add('active');
 
-      const name = chip.dataset.name;
-      const lat = parseFloat(chip.dataset.lat);
-      const lng = parseFloat(chip.dataset.lng);
-      const pbtId = chip.dataset.pbt;
+      const name = row.dataset.name;
+      const fullName = row.dataset.fullname || name;
+      const lat = parseFloat(row.dataset.lat);
+      const lng = parseFloat(row.dataset.lng);
+      const pbtId = row.dataset.pbt;
 
-      if (!isNaN(lat) && !isNaN(lng) && name) {
-        updateSiteLocationOnly(lat, lng, name, {}, pbtId);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        updateSiteLocationOnly(lat, lng, fullName, {}, pbtId);
       }
     });
   }
@@ -273,6 +282,10 @@ function initUI() {
     btnSim.addEventListener('click', (e) => {
       if (state.isSimulating) {
         e.preventDefault();
+        // Guard against rapid click / accidental cancel on startup
+        if (Date.now() - simulationStartTime < 800) {
+          return;
+        }
         cancelSimulationAndRollback();
       }
     });
@@ -282,6 +295,7 @@ function initUI() {
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (autocompleteFlyout) autocompleteFlyout.style.display = 'none';
       state.isManualPbtSelection = false; // Running simulation on entered location
       if (!state.isSimulating) {
         readFormInputs();
@@ -294,6 +308,7 @@ function initUI() {
   const btnSearch = document.getElementById('btn-geocode-search');
   if (btnSearch) {
     btnSearch.addEventListener('click', async () => {
+      if (autocompleteFlyout) autocompleteFlyout.style.display = 'none';
       state.isManualPbtSelection = false; // Explicit search on entered location
       readFormInputs();
       if (!state.currentSiteName) return;
@@ -386,6 +401,33 @@ function initUI() {
       if (mapController) mapController.clearMeasurement();
     });
   }
+
+  // 12. Zoom & Camera Navigation Listeners
+  const btnZoomIn = document.getElementById('btn-zoom-in');
+  const btnZoomOut = document.getElementById('btn-zoom-out');
+  const btnZoomFitSite = document.getElementById('btn-zoom-fit-site');
+  const btnZoomFitMalaysia = document.getElementById('btn-zoom-fit-malaysia');
+
+  if (btnZoomIn) {
+    btnZoomIn.addEventListener('click', () => {
+      if (mapController) mapController.zoomIn();
+    });
+  }
+  if (btnZoomOut) {
+    btnZoomOut.addEventListener('click', () => {
+      if (mapController) mapController.zoomOut();
+    });
+  }
+  if (btnZoomFitSite) {
+    btnZoomFitSite.addEventListener('click', () => {
+      if (mapController) mapController.fitSite();
+    });
+  }
+  if (btnZoomFitMalaysia) {
+    btnZoomFitMalaysia.addEventListener('click', () => {
+      if (mapController) mapController.fitMalaysia();
+    });
+  }
 }
 
 /**
@@ -402,17 +444,34 @@ async function updateNearbyLocationChips(queryText = '', pbtInfo = state.current
     const suggestions = await fetchNearbySuggestions(queryText, pbtInfo);
     if (loadingIndicator) loadingIndicator.style.display = 'none';
 
+    if (suggestions.length === 0) {
+      container.innerHTML = `
+        <div style="padding: 0.75rem; font-size: 0.74rem; color: #94a3b8; text-align: center;">
+          Tiada cadangan lokasi dijumpai. Sila taip carian atau klik pada peta.
+        </div>
+      `;
+      return;
+    }
+
     container.innerHTML = suggestions
       .map(
-        (s, idx) => `
-        <button type="button" class="preset-chip ${idx === 0 ? 'active' : ''}" 
+        (s) => `
+        <div class="suggestion-row" 
           data-id="${s.id}" 
           data-lat="${s.lat}" 
           data-lng="${s.lng}" 
           data-name="${s.name}" 
+          data-fullname="${s.fullName || s.name}"
           data-pbt="${s.pbtId || ''}">
-          📍 ${s.name}
-        </button>
+          <div class="suggestion-icon">
+            ${s.type === 'preset' ? '📍' : s.type === 'pbt' ? '🏛️' : '🔍'}
+          </div>
+          <div class="suggestion-info">
+            <div class="suggestion-title">${s.name}</div>
+            <div class="suggestion-sub">${s.subtitle || ''}</div>
+          </div>
+          ${s.badge ? `<div class="suggestion-badge">${s.badge}</div>` : ''}
+        </div>
       `
       )
       .join('');
@@ -479,37 +538,45 @@ function resetSimulationToReadyState() {
  * Updates coordinates, map buffer, auto-detects PBT, and sets UI to clean ready state.
  */
 function updateSiteLocationOnly(lat, lng, siteName, addressDetails = {}, pbtId = null) {
+  if (!isWithinMalaysia(lat, lng, addressDetails)) {
+    console.warn('[Update Site Location] Lokasi di luar Malaysia diabaikan:', lat, lng);
+    return;
+  }
+
   state.currentLat = lat;
   state.currentLng = lng;
   state.currentSiteName = siteName;
+  state.lastGeocodedName = siteName;
   state.addressDetails = addressDetails;
 
   const siteInput = document.getElementById('site-name-input');
   if (siteInput) siteInput.value = siteName;
 
-  // Auto-Detect PBT
-  const detectedPbt = pbtId
-    ? (PBT_ALL_DATABASE.find((p) => p.id === pbtId) || JurisdictionEngine.detectPBTFromLocation(lat, lng, siteName, addressDetails))
-    : JurisdictionEngine.detectPBTFromLocation(lat, lng, siteName, addressDetails);
+  const flyout = document.getElementById('autocomplete-flyout');
+  if (flyout) flyout.style.display = 'none';
 
-  if (detectedPbt) {
-    state.currentPbt = detectedPbt;
-    state.selectedStateId = detectedPbt.stateId;
+  // Auto-Detect PBT using single source of truth
+  const detectedPbt = JurisdictionEngine.detectPBTFromLocation(lat, lng, siteName, addressDetails);
+  const targetPbt = detectedPbt || (pbtId ? PBT_ALL_DATABASE.find((p) => p.id === pbtId) : PBT_ALL_DATABASE[0]);
+
+  if (targetPbt) {
+    state.currentPbt = targetPbt;
+    state.selectedStateId = targetPbt.stateId;
     state.isManualPbtSelection = false;
 
     const stateSelect = document.getElementById('state-filter-select');
-    if (stateSelect) stateSelect.value = detectedPbt.stateId;
-    populatePbtDropdown(detectedPbt.stateId);
+    if (stateSelect) stateSelect.value = targetPbt.stateId;
+    populatePbtDropdown(targetPbt.stateId);
 
     const pbtSelect = document.getElementById('pbt-select');
-    if (pbtSelect) pbtSelect.value = detectedPbt.id;
+    if (pbtSelect) pbtSelect.value = targetPbt.id;
 
     const overlayPbtSub = document.getElementById('overlay-pbt-sub');
     if (overlayPbtSub) {
-      overlayPbtSub.innerText = `PBT: ${detectedPbt.shortName} (${detectedPbt.stateName}) | Zon Penampan 1,000m`;
+      overlayPbtSub.innerText = `PBT: ${targetPbt.shortName} (${targetPbt.stateName}) | Zon Penampan 1,000m`;
     }
 
-    updatePolicyOptionsForTargetPbt(detectedPbt, state.developmentTypeId);
+    updatePolicyOptionsForTargetPbt(targetPbt, state.developmentTypeId);
   }
 
   // Update map view with 1km buffer ring
@@ -576,12 +643,16 @@ function applyPresetSite(preset) {
 function initMap() {
   mapController = new MapController('map');
 
-  // Handle map click to pin proposed site (with auto-assign PBT without auto-starting simulation)
-  mapController.onSiteSelected(async (lat, lng) => {
+  // Handle map click to pin proposed site (pre-validated and geo-resolved)
+  mapController.onSiteSelected(async (lat, lng, geo = null) => {
     try {
-      const geo = await reverseGeocode(lat, lng, activeAbortController ? activeAbortController.signal : null);
-      const siteName = geo.displayName.split(',').slice(0, 2).join(',');
-      updateSiteLocationOnly(lat, lng, siteName, geo.addressDetails || {});
+      const geoResolved = geo || await reverseGeocode(lat, lng, activeAbortController ? activeAbortController.signal : null);
+      if (!isWithinMalaysia(lat, lng, geoResolved.addressDetails || {})) {
+        console.warn('[Map Click] Titik di luar wilayah Malaysia diabaikan.');
+        return;
+      }
+      const siteName = geoResolved.displayName ? geoResolved.displayName.split(',').slice(0, 2).join(',') : `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+      updateSiteLocationOnly(lat, lng, siteName, geoResolved.addressDetails || {});
     } catch (err) {
       console.error('Reverse geocode error:', err);
       updateSiteLocationOnly(lat, lng, `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`, {});
@@ -622,6 +693,7 @@ function readFormInputs() {
 async function runFullPipeline() {
   if (state.isSimulating) return;
   state.isSimulating = true;
+  simulationStartTime = Date.now();
 
   // Create new AbortController for cancelation
   activeAbortController = new AbortController();
@@ -769,7 +841,7 @@ async function runFullPipeline() {
     }
 
   } catch (err) {
-    if (err.name === 'AbortError') {
+    if (activeAbortController && activeAbortController.signal.aborted) {
       console.log('[MyPBTSim] Proses simulasi telah dibatalkan oleh pengguna.');
     } else {
       console.error('[MyPBTSim] Simulation pipeline error:', err);
@@ -889,16 +961,37 @@ function setReportButtonAvailable(isAvailable) {
 
 async function executeStep2GeocodingAndJurisdiction(signal = null) {
   try {
-    const geoResult = await geocodeLocation(state.currentSiteName, signal);
-    state.currentLat = geoResult.lat;
-    state.currentLng = geoResult.lng;
-    state.addressDetails = geoResult.addressDetails || {};
+    let lat = state.currentLat;
+    let lng = state.currentLng;
+    let displayName = state.currentSiteName;
+    let addressDetails = state.addressDetails || {};
+
+    const hasPinnedLocation =
+      typeof lat === 'number' &&
+      typeof lng === 'number' &&
+      !isNaN(lat) &&
+      !isNaN(lng) &&
+      state.lastGeocodedName &&
+      state.lastGeocodedName.trim().toLowerCase() === state.currentSiteName.trim().toLowerCase();
+
+    if (!hasPinnedLocation) {
+      const geoResult = await geocodeLocation(state.currentSiteName, signal);
+      lat = geoResult.lat;
+      lng = geoResult.lng;
+      displayName = geoResult.displayName;
+      addressDetails = geoResult.addressDetails || {};
+
+      state.currentLat = lat;
+      state.currentLng = lng;
+      state.addressDetails = addressDetails;
+      state.lastGeocodedName = state.currentSiteName;
+    }
 
     const detectedPbt = JurisdictionEngine.detectPBTFromLocation(
-      geoResult.lat,
-      geoResult.lng,
-      geoResult.displayName,
-      geoResult.addressDetails
+      lat,
+      lng,
+      displayName,
+      addressDetails
     );
 
     // If user changed location (e.g. from KL to Alor Gajah), automatically assign MPAG seamlessly!
@@ -922,8 +1015,11 @@ async function executeStep2GeocodingAndJurisdiction(signal = null) {
     }
 
     // Fetch real-time satellite elevation and calculate ground slope gradient
-    const terrain = await fetchTerrainElevation(geoResult.lat, geoResult.lng);
-    state.terrainData = terrain;
+    let terrain = state.terrainData;
+    if (!terrain) {
+      terrain = await fetchTerrainElevation(lat, lng);
+      state.terrainData = terrain;
+    }
     state.policyOptions.elevationMeters = terrain.elevation;
     state.policyOptions.slopeClass = terrain.slopeClass;
 
@@ -931,16 +1027,16 @@ async function executeStep2GeocodingAndJurisdiction(signal = null) {
     // If the user manually selected an unmatched PBT, this generates a clear warning banner!
     state.jurisdictionResult = JurisdictionEngine.validateJurisdiction(
       state.currentPbt.id,
-      geoResult.lat,
-      geoResult.lng,
-      geoResult.displayName,
-      geoResult.addressDetails
+      lat,
+      lng,
+      displayName,
+      addressDetails
     );
 
     renderJurisdictionBanner(state.jurisdictionResult);
-    updateGeocodeDisplay(geoResult.lat, geoResult.lng, geoResult.displayName, terrain);
+    updateGeocodeDisplay(lat, lng, displayName, terrain);
   } catch (err) {
-    if (err.name === 'AbortError') throw err;
+    if (signal && signal.aborted) throw err;
     console.warn('[Geocoding] Fallback:', err.message);
   }
 }

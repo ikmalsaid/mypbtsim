@@ -8,6 +8,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as turf from '@turf/turf';
 import { createCustomIcon, buildPopupHtml } from './map-layers.js';
+import { isWithinMalaysia, reverseGeocode } from '../services/geocoding.js';
 
 export class MapController {
   constructor(containerId = 'map') {
@@ -285,6 +286,32 @@ export class MapController {
   }
 
   /**
+   * Zoom & Camera Navigation Helpers
+   */
+  zoomIn() {
+    if (this.map) this.map.zoomIn();
+  }
+
+  zoomOut() {
+    if (this.map) this.map.zoomOut();
+  }
+
+  fitSite() {
+    if (this.map && typeof this.centerLat === 'number' && typeof this.centerLng === 'number') {
+      this.map.flyTo([this.centerLat, this.centerLng], 15, { duration: 0.8 });
+    }
+  }
+
+  fitMalaysia() {
+    if (this.map) {
+      this.map.flyToBounds([
+        [1.0, 99.6],
+        [7.4, 119.3]
+      ], { duration: 1.0 });
+    }
+  }
+
+  /**
    * Interactive Measuring Tools (Distance & Area)
    */
   startMeasurement(mode = 'distance') {
@@ -299,8 +326,8 @@ export class MapController {
 
     this.updateMeasureStatusText(
       mode === 'distance'
-        ? '📍 Klik titik atas peta (jarak)'
-        : '📐 Klik ≥3 titik poligon (luas)'
+        ? '📏 Klik peta untuk jarak'
+        : '📐 Klik ≥3 titik untuk luas'
     );
   }
 
@@ -318,7 +345,7 @@ export class MapController {
     if (btnDist) btnDist.classList.remove('active');
     if (btnArea) btnArea.classList.remove('active');
 
-    this.updateMeasureStatusText('Pilih alat untuk mula mengukur');
+    this.updateMeasureStatusText('Sedia untuk mengukur');
   }
 
   handleMapClick(e) {
@@ -362,7 +389,9 @@ export class MapController {
     const latLngs = this.measurePoints.map(([pLng, pLat]) => [pLat, pLng]);
 
     if (this.measuringMode === 'distance') {
-      if (this.measurePoints.length >= 2) {
+      if (this.measurePoints.length === 1) {
+        this.updateMeasureStatusText('📏 1 titik (klik titik seterusnya)');
+      } else if (this.measurePoints.length >= 2) {
         const line = turf.lineString(this.measurePoints);
         const lengthKm = turf.length(line, { units: 'kilometers' });
         const text = lengthKm < 1 ? `${(lengthKm * 1000).toFixed(1)} meter` : `${lengthKm.toFixed(2)} km`;
@@ -385,7 +414,7 @@ export class MapController {
           .openTooltip();
         this.layers.measurements.addLayer(this.activeLabelMarker);
 
-        this.updateMeasureStatusText(`📏 Jarak: ${text} (${this.measurePoints.length} titik disambung)`);
+        this.updateMeasureStatusText(`📏 ${text} (${this.measurePoints.length} titik)`);
       }
     } else if (this.measuringMode === 'area') {
       if (this.measurePoints.length < 3) {
@@ -396,7 +425,7 @@ export class MapController {
           dashArray: '4, 4'
         });
         this.layers.measurements.addLayer(this.activeShapeLayer);
-        this.updateMeasureStatusText(`📐 Titik ${this.measurePoints.length}/3 dipilih. Sila klik titik seterusnya untuk membentuk poligon.`);
+        this.updateMeasureStatusText(`📐 Titik ${this.measurePoints.length}/3 (klik seterusnya)`);
       } else {
         // 3 or more points: draw closed polygon
         this.activeShapeLayer = L.polygon(latLngs, {
@@ -411,7 +440,7 @@ export class MapController {
         const areaResult = this.calculateRobustArea(this.measurePoints);
 
         if (areaResult.isCollinear) {
-          this.updateMeasureStatusText('⚠️ Titik-titik berada dalam satu garisan lurus. Sila klik titik di luar jajaran untuk membentuk keluasan.');
+          this.updateMeasureStatusText('⚠️ Titik selari (klik luar jajaran)');
           return;
         }
 
@@ -432,7 +461,7 @@ export class MapController {
         this.layers.measurements.addLayer(this.activeLabelMarker);
 
         this.updateMeasureStatusText(
-          `📐 Keluasan: ${areaSqM.toLocaleString()} m² (~${areaAcres} ekar / ${areaHectares} hektar) [${this.measurePoints.length} bucu${isSelfIntersecting ? ' - Auto Unkinked' : ''}]`
+          `📐 ${areaSqM.toLocaleString()} m² (~${areaAcres} ekar)`
         );
       }
     }
@@ -515,22 +544,31 @@ export class MapController {
   }
 
   /**
-   * Fallback Shoelace formula for non-manifold topologies
+   * Fallback Shoelace formula with origin-centered local projection for maximum numerical precision
    */
   calculateShoelaceArea(points) {
     let area = 0;
     const n = points.length;
+    if (n < 3) {
+      return { isCollinear: true, areaSqM: 0 };
+    }
+
+    const refLng = points[0][0];
+    const refLat = points[0][1];
+    const cosLat = Math.cos((refLat * Math.PI) / 180);
+    const metersPerDegreeLng = 111320 * cosLat;
+    const metersPerDegreeLat = 110574;
+
     for (let i = 0; i < n; i++) {
       const j = (i + 1) % n;
-      // Convert lat/lng to approximate meters from reference
-      const x1 = points[i][0] * 111320 * Math.cos((points[i][1] * Math.PI) / 180);
-      const y1 = points[i][1] * 110540;
-      const x2 = points[j][0] * 111320 * Math.cos((points[j][1] * Math.PI) / 180);
-      const y2 = points[j][1] * 110540;
+      const x1 = (points[i][0] - refLng) * metersPerDegreeLng;
+      const y1 = (points[i][1] - refLat) * metersPerDegreeLat;
+      const x2 = (points[j][0] - refLng) * metersPerDegreeLng;
+      const y2 = (points[j][1] - refLat) * metersPerDegreeLat;
       area += x1 * y2 - x2 * y1;
     }
     const areaSqM = Math.round(Math.abs(area) / 2);
-    const areaAcres = (areaSqM / 4046.86).toFixed(2);
+    const areaAcres = (areaSqM / 4046.8564).toFixed(2);
     const areaHectares = (areaSqM / 10000).toFixed(2);
     const areaSqFt = Math.round(areaSqM * 10.7639).toLocaleString();
 
@@ -541,7 +579,7 @@ export class MapController {
       areaAcres,
       areaHectares,
       areaSqFt,
-      labelCenter: { lat: points[0][1], lng: points[0][0] }
+      labelCenter: { lat: refLat, lng: refLng }
     };
   }
 
@@ -552,12 +590,119 @@ export class MapController {
     }
   }
 
-  showRelocateConfirmation(lat, lng) {
+  async showRelocateConfirmation(lat, lng) {
     // Clear any previous pending confirmation marker
     if (this.pendingRelocateMarker) {
       this.map.removeLayer(this.pendingRelocateMarker);
       this.pendingRelocateMarker = null;
     }
+
+    // 1. Initial quick bounds check (e.g. Europe, America, Australia, North Asia)
+    const isObviousOverseas = lat < 0.5 || lat > 8.0 || lng < 99.0 || lng > 120.0;
+
+    const pinIcon = L.divIcon({
+      className: 'pending-site-pin',
+      html: `
+        <div class="pending-pin-wrapper">
+          <div class="pending-pin-pulse" id="pending-pin-pulse-el"></div>
+          <div class="pending-pin-dot" id="pending-pin-dot-el">?</div>
+        </div>
+      `,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    });
+
+    const loadingHtml = `
+      <div class="site-relocate-confirm-popup">
+        <div class="confirm-header">
+          <span class="confirm-icon">🔍</span>
+          <strong>Menyemak Lokasi Tapak...</strong>
+        </div>
+        <p class="confirm-desc" style="color: #94a3b8; font-size: 0.76rem; margin: 0.5rem 0;">
+          Sedang mengesahkan sempadan wilayah dan pihak berkuasa tempatan (PBT)...
+        </p>
+        <div class="confirm-coords">
+          <code>Lat: ${lat.toFixed(5)}</code> | <code>Lng: ${lng.toFixed(5)}</code>
+        </div>
+      </div>
+    `;
+
+    this.pendingRelocateMarker = L.marker([lat, lng], { icon: pinIcon, zIndexOffset: 2000 })
+      .addTo(this.map)
+      .bindPopup(loadingHtml, { closeButton: false, minWidth: 260, className: 'relocate-confirm-leaflet-popup' })
+      .openPopup();
+
+    if (isObviousOverseas) {
+      this.renderRelocateError(lat, lng, 'Lokasi Antarabangsa');
+      return;
+    }
+
+    // 2. Fetch authoritative reverse geocode to verify country
+    try {
+      const geo = await reverseGeocode(lat, lng);
+      const isMalaysia = isWithinMalaysia(lat, lng, geo.addressDetails);
+
+      if (!isMalaysia || (geo.addressDetails && geo.addressDetails.country_code && geo.addressDetails.country_code !== 'my')) {
+        this.renderRelocateError(lat, lng, geo.displayName || 'Di Luar Sempadan Malaysia');
+      } else {
+        this.renderRelocateSuccess(lat, lng, geo);
+      }
+    } catch {
+      this.renderRelocateSuccess(lat, lng, { displayName: `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`, addressDetails: {} });
+    }
+  }
+
+  renderRelocateError(lat, lng, locationName) {
+    if (!this.pendingRelocateMarker) return;
+
+    // Update marker styling to Red Warning
+    const pulseEl = document.getElementById('pending-pin-pulse-el');
+    const dotEl = document.getElementById('pending-pin-dot-el');
+    if (pulseEl) pulseEl.style.background = 'rgba(239, 68, 68, 0.45)';
+    if (dotEl) {
+      dotEl.style.background = '#ef4444';
+      dotEl.style.borderColor = '#fca5a5';
+      dotEl.innerText = '✕';
+    }
+
+    const popupHtml = `
+      <div class="site-relocate-confirm-popup site-relocate-error-popup">
+        <div class="confirm-header" style="color: #ef4444;">
+          <span class="confirm-icon">⚠️</span>
+          <strong style="color: #fca5a5;">Ralat: Di Luar Malaysia</strong>
+        </div>
+        <p class="confirm-desc" style="color: #cbd5e1; font-size: 0.76rem; line-height: 1.35; margin: 0.4rem 0;">
+          Lokasi dikesan di luar Malaysia (${locationName}). Simulasi MyPBTSim dihadkan khusus untuk PBT di dalam Malaysia sahaja.
+        </p>
+        <div class="confirm-coords" style="margin-bottom: 0.6rem;">
+          <code>Lat: ${lat.toFixed(5)}</code> | <code>Lng: ${lng.toFixed(5)}</code>
+        </div>
+        <div class="confirm-actions">
+          <button type="button" class="btn-confirm-no" id="btn-cancel-move-site" style="width: 100%; font-weight: 700; background: #334155; color: #f8fafc; cursor: pointer; padding: 0.45rem;">✕ Tutup</button>
+        </div>
+      </div>
+    `;
+
+    this.pendingRelocateMarker.setPopupContent(popupHtml);
+
+    setTimeout(() => {
+      const btnCancel = document.getElementById('btn-cancel-move-site');
+      if (btnCancel) {
+        btnCancel.addEventListener('click', () => {
+          if (this.pendingRelocateMarker) {
+            this.map.removeLayer(this.pendingRelocateMarker);
+            this.pendingRelocateMarker = null;
+          }
+        });
+      }
+    }, 50);
+  }
+
+  renderRelocateSuccess(lat, lng, geo) {
+    if (!this.pendingRelocateMarker) return;
+
+    const cleanName = geo && geo.displayName ? geo.displayName.split(',').slice(0, 2).join(',') : `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
 
     const popupHtml = `
       <div class="site-relocate-confirm-popup">
@@ -565,8 +710,10 @@ export class MapController {
           <span class="confirm-icon">📍</span>
           <strong>Pindahkan Tapak & Zon 1km?</strong>
         </div>
-        <p class="confirm-desc">Adakah anda ingin menukar tapak pemajuan ke titik ini dan menjana semula simulasi impak?</p>
-        <div class="confirm-coords">
+        <p class="confirm-desc" style="font-size: 0.76rem; line-height: 1.35; margin: 0.4rem 0;">
+          Adakah anda ingin menukar tapak pemajuan ke <strong>${cleanName}</strong> dan mengira semula zon penampan 1,000m?
+        </p>
+        <div class="confirm-coords" style="margin-bottom: 0.6rem;">
           <code>Lat: ${lat.toFixed(5)}</code> | <code>Lng: ${lng.toFixed(5)}</code>
         </div>
         <div class="confirm-actions">
@@ -576,25 +723,8 @@ export class MapController {
       </div>
     `;
 
-    const pinIcon = L.divIcon({
-      className: 'pending-site-pin',
-      html: `
-        <div class="pending-pin-wrapper">
-          <div class="pending-pin-pulse"></div>
-          <div class="pending-pin-dot">?</div>
-        </div>
-      `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-      popupAnchor: [0, -16]
-    });
+    this.pendingRelocateMarker.setPopupContent(popupHtml);
 
-    this.pendingRelocateMarker = L.marker([lat, lng], { icon: pinIcon, zIndexOffset: 2000 })
-      .addTo(this.map)
-      .bindPopup(popupHtml, { closeButton: false, minWidth: 260, className: 'relocate-confirm-leaflet-popup' })
-      .openPopup();
-
-    // Attach listeners on next tick when popup DOM is rendered
     setTimeout(() => {
       const btnConfirm = document.getElementById('btn-confirm-move-site');
       const btnCancel = document.getElementById('btn-cancel-move-site');
@@ -606,7 +736,7 @@ export class MapController {
             this.pendingRelocateMarker = null;
           }
           if (this.onSiteSelectedCallback) {
-            this.onSiteSelectedCallback(lat, lng);
+            this.onSiteSelectedCallback(lat, lng, geo);
           }
         });
       }

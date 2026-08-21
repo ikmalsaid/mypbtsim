@@ -164,6 +164,53 @@ async function runTests() {
   assert(terrainLive && typeof terrainLive.elevation === 'number' && terrainLive.elevation > 0, `Fetches valid satellite elevation (${terrainLive.elevation}m for KL)`);
   assert(terrainLive.slopeDegrees >= 0 && terrainLive.slopeClass, `Computes valid ground slope gradient (${terrainLive.slopeDegrees} deg, ${terrainLive.slopeClassLabel})`);
 
+  // 8. Test Geodesic Distance & Polygon Area Measurement Engine
+  console.log('\n📏 8. Testing Geodesic Distance & Polygon Area Measurement Engine:');
+  
+  // Test 100m segment geodesic line calculation in Kuala Lumpur
+  const refLat = 3.1408;
+  const refLng = 101.6932;
+  const dLat100 = 100 / 110574;
+  const dLng100 = 100 / (111320 * Math.cos(refLat * Math.PI / 180));
+  
+  const test100mLine = turf.lineString([[refLng, refLat], [refLng + dLng100, refLat]]);
+  const test100mDist = turf.length(test100mLine, { units: 'kilometers' }) * 1000;
+  assert(Math.abs(test100mDist - 100) < 0.5, `Geodesic distance calculation is accurate (Calculated: ${test100mDist.toFixed(2)}m for 100m line)`);
+
+  // Test 100m x 100m (10,000 m² = 1.0 ha = 2.47 ekar) polygon
+  const testSquare = [
+    [refLng, refLat],
+    [refLng + dLng100, refLat],
+    [refLng + dLng100, refLat + dLat100],
+    [refLng, refLat + dLat100],
+    [refLng, refLat]
+  ];
+  const testPoly = turf.polygon([testSquare]);
+  const polyAreaSqM = turf.area(testPoly);
+  assert(Math.abs(polyAreaSqM - 10000) < 100, `Geodesic area calculation is accurate (Calculated: ${polyAreaSqM.toFixed(1)} m² for 10,000 m² parcel)`);
+
+  // Test Acre and Hectare conversions
+  const computedAcres = polyAreaSqM / 4046.8564;
+  const computedHectares = polyAreaSqM / 10000;
+  assert(Math.abs(computedAcres - 2.471) < 0.05, `Acres conversion matches international standards (~${computedAcres.toFixed(2)} ekar)`);
+  assert(Math.abs(computedHectares - 1.0) < 0.02, `Hectares conversion matches international standards (~${computedHectares.toFixed(2)} ha)`);
+
+  // Test Self-intersecting / Bowtie unkinking support
+  const bowtie = [
+    [refLng, refLat],
+    [refLng + dLng100, refLat + dLat100],
+    [refLng + dLng100, refLat],
+    [refLng, refLat + dLat100],
+    [refLng, refLat]
+  ];
+  const bowtiePoly = turf.polygon([bowtie]);
+  const kinks = turf.kinks(bowtiePoly);
+  assert(kinks.features.length > 0, 'Detects self-intersecting polygon kinks');
+  const unkinked = turf.unkinkPolygon(bowtiePoly);
+  let unkinkedSum = 0;
+  unkinked.features.forEach(f => unkinkedSum += turf.area(f));
+  assert(unkinkedSum > 0 && Math.abs(unkinkedSum - 5000) < 100, `Decomposes and calculates area of self-intersecting bowtie polygons (${unkinkedSum.toFixed(0)} m²)`);
+
   console.log(`\n========================================`);
   console.log(`Total Passed: ${passed} | Failed: ${failed}`);
   console.log(`========================================\n`);

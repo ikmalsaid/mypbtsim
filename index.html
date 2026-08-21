@@ -109,7 +109,7 @@
             <!-- Floating Smart Suggestions Flyout (Shows only while typing) -->
             <div id="autocomplete-flyout" class="site-autocomplete-flyout" style="display: none;">
               <div class="autocomplete-header">
-                <span>📍 Cadangan Lokasi Berdekatan:</span>
+                <span>Cadangan Lokasi Berdekatan:</span>
                 <span id="presets-loading-indicator" style="display: none; font-size: 0.68rem; color: #38bdf8;">Mencari...</span>
               </div>
               <div class="presets-grid" id="presets-container">
@@ -332,7 +332,7 @@
 
         <!-- Alat Ukur Section (Placed under Peta Dasar with uniform radius & hint above buttons) -->
         <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">Alat Ukur</div>
-        <div id="measure-status-text" class="measure-hint-text">Pilih alat untuk mula mengukur</div>
+        <div id="measure-status-text" class="measure-hint-text">Sedia untuk mengukur</div>
         <div class="measure-buttons-grid">
           <button type="button" id="btn-measure-distance" class="measure-tool-btn" title="Ukur Jarak Geodesik">
             <span>📏</span> Jarak
@@ -342,6 +342,23 @@
           </button>
           <button type="button" id="btn-clear-measure" class="measure-tool-btn btn-clear-tool" title="Padam Ukuran">
             <span>✖</span> Padam
+          </button>
+        </div>
+
+        <!-- Kawalan Zoom Section (Placed under Alat Ukur) -->
+        <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">Kawalan Zoom</div>
+        <div class="zoom-buttons-grid">
+          <button type="button" id="btn-zoom-in" class="measure-tool-btn zoom-tool-btn" title="Zum Masuk (+)">
+            <span>➕</span> Zum Masuk
+          </button>
+          <button type="button" id="btn-zoom-out" class="measure-tool-btn zoom-tool-btn" title="Zum Keluar (-)">
+            <span>➖</span> Zum Keluar
+          </button>
+          <button type="button" id="btn-zoom-fit-site" class="measure-tool-btn zoom-tool-btn" title="Fokus Semula Tapak Cadangan (Zon 1km)">
+            <span>🎯</span> Fokus Tapak
+          </button>
+          <button type="button" id="btn-zoom-fit-malaysia" class="measure-tool-btn zoom-tool-btn" title="Pandangan Penuh Seluruh Malaysia">
+            <span>🇲🇾</span> Seluruh Malaysia
           </button>
         </div>
       </div>

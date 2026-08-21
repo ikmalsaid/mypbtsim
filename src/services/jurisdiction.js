@@ -5,7 +5,7 @@
  */
 
 import * as turf from '@turf/turf';
-import { PBT_ALL_DATABASE } from '../config/pbt-database.js';
+import { PBT_ALL_DATABASE, MALAYSIA_STATES } from '../config/pbt-database.js';
 
 export class JurisdictionEngine {
   /**
@@ -17,11 +17,11 @@ export class JurisdictionEngine {
    * @returns {object} Matching PBT object from database
    */
   static detectPBTFromLocation(lat, lng, addressString = '', rawAddressDetails = {}) {
-    const cleanAddress = addressString.toLowerCase();
-    const sitePoint = turf.point([lng, lat]);
+    const cleanAddress = (addressString || '').toLowerCase();
+    const hasValidCoords = typeof lat === 'number' && typeof lng === 'number' && !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0);
+    const sitePoint = hasValidCoords ? turf.point([lng, lat]) : null;
 
-    // 1. Keyword / Municipal name matching from Nominatim details
-    const textToMatch = [
+    const addressParts = [
       rawAddressDetails.city || '',
       rawAddressDetails.municipality || '',
       rawAddressDetails.county || '',
@@ -32,53 +32,71 @@ export class JurisdictionEngine {
       cleanAddress
     ].join(' ').toLowerCase();
 
-    // 1. Keyword / Municipal name matching from Nominatim details
-    let bestKeywordMatch = null;
-    let maxKeywordHits = 0;
+    // 1. Detect state from address details or text
+    const detectedState = MALAYSIA_STATES.find((s) => {
+      const sName = s.name.toLowerCase();
+      const sId = s.id.toLowerCase();
+      return (
+        addressParts.includes(sName) ||
+        addressParts.includes(sId) ||
+        (rawAddressDetails.state && rawAddressDetails.state.toLowerCase().includes(sName))
+      );
+    });
+
+    // 2. Score all PBTs using multi-factor evaluation
+    let bestPbt = null;
+    let highestScore = -Infinity;
 
     for (const pbt of PBT_ALL_DATABASE) {
-      let hits = 0;
-      for (const kw of pbt.keywords) {
-        if (textToMatch.includes(kw.toLowerCase())) {
-          hits += kw.length; // weight by keyword specificity
+      let score = 0;
+
+      // State alignment (+150 if state matches, -100 if conflict when state is known)
+      if (detectedState) {
+        if (pbt.stateId === detectedState.id) {
+          score += 150;
+        } else {
+          score -= 100;
         }
       }
-      if (textToMatch.includes(pbt.shortName.toLowerCase())) {
-        hits += 10;
+
+      // Explicit municipal name in address (+80)
+      if (addressParts.includes(pbt.name.toLowerCase())) {
+        score += 80;
       }
-      if (hits > maxKeywordHits) {
-        maxKeywordHits = hits;
-        bestKeywordMatch = pbt;
+
+      // Explicit shortName with word boundary check (+40)
+      const shortRegex = new RegExp(`\\b${pbt.shortName.toLowerCase()}\\b`, 'i');
+      if (shortRegex.test(addressParts)) {
+        score += 40;
+      }
+
+      // Keyword hits weighted by keyword length
+      if (pbt.keywords && Array.isArray(pbt.keywords)) {
+        for (const kw of pbt.keywords) {
+          const kwLower = kw.toLowerCase();
+          if (kwLower.length >= 3) {
+            if (addressParts.includes(kwLower)) {
+              score += kwLower.length * 4;
+            }
+          }
+        }
+      }
+
+      // Spatial distance penalty (if valid coordinates available)
+      if (sitePoint && typeof pbt.lat === 'number' && typeof pbt.lng === 'number') {
+        const pbtPoint = turf.point([pbt.lng, pbt.lat]);
+        const distKm = turf.distance(sitePoint, pbtPoint, { units: 'kilometers' });
+        // Subtract distance: closer PBT gets higher score
+        score -= distKm * 1.5;
+      }
+
+      if (score > highestScore) {
+        highestScore = score;
+        bestPbt = pbt;
       }
     }
 
-    // If strong keyword match found, return immediately
-    if (bestKeywordMatch && maxKeywordHits > 0) {
-      return bestKeywordMatch;
-    }
-
-    // 2. Geodesic distance calculation to PBT centers
-    // Filter by state first if state is present in address text
-    const matchedStatePbts = PBT_ALL_DATABASE.filter((p) =>
-      textToMatch.includes(p.stateName.toLowerCase()) || textToMatch.includes(p.stateId.toLowerCase())
-    );
-
-    const candidates = matchedStatePbts.length > 0 ? matchedStatePbts : PBT_ALL_DATABASE;
-
-    let nearestPbt = null;
-    let minDistanceKm = Infinity;
-
-    for (const pbt of candidates) {
-      const pbtPoint = turf.point([pbt.lng, pbt.lat]);
-      const distKm = turf.distance(sitePoint, pbtPoint, { units: 'kilometers' });
-
-      if (distKm < minDistanceKm) {
-        minDistanceKm = distKm;
-        nearestPbt = pbt;
-      }
-    }
-
-    return nearestPbt || PBT_ALL_DATABASE[0];
+    return bestPbt || PBT_ALL_DATABASE[0];
   }
 
   /**

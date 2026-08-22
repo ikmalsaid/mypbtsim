@@ -4,31 +4,36 @@
  * and updates 5-step simulation progress.
  */
 
-export function renderInfrastructureCounters(containerElement, counts) {
+export function renderInfrastructureCounters(containerElement, counts = {}) {
   if (!containerElement) return;
+
+  const categories = [
+    { key: 'railStations', label: '🚆 Stesen Rel', color: '#a855f7', count: counts.railStations || 0 },
+    { key: 'busStops', label: '🚌 Hentian Bas', color: '#f59e0b', count: counts.busStops || 0 },
+    { key: 'schools', label: '🏫 Pendidikan', color: '#10b981', count: counts.schools || 0 },
+    { key: 'worshipPlaces', label: '🕌 Rumah Ibadat', color: '#06b6d4', count: counts.worshipPlaces || 0 },
+    { key: 'heritageSites', label: '🏛️ Warisan Sejarah', color: '#ec4899', count: counts.heritageSites || 0 },
+    { key: 'museums', label: '🎨 Muzium & Sains', color: '#f43f5e', count: counts.museums || 0 },
+    { key: 'healthSafety', label: '🏥 Kesihatan & Awam', color: '#14b8a6', count: counts.healthSafety || 0 },
+    { key: 'parks', label: '🌳 Taman & Rekreasi', color: '#84cc16', count: counts.parks || 0 }
+  ];
+
+  // Filter to show active categories or core transit/community if all zero
+  const activeCategories = categories.filter((c) => c.count > 0);
+  const displayCategories = activeCategories.length > 0 ? activeCategories : categories.slice(0, 5);
 
   const html = `
     <div class="infra-counter-grid">
-      <div class="infra-counter-item">
-        <span class="infra-counter-val" style="color: #a855f7;">${counts.railStations || 0}</span>
-        <span class="infra-counter-lbl">🚆 Stesen Rel</span>
-      </div>
-      <div class="infra-counter-item">
-        <span class="infra-counter-val" style="color: #f59e0b;">${counts.busStops || 0}</span>
-        <span class="infra-counter-lbl">🚌 Hentian Bas</span>
-      </div>
-      <div class="infra-counter-item">
-        <span class="infra-counter-val" style="color: #10b981;">${counts.schools || 0}</span>
-        <span class="infra-counter-lbl">🏫 Pendidikan</span>
-      </div>
-      <div class="infra-counter-item">
-        <span class="infra-counter-val" style="color: #06b6d4;">${counts.worshipPlaces || 0}</span>
-        <span class="infra-counter-lbl">🕌 Rumah Ibadat</span>
-      </div>
-      <div class="infra-counter-item">
-        <span class="infra-counter-val" style="color: #ec4899;">${counts.heritageSites || 0}</span>
-        <span class="infra-counter-lbl">🏛️ Tapak Warisan</span>
-      </div>
+      ${displayCategories
+        .map(
+          (cat) => `
+        <div class="infra-counter-item">
+          <span class="infra-counter-val" style="color: ${cat.color};">${cat.count}</span>
+          <span class="infra-counter-lbl">${cat.label}</span>
+        </div>
+      `
+        )
+        .join('')}
     </div>
   `;
 

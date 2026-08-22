@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html lang="ms">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyPBTSim — Sistem Simulasi Impak Kebenaran Merancang PBT Malaysia</title>
-  <meta name="description" content="Sistem Simulasi Perancangan Spatial PBT Malaysia dengan Analisis Trafik, TOD, Pematuhan Statutori dan Pengekstrakan Data GIS OpenStreetMap secara Langsung." />
+  <title>MyPBTSim | Sistem Simulasi Impak Kebenaran Merancang PBT Malaysia</title>
+  <meta name="description"
+    content="Sistem Simulasi Perancangan Spatial PBT Malaysia dengan Analisis Trafik, TOD, Pematuhan Statutori dan Pengekstrakan Data GIS OpenStreetMap secara Langsung." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="./src/styles/main.css" />
   <link rel="stylesheet" href="./src/styles/report.css" />
 </head>
+
 <body>
 
   <!-- Top Application Header Bar with High-Impact Brand Identity -->
   <header class="app-header">
     <div class="brand-section">
-      <div class="brand-logo-emblem" title="MyPBTSim — Sistem Simulasi Spatial Perancangan PBT Malaysia">
+      <div class="brand-logo-emblem" title="MyPBTSim | Sistem Simulasi Spatial Perancangan PBT Malaysia">
         <div class="emblem-inner-glow"></div>
         <svg class="emblem-svg" width="32" height="32" viewBox="0 0 48 48" fill="none">
           <!-- 3D Isometric Spatial Planning Node Hexagon -->
-          <polygon points="24,4 44,14 44,34 24,44 4,34 4,14" fill="url(#hexGrad)" stroke="#38bdf8" stroke-width="2" stroke-linejoin="round" />
-          <path d="M24,4 L24,44 M4,14 L24,24 L44,14 M4,34 L24,24 L44,34" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" />
+          <polygon points="24,4 44,14 44,34 24,44 4,34 4,14" fill="url(#hexGrad)" stroke="#38bdf8" stroke-width="2"
+            stroke-linejoin="round" />
+          <path d="M24,4 L24,44 M4,14 L24,24 L44,14 M4,34 L24,24 L44,34" stroke="rgba(255,255,255,0.22)"
+            stroke-width="1.5" />
           <!-- Multi-tier Planning Nodes -->
           <circle cx="24" cy="24" r="4.5" fill="#38bdf8" />
           <circle cx="14" cy="19" r="2.5" fill="#00f5d4" />
           <circle cx="34" cy="19" r="2.5" fill="#c084fc" />
           <circle cx="24" cy="36" r="2.5" fill="#fbbf24" />
-          <path d="M15 10 A12 12 0 0 1 33 10" stroke="#00f5d4" stroke-width="1.8" stroke-linecap="round" opacity="0.85" />
+          <path d="M15 10 A12 12 0 0 1 33 10" stroke="#00f5d4" stroke-width="1.8" stroke-linecap="round"
+            opacity="0.85" />
           <defs>
             <linearGradient id="hexGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.95" />
@@ -53,7 +61,8 @@
       <!-- State Filter -->
       <div style="display: flex; align-items: center; gap: 0.35rem;">
         <span style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">Negeri:</span>
-        <select id="state-filter-select" class="form-select" style="width: 180px; min-width: 170px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
+        <select id="state-filter-select" class="form-select"
+          style="width: 180px; min-width: 170px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
           <!-- Populated from MALAYSIA_STATES -->
         </select>
       </div>
@@ -61,14 +70,22 @@
       <!-- PBT Council Selector -->
       <div style="display: flex; align-items: center; gap: 0.35rem;">
         <span style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">PBT:</span>
-        <select id="pbt-select" class="form-select" style="width: 360px; min-width: 310px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
+        <select id="pbt-select" class="form-select"
+          style="width: 360px; min-width: 310px; padding: 0.45rem 0.6rem; font-size: 0.8rem;">
           <!-- Populated from PBT_ALL_DATABASE -->
         </select>
       </div>
 
       <!-- Laporan Semasa / Laporan Tersedia button -->
-      <button id="btn-quick-report" class="btn btn-secondary disabled-report-btn" disabled style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <button id="btn-quick-report" class="btn btn-secondary disabled-report-btn" disabled
+        style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
         <span id="report-btn-text">Laporan Belum Sedia</span>
       </button>
     </div>
@@ -76,10 +93,10 @@
 
   <!-- 3-Column Main Application Layout -->
   <main class="main-layout">
-    
+
     <!-- LEFT SIDEBAR: Step 1 (Inputs & Presets) & Step 2 (Geocoding & Jurisdiction) -->
     <aside class="sidebar-panel left-panel">
-      
+
       <!-- STEP 1: Form Input Card (Streamlined & Uncluttered in Pure Bahasa Melayu) -->
       <section class="glass-card">
         <div class="card-title">
@@ -92,17 +109,13 @@
           <div class="form-group" style="position: relative;" id="site-input-group">
             <label class="form-label" for="site-name-input">Tapak Cadangan Pemajuan</label>
             <div class="input-with-btn">
-              <input 
-                type="text" 
-                id="site-name-input" 
-                class="form-input" 
-                placeholder="cth: Kampung Baru, Kuala Lumpur"
-                value="Kampung Baru, Kuala Lumpur" 
-                autocomplete="off"
-                required 
-              />
+              <input type="text" id="site-name-input" class="form-input" placeholder="cth: Kampung Baru, Kuala Lumpur"
+                value="Kampung Baru, Kuala Lumpur" autocomplete="off" required />
               <button type="button" id="btn-geocode-search" class="btn btn-secondary" title="Cari Lokasi & Semak PBT">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
               </button>
             </div>
 
@@ -110,7 +123,8 @@
             <div id="autocomplete-flyout" class="site-autocomplete-flyout" style="display: none;">
               <div class="autocomplete-header">
                 <span>Cadangan Lokasi Berdekatan:</span>
-                <span id="presets-loading-indicator" style="display: none; font-size: 0.68rem; color: #38bdf8;">Mencari...</span>
+                <span id="presets-loading-indicator"
+                  style="display: none; font-size: 0.68rem; color: #38bdf8;">Mencari...</span>
               </div>
               <div class="presets-grid" id="presets-container">
                 <!-- Dynamically generated preset chips -->
@@ -121,15 +135,7 @@
           <!-- Development Size -->
           <div class="form-group">
             <label class="form-label" id="units-label" for="units-input">Skala Cadangan (Bilangan Unit)</label>
-            <input 
-              type="number" 
-              id="units-input" 
-              class="form-input" 
-              min="1" 
-              max="5000" 
-              value="350" 
-              required 
-            />
+            <input type="number" id="units-input" class="form-input" min="1" max="5000" value="350" required />
           </div>
 
           <!-- Development Category & Type Selection -->
@@ -158,24 +164,28 @@
               <span>⚙️ Pilihan Dasar PBT</span>
               <span id="accordion-arrow">▾</span>
             </button>
-            
+
             <div class="policy-accordion-body" id="policy-options-body" style="display: none;">
               <!-- Affordable Housing Percent (Dynamically Matched to State Policy) -->
               <div class="form-group" id="group-opt-affordable">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                  <label class="form-label" id="lbl-affordable-housing" for="opt-affordable-percent" style="font-size: 0.74rem; margin: 0;">
+                  <label class="form-label" id="lbl-affordable-housing" for="opt-affordable-percent"
+                    style="font-size: 0.74rem; margin: 0;">
                     Kuota Rumah Mampu Milik (RSKU / RUMAWIP):
                   </label>
-                  <span id="affordable-percent-val" style="font-size: 0.75rem; font-weight: 700; color: #38bdf8;">20%</span>
+                  <span id="affordable-percent-val"
+                    style="font-size: 0.75rem; font-weight: 700; color: #38bdf8;">20%</span>
                 </div>
-                <input type="range" id="opt-affordable-percent" min="0" max="50" step="5" value="20" style="width: 100%; accent-color: #0284c7;" />
+                <input type="range" id="opt-affordable-percent" min="0" max="50" step="5" value="20"
+                  style="width: 100%; accent-color: #0284c7;" />
                 <div id="hint-affordable-policy" style="font-size: 0.67rem; color: #94a3b8; margin-top: 2px;"></div>
               </div>
 
               <!-- Slope Category (Dynamically Highlights for Hillside Councils) -->
               <div class="form-group" id="group-opt-slope">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                  <label class="form-label" id="lbl-slope-class" for="opt-slope-class" style="font-size: 0.74rem; margin: 0;">
+                  <label class="form-label" id="lbl-slope-class" for="opt-slope-class"
+                    style="font-size: 0.74rem; margin: 0;">
                     Kelas Kecerunan Tapak:
                   </label>
                   <span id="badge-slope-policy" style="font-size: 0.65rem; color: #fbbf24; font-weight: 600;"></span>
@@ -193,7 +203,8 @@
                 <label class="form-label" for="opt-elevation-meters" style="font-size: 0.74rem;">
                   Ketinggian Aras Laut (Meter):
                 </label>
-                <input type="number" id="opt-elevation-meters" class="form-input" style="font-size: 0.75rem; padding: 4px 6px;" value="25" min="0" max="2000" />
+                <input type="number" id="opt-elevation-meters" class="form-input"
+                  style="font-size: 0.75rem; padding: 4px 6px;" value="25" min="0" max="2000" />
               </div>
 
               <!-- Data Center PUE -->
@@ -201,7 +212,8 @@
                 <label class="form-label" for="opt-pue" style="font-size: 0.74rem;">
                   Sasaran Kecekapan Tenaga (PUE Pusat Data):
                 </label>
-                <input type="number" id="opt-pue" class="form-input" style="font-size: 0.75rem; padding: 4px 6px;" value="1.35" step="0.05" min="1.0" max="2.5" />
+                <input type="number" id="opt-pue" class="form-input" style="font-size: 0.75rem; padding: 4px 6px;"
+                  value="1.35" step="0.05" min="1.0" max="2.5" />
               </div>
 
               <!-- Green Building Rating -->
@@ -224,7 +236,8 @@
                 <label class="form-label" for="opt-industrial-buffer" style="font-size: 0.74rem;">
                   Zon Penampan Hijau Fizikal JAS (Meter):
                 </label>
-                <input type="number" id="opt-industrial-buffer" class="form-input" style="font-size: 0.75rem; padding: 4px 6px;" value="50" min="0" max="1000" />
+                <input type="number" id="opt-industrial-buffer" class="form-input"
+                  style="font-size: 0.75rem; padding: 4px 6px;" value="50" min="0" max="1000" />
               </div>
             </div>
           </div>
@@ -232,7 +245,9 @@
           <!-- Unified Single Action & Cancel Button with Live Stopwatch Timer -->
           <button type="submit" id="btn-run-simulation" class="btn btn-simulate">
             <span id="btn-sim-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
             </span>
             <span id="btn-sim-text">Jalankan Simulasi Impak</span>
           </button>
@@ -254,7 +269,11 @@
         <div id="geocoding-status-box" class="site-geo-status-card">
           <!-- Top Row: Address / Site Name with single crisp map pin -->
           <div class="geo-site-address-row">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5" class="geo-pin-icon"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"
+              class="geo-pin-icon">
+              <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
             <span id="geo-address-display">Kampung Baru, Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur</span>
           </div>
 
@@ -277,7 +296,10 @@
       <!-- Simulation Pipeline Stepper -->
       <section class="glass-card">
         <div class="card-title" style="margin-bottom: 0.5rem;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 14 14" />
+          </svg>
           <span>Status Aliran Simulasi</span>
         </div>
         <div class="simulation-stepper" id="simulation-stepper-container">
@@ -289,30 +311,39 @@
 
     <!-- CENTER AREA: Step 3 (Interactive Spatial Map) -->
     <section class="map-container-wrapper">
-      
+
       <!-- Top-Left Floating Info Badge -->
       <div class="map-floating-overlay">
-        <div style="width: 10px; height: 10px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8;"></div>
+        <div style="width: 10px; height: 10px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8;">
+        </div>
         <div>
           <strong id="overlay-site-title">Kampung Baru, Kuala Lumpur</strong>
-          <div id="overlay-pbt-sub" style="font-size: 0.72rem; color: var(--text-secondary);">PBT: Dewan Bandaraya Kuala Lumpur (DBKL) | Zon Penampan 1,000m</div>
+          <div id="overlay-pbt-sub" style="font-size: 0.72rem; color: var(--text-secondary);">PBT: Dewan Bandaraya Kuala
+            Lumpur (DBKL) | Zon Penampan 1,000m</div>
         </div>
       </div>
 
       <!-- Top-Right Layer & Basemap Toggles with Distinctive Colors & Selectable Icons -->
       <div class="map-layer-controls">
-        <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 2px;">Lapisan PBT</div>
-        <button class="layer-toggle-btn active layer-btn-buffer" data-layer="bufferCircle"><span class="layer-dot dot-buffer"></span> ⭕ Zon 1km</button>
-        <button class="layer-toggle-btn active layer-btn-rail" data-layer="rail"><span class="layer-dot dot-rail"></span> 🚆 Stesen Rel</button>
-        <button class="layer-toggle-btn active layer-btn-bus" data-layer="bus"><span class="layer-dot dot-bus"></span> 🚌 Hentian Bas</button>
-        <button class="layer-toggle-btn active layer-btn-education" data-layer="education"><span class="layer-dot dot-education"></span> 🏫 Sekolah</button>
-        <button class="layer-toggle-btn active layer-btn-worship" data-layer="worship"><span class="layer-dot dot-worship"></span> 🕌 Rumah Ibadat</button>
-        <button class="layer-toggle-btn active layer-btn-heritage" data-layer="heritage"><span class="layer-dot dot-heritage"></span> 🏛️ Warisan</button>
-        
-        <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 6px; margin-bottom: 3px;">Peta Dasar</div>
+        <div
+          style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 2px;">
+          Lapisan PBT</div>
+        <div id="map-layer-toggles-container" class="map-layer-toggles-container">
+          <button type="button" class="layer-toggle-btn active layer-btn-buffer" data-layer="bufferCircle"
+            title="Togol Paparan Zon Penampan (Radius 1km) (Buka/Tutup)">
+            <span class="layer-dot dot-buffer"></span>
+            <span class="layer-title-text">⭕ Zon Penampan (Radius 1km)</span>
+            <span class="layer-switch-indicator" aria-hidden="true"><span class="switch-knob"></span></span>
+          </button>
+        </div>
+
+        <div
+          style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 6px; margin-bottom: 3px;">
+          Peta Dasar</div>
         <!-- Visual Icon-Based Selectable Basemap Grid -->
         <div class="basemap-icon-grid" id="basemap-icon-group">
-          <button type="button" class="basemap-icon-btn active" data-basemap="satellite" title="Satelit Esri (Imej Udara Resolusi Tinggi)">
+          <button type="button" class="basemap-icon-btn active" data-basemap="satellite"
+            title="Satelit Esri (Imej Udara Resolusi Tinggi)">
             <span class="basemap-emoji">🛰️</span>
             <span class="basemap-lbl">Satelit</span>
           </button>
@@ -331,7 +362,9 @@
         </div>
 
         <!-- Alat Ukur Section (Placed under Peta Dasar with uniform radius & hint above buttons) -->
-        <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">Alat Ukur</div>
+        <div
+          style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">
+          Alat Ukur</div>
         <div id="measure-status-text" class="measure-hint-text">Sedia untuk mengukur</div>
         <div class="measure-buttons-grid">
           <button type="button" id="btn-measure-distance" class="measure-tool-btn" title="Ukur Jarak Geodesik">
@@ -346,7 +379,9 @@
         </div>
 
         <!-- Kawalan Zoom Section (Placed under Alat Ukur) -->
-        <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">Kawalan Zoom</div>
+        <div
+          style="font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-top: 8px; margin-bottom: 3px;">
+          Kawalan Zoom</div>
         <div class="zoom-buttons-grid">
           <button type="button" id="btn-zoom-in" class="measure-tool-btn zoom-tool-btn" title="Zum Masuk (+)">
             <span>➕</span> Zum Masuk
@@ -354,10 +389,12 @@
           <button type="button" id="btn-zoom-out" class="measure-tool-btn zoom-tool-btn" title="Zum Keluar (-)">
             <span>➖</span> Zum Keluar
           </button>
-          <button type="button" id="btn-zoom-fit-site" class="measure-tool-btn zoom-tool-btn" title="Fokus Semula Tapak Cadangan (Zon 1km)">
+          <button type="button" id="btn-zoom-fit-site" class="measure-tool-btn zoom-tool-btn"
+            title="Fokus Semula Tapak Cadangan (Zon 1km)">
             <span>🎯</span> Fokus Tapak
           </button>
-          <button type="button" id="btn-zoom-fit-malaysia" class="measure-tool-btn zoom-tool-btn" title="Pandangan Penuh Seluruh Malaysia">
+          <button type="button" id="btn-zoom-fit-malaysia" class="measure-tool-btn zoom-tool-btn"
+            title="Pandangan Penuh Seluruh Malaysia">
             <span>🇲🇾</span> Seluruh Malaysia
           </button>
         </div>
@@ -369,7 +406,7 @@
 
     <!-- RIGHT SIDEBAR: Step 4 (AI Simulation Hazards) & Step 5 (Assessment Summary) -->
     <aside class="sidebar-panel right-panel">
-      
+
       <!-- Spatial Infrastructure Summary Counters -->
       <section class="glass-card">
         <div class="card-title">
@@ -398,27 +435,37 @@
 
   <!-- Centered Footer Disclaimer (Minimalist Text, Not a Card) -->
   <footer class="main-footer-disclaimer">
-    Penafian: Simulasi ini dijana berasaskan unjuran <em>senario terbaik (best-case scenario)</em>. Pegawai perancang dinasihatkan menyemak sebarang ralat & data tapak sebelum membuat keputusan rasmi.
+    Penafian: Simulasi ini dijana berasaskan unjuran <em>senario terbaik (best-case scenario)</em>. Pegawai perancang
+    dinasihatkan menyemak sebarang ralat & data tapak sebelum membuat keputusan rasmi.
   </footer>
 
   <!-- STEP 5: Official Report Modal -->
   <div id="report-modal" class="modal-overlay">
     <div class="modal-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;" class="no-print">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;"
+        class="no-print">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
           <strong style="color: #ffffff; font-size: 1.05rem;">Pratonton Dokumen Rasmi Kebenaran Merancang</strong>
         </div>
         <div style="display: flex; gap: 0.5rem;">
           <button id="btn-print-report" class="btn btn-primary" style="padding: 0.4rem 0.9rem; font-size: 0.8rem;">
             🖨️ Cetak / Simpan PDF
           </button>
-          <button id="btn-close-modal" class="btn btn-secondary modal-close-btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+          <button id="btn-close-modal" class="btn btn-secondary modal-close-btn"
+            style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
             ✕ Tutup
           </button>
         </div>
       </div>
-      
+
       <!-- Report Container Rendered Dynamically -->
       <div id="report-modal-body"></div>
     </div>
@@ -431,8 +478,10 @@
         <div style="display: flex; align-items: center; gap: 0.65rem;">
           <span style="font-size: 1.4rem;">⚠️</span>
           <div>
-            <h3 style="font-size: 1rem; font-weight: 800; color: #fca5a5; margin: 0;">Konflik Bidang Kuasa PBT Dikesan</h3>
-            <p style="font-size: 0.72rem; color: #94a3b8; margin: 0;">Percanggahan Statutori Kebenaran Merancang (KM)</p>
+            <h3 style="font-size: 1rem; font-weight: 800; color: #fca5a5; margin: 0;">Konflik Bidang Kuasa PBT Dikesan
+            </h3>
+            <p style="font-size: 0.72rem; color: #94a3b8; margin: 0;">Percanggahan Statutori Kebenaran Merancang (KM)
+            </p>
           </div>
         </div>
         <button type="button" id="btn-close-conflict-modal" class="btn-conflict-close" title="Tutup Dialog">✕</button>
@@ -443,10 +492,12 @@
       </div>
 
       <div class="conflict-modal-footer">
-        <button type="button" id="btn-keep-current-pbt" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 12px;">
+        <button type="button" id="btn-keep-current-pbt" class="btn btn-secondary"
+          style="font-size: 0.78rem; padding: 6px 12px;">
           Kekalkan Pilihan Semasa
         </button>
-        <button type="button" id="btn-confirm-sync-pbt" class="btn btn-primary" style="font-size: 0.8rem; font-weight: 700; padding: 6px 14px;">
+        <button type="button" id="btn-confirm-sync-pbt" class="btn btn-primary"
+          style="font-size: 0.8rem; font-weight: 700; padding: 6px 14px;">
           Selaraskan PBT Sekarang
         </button>
       </div>
@@ -455,4 +506,5 @@
 
   <script type="module" src="./src/main.js"></script>
 </body>
+
 </html>

@@ -370,16 +370,8 @@ function initUI() {
     });
   }
 
-  // 10. Layer Toggle Buttons Listeners
-  document.querySelectorAll('.layer-toggle-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const layer = btn.dataset.layer;
-      const isActive = btn.classList.toggle('active');
-      if (mapController && layer) {
-        mapController.toggleLayer(layer, isActive);
-      }
-    });
-  });
+  // 10. Dynamic Layer Toggle Buttons (Initializes available layers)
+  renderLayerToggleButtons(null);
 
   // 11. Measuring Tools Listeners
   const btnDist = document.getElementById('btn-measure-distance');
@@ -778,7 +770,10 @@ async function runFullPipeline() {
     state.spatialData = await queryOverpassRadius(state.currentLat, state.currentLng, 1000, activeAbortController.signal);
     mapController.renderSpatialInfrastructure(state.spatialData);
 
-    // Render counts
+    // Dynamically update available map layer toggles (showing ONLY available layers with counts)
+    renderLayerToggleButtons(state.spatialData);
+
+    // Render counts in Step 3 sidebar panel
     const countersContainer = document.getElementById('infra-counters-container');
     renderInfrastructureCounters(countersContainer, state.spatialData.counts);
 
@@ -1107,6 +1102,55 @@ function renderJurisdictionBanner(jurisdiction) {
       });
     }
   }
+}
+
+/**
+ * Renders ONLY available Lapisan PBT toggle buttons based on live spatial data
+ */
+function renderLayerToggleButtons(spatialData = null) {
+  const container = document.getElementById('map-layer-toggles-container');
+  if (!container) return;
+
+  const counts = spatialData && spatialData.counts ? spatialData.counts : {};
+
+  const layerDefs = [
+    { id: 'bufferCircle', cls: 'buffer', label: 'Zon Penampan (Radius 1km)', icon: '⭕', count: null, alwaysShow: true },
+    { id: 'rail', cls: 'rail', label: 'Stesen Rel', icon: '🚆', count: counts.railStations || 0 },
+    { id: 'bus', cls: 'bus', label: 'Hentian Bas', icon: '🚌', count: counts.busStops || 0 },
+    { id: 'education', cls: 'education', label: 'Pendidikan', icon: '🏫', count: counts.schools || 0 },
+    { id: 'worship', cls: 'worship', label: 'Rumah Ibadat', icon: '🕌', count: counts.worshipPlaces || 0 },
+    { id: 'heritage', cls: 'heritage', label: 'Warisan Sejarah', icon: '🏛️', count: counts.heritageSites || 0 },
+    { id: 'museum', cls: 'museum', label: 'Muzium & Sains', icon: '🎨', count: counts.museums || 0 },
+    { id: 'health', cls: 'health', label: 'Kesihatan & Awam', icon: '🏥', count: counts.healthSafety || 0 },
+    { id: 'parks', cls: 'parks', label: 'Taman Awam', icon: '🌳', count: counts.parks || 0 }
+  ];
+
+  // Show only available layers (count > 0 or alwaysShow)
+  const availableLayers = layerDefs.filter((l) => l.alwaysShow || l.count > 0);
+
+  container.innerHTML = availableLayers
+    .map(
+      (l) => `
+      <button type="button" class="layer-toggle-btn active layer-btn-${l.cls}" data-layer="${l.id}" title="Togol Paparan ${l.label} (Buka/Tutup)">
+        <span class="layer-dot dot-${l.cls}"></span>
+        <span class="layer-title-text">${l.icon} ${l.label}</span>
+        ${l.count !== null ? `<span class="layer-count-pill">${l.count}</span>` : ''}
+        <span class="layer-switch-indicator" aria-hidden="true"><span class="switch-knob"></span></span>
+      </button>
+    `
+    )
+    .join('');
+
+  // Wire click listeners on dynamically generated buttons
+  container.querySelectorAll('.layer-toggle-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const layer = btn.dataset.layer;
+      const isActive = btn.classList.toggle('active');
+      if (mapController && layer) {
+        mapController.toggleLayer(layer, isActive);
+      }
+    });
+  });
 }
 
 /**

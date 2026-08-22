@@ -27,6 +27,9 @@ export class MapController {
       education: L.layerGroup(),
       worship: L.layerGroup(),
       heritage: L.layerGroup(),
+      museum: L.layerGroup(),
+      health: L.layerGroup(),
+      parks: L.layerGroup(),
       roads: L.layerGroup(),
       measurements: L.layerGroup()
     };
@@ -85,6 +88,21 @@ export class MapController {
 
     // Handle Map Clicks for site selection or measuring
     this.map.on('click', (e) => this.handleMapClick(e));
+
+    // Global popup lifecycle listeners to prevent stuck/orphaned relocate confirmation pins
+    this.map.on('popupopen', (e) => {
+      // If any popup opens that is NOT the pending relocate confirmation, remove the pending relocate pin
+      if (this.pendingRelocateMarker && e.popup !== this.pendingRelocateMarker.getPopup()) {
+        this.clearPendingRelocate();
+      }
+    });
+
+    this.map.on('popupclose', (e) => {
+      // If the pending relocate popup is closed (by user clicking close button, tapping outside, etc.), clean up
+      if (this.pendingRelocateMarker && e.popup === this.pendingRelocateMarker.getPopup()) {
+        this.clearPendingRelocate();
+      }
+    });
 
     // Recalibrate full-screen dimensions
     setTimeout(() => {
@@ -174,9 +192,13 @@ export class MapController {
   toggleLayer(layerName, isVisible) {
     if (!this.layers[layerName]) return;
     if (isVisible) {
-      this.map.addLayer(this.layers[layerName]);
+      if (!this.map.hasLayer(this.layers[layerName])) {
+        this.map.addLayer(this.layers[layerName]);
+      }
     } else {
-      this.map.removeLayer(this.layers[layerName]);
+      if (this.map.hasLayer(this.layers[layerName])) {
+        this.map.removeLayer(this.layers[layerName]);
+      }
     }
   }
 
@@ -186,6 +208,9 @@ export class MapController {
   setProposedSite(lat, lng, siteName = 'Tapak Cadangan', units = 350) {
     this.centerLat = lat;
     this.centerLng = lng;
+
+    // Clear any pending relocation marker
+    this.clearPendingRelocate();
 
     // Clear previous site & buffer
     this.layers.siteMarker.clearLayers();
@@ -206,7 +231,8 @@ export class MapController {
       color: style.haloColor,
       weight: style.haloWeight,
       opacity: style.haloOpacity,
-      fill: false
+      fill: false,
+      interactive: false
     });
     this.layers.bufferCircle.addLayer(this.activeBufferHalo);
 
@@ -217,17 +243,22 @@ export class MapController {
       weight: style.weight,
       dashArray: style.dashArray,
       fillColor: style.fillColor,
-      fillOpacity: style.fillOpacity
+      fillOpacity: style.fillOpacity,
+      interactive: false
     });
-    this.activeBufferCircle.bindTooltip(`⭕ Zon Penampan 1km (1,000m Radius Kawasan Impak)`, { permanent: false, direction: 'top' });
     this.layers.bufferCircle.addLayer(this.activeBufferCircle);
+
+    // Ensure buffer layer is visible on the map
+    if (!this.map.hasLayer(this.layers.bufferCircle)) {
+      this.map.addLayer(this.layers.bufferCircle);
+    }
 
     // Smooth flyTo
     this.map.flyTo([lat, lng], 15, { duration: 1.2 });
   }
 
   /**
-   * Clears all spatial infrastructure layers (rail, bus, education, worship, heritage)
+   * Clears all spatial infrastructure layers (rail, bus, education, worship, heritage, museum, health, parks)
    */
   clearSpatialLayers() {
     this.layers.rail.clearLayers();
@@ -235,6 +266,9 @@ export class MapController {
     this.layers.education.clearLayers();
     this.layers.worship.clearLayers();
     this.layers.heritage.clearLayers();
+    this.layers.museum.clearLayers();
+    this.layers.health.clearLayers();
+    this.layers.parks.clearLayers();
   }
 
   /**
@@ -276,12 +310,36 @@ export class MapController {
       this.layers.worship.addLayer(marker);
     });
 
-    // 5. Heritage Sites (Akta 645)
+    // 5. Authentic Heritage Sites (Akta 645)
     (spatialData.heritageSites || []).forEach((item) => {
       const icon = createCustomIcon('heritage', item.name);
       const marker = L.marker([item.lat, item.lng], { icon });
       marker.bindPopup(buildPopupHtml(item, 'heritage'));
       this.layers.heritage.addLayer(marker);
+    });
+
+    // 6. Museums, Science Discovery Centers & Tourism Attractions
+    (spatialData.museums || []).forEach((item) => {
+      const icon = createCustomIcon('museum', item.name);
+      const marker = L.marker([item.lat, item.lng], { icon });
+      marker.bindPopup(buildPopupHtml(item, 'museum'));
+      this.layers.museum.addLayer(marker);
+    });
+
+    // 7. Health & Public Safety (Hospital, Klinik, Polis, Bomba)
+    (spatialData.healthSafety || []).forEach((item) => {
+      const icon = createCustomIcon('health', item.name);
+      const marker = L.marker([item.lat, item.lng], { icon });
+      marker.bindPopup(buildPopupHtml(item, 'health'));
+      this.layers.health.addLayer(marker);
+    });
+
+    // 8. Public Parks & Recreation
+    (spatialData.parks || []).forEach((item) => {
+      const icon = createCustomIcon('parks', item.name);
+      const marker = L.marker([item.lat, item.lng], { icon });
+      marker.bindPopup(buildPopupHtml(item, 'parks'));
+      this.layers.parks.addLayer(marker);
     });
   }
 
@@ -590,12 +648,22 @@ export class MapController {
     }
   }
 
+  /**
+   * Safely clears any pending site relocation marker and its popup
+   */
+  clearPendingRelocate() {
+    if (this.pendingRelocateMarker) {
+      const marker = this.pendingRelocateMarker;
+      this.pendingRelocateMarker = null;
+      if (this.map && this.map.hasLayer(marker)) {
+        this.map.removeLayer(marker);
+      }
+    }
+  }
+
   async showRelocateConfirmation(lat, lng) {
     // Clear any previous pending confirmation marker
-    if (this.pendingRelocateMarker) {
-      this.map.removeLayer(this.pendingRelocateMarker);
-      this.pendingRelocateMarker = null;
-    }
+    this.clearPendingRelocate();
 
     // 1. Initial quick bounds check (e.g. Europe, America, Australia, North Asia)
     const isObviousOverseas = lat < 0.5 || lat > 8.0 || lng < 99.0 || lng > 120.0;
@@ -630,7 +698,7 @@ export class MapController {
 
     this.pendingRelocateMarker = L.marker([lat, lng], { icon: pinIcon, zIndexOffset: 2000 })
       .addTo(this.map)
-      .bindPopup(loadingHtml, { closeButton: false, minWidth: 260, className: 'relocate-confirm-leaflet-popup' })
+      .bindPopup(loadingHtml, { closeButton: true, minWidth: 260, className: 'relocate-confirm-leaflet-popup' })
       .openPopup();
 
     if (isObviousOverseas) {
@@ -641,6 +709,8 @@ export class MapController {
     // 2. Fetch authoritative reverse geocode to verify country
     try {
       const geo = await reverseGeocode(lat, lng);
+      if (!this.pendingRelocateMarker || !this.map.hasLayer(this.pendingRelocateMarker)) return;
+
       const isMalaysia = isWithinMalaysia(lat, lng, geo.addressDetails);
 
       if (!isMalaysia || (geo.addressDetails && geo.addressDetails.country_code && geo.addressDetails.country_code !== 'my')) {
@@ -649,12 +719,13 @@ export class MapController {
         this.renderRelocateSuccess(lat, lng, geo);
       }
     } catch {
+      if (!this.pendingRelocateMarker || !this.map.hasLayer(this.pendingRelocateMarker)) return;
       this.renderRelocateSuccess(lat, lng, { displayName: `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`, addressDetails: {} });
     }
   }
 
   renderRelocateError(lat, lng, locationName) {
-    if (!this.pendingRelocateMarker) return;
+    if (!this.pendingRelocateMarker || !this.map.hasLayer(this.pendingRelocateMarker)) return;
 
     // Update marker styling to Red Warning
     const pulseEl = document.getElementById('pending-pin-pulse-el');
@@ -690,17 +761,14 @@ export class MapController {
       const btnCancel = document.getElementById('btn-cancel-move-site');
       if (btnCancel) {
         btnCancel.addEventListener('click', () => {
-          if (this.pendingRelocateMarker) {
-            this.map.removeLayer(this.pendingRelocateMarker);
-            this.pendingRelocateMarker = null;
-          }
+          this.clearPendingRelocate();
         });
       }
     }, 50);
   }
 
   renderRelocateSuccess(lat, lng, geo) {
-    if (!this.pendingRelocateMarker) return;
+    if (!this.pendingRelocateMarker || !this.map.hasLayer(this.pendingRelocateMarker)) return;
 
     const cleanName = geo && geo.displayName ? geo.displayName.split(',').slice(0, 2).join(',') : `Tapak (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
 
@@ -708,7 +776,7 @@ export class MapController {
       <div class="site-relocate-confirm-popup">
         <div class="confirm-header">
           <span class="confirm-icon">📍</span>
-          <strong>Pindahkan Tapak & Zon 1km?</strong>
+          <strong>Pindahkan Tapak & Zon Penampan?</strong>
         </div>
         <p class="confirm-desc" style="font-size: 0.76rem; line-height: 1.35; margin: 0.4rem 0;">
           Adakah anda ingin menukar tapak pemajuan ke <strong>${cleanName}</strong> dan mengira semula zon penampan 1,000m?
@@ -731,10 +799,7 @@ export class MapController {
 
       if (btnConfirm) {
         btnConfirm.addEventListener('click', () => {
-          if (this.pendingRelocateMarker) {
-            this.map.removeLayer(this.pendingRelocateMarker);
-            this.pendingRelocateMarker = null;
-          }
+          this.clearPendingRelocate();
           if (this.onSiteSelectedCallback) {
             this.onSiteSelectedCallback(lat, lng, geo);
           }
@@ -743,10 +808,7 @@ export class MapController {
 
       if (btnCancel) {
         btnCancel.addEventListener('click', () => {
-          if (this.pendingRelocateMarker) {
-            this.map.removeLayer(this.pendingRelocateMarker);
-            this.pendingRelocateMarker = null;
-          }
+          this.clearPendingRelocate();
         });
       }
     }, 50);

@@ -6,7 +6,7 @@ import * as turf from '@turf/turf';
 import { CacheService } from '../src/services/cache.js';
 import { JurisdictionEngine } from '../src/services/jurisdiction.js';
 import { geocodeLocation } from '../src/services/geocoding.js';
-import { generateSimulatedSpatialData } from '../src/services/overpass.js';
+import { generateSimulatedSpatialData, processOverpassElements, buildOverpassQuery } from '../src/services/overpass.js';
 import { runSimulation } from '../src/services/simulation.js';
 import { generateReportHtml } from '../src/ui/report-generator.js';
 import { PBT_ALL_DATABASE } from '../src/config/pbt-database.js';
@@ -211,6 +211,65 @@ async function runTests() {
   unkinked.features.forEach(f => unkinkedSum += turf.area(f));
   assert(unkinkedSum > 0 && Math.abs(unkinkedSum - 5000) < 100, `Decomposes and calculates area of self-intersecting bowtie polygons (${unkinkedSum.toFixed(0)} m²)`);
 
+  // 10. Test Overpass POI Categorization & Petrosains Disambiguation
+  console.log('\n🏛️ 10. Testing Overpass POI Accurate Categorization:');
+  const mockElements = [
+    {
+      id: 101,
+      lat: 3.158,
+      lon: 101.712,
+      tags: {
+        name: 'Petrosains, The Discovery Centre',
+        tourism: 'museum',
+        science: 'interactive'
+      }
+    },
+    {
+      id: 102,
+      lat: 3.150,
+      lon: 101.694,
+      tags: {
+        name: 'Tugu Negara',
+        historic: 'monument',
+        memorial: 'war_memorial'
+      }
+    },
+    {
+      id: 103,
+      lat: 3.170,
+      lon: 101.700,
+      tags: {
+        name: 'Hospital Kuala Lumpur',
+        amenity: 'hospital'
+      }
+    },
+    {
+      id: 104,
+      lat: 3.155,
+      lon: 101.715,
+      tags: {
+        name: 'Taman KLCC',
+        leisure: 'park'
+      }
+    }
+  ];
+
+  const parsed = processOverpassElements(mockElements, 3.1578, 101.7123);
+
+  // Assert Petrosains is categorized as museum/science center, NOT historic heritage
+  assert(parsed.museums.length === 1, 'Petrosains correctly categorized into museums & science centres');
+  assert(parsed.museums[0].primaryTag === 'tourism=museum', 'Petrosains primary Overpass tag is tourism=museum');
+  assert(parsed.museums[0].name.includes('Petrosains'), 'Petrosains retains accurate name');
+  assert(parsed.heritageSites.length === 1, 'Tugu Negara correctly categorized into historic heritage');
+  assert(parsed.heritageSites[0].primaryTag === 'historic=monument', 'Tugu Negara primary Overpass tag is historic=monument');
+  assert(parsed.healthSafety.length === 1, 'Hospital KL categorized into health & safety');
+  assert(parsed.parks.length === 1, 'KLCC Park categorized into public parks');
+
+  const queryQL = buildOverpassQuery(3.15, 101.71, 1000);
+  assert(queryQL.includes('tourism"="museum'), 'Overpass QL query queries tourism=museum');
+  assert(queryQL.includes('historic'), 'Overpass QL query queries historic');
+  assert(queryQL.includes('amenity"="hospital'), 'Overpass QL query queries amenity=hospital');
+
   console.log(`\n========================================`);
   console.log(`Total Passed: ${passed} | Failed: ${failed}`);
   console.log(`========================================\n`);
@@ -219,3 +278,4 @@ async function runTests() {
 }
 
 runTests();
+
